@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   title: Checkout.com - Identity Verification
   x-logo:
-    url: "https://raw.githubusercontent.com/kenji-ubble/kenji-ubble/main/CKO_logo.png"
+    url: "https://raw.githubusercontent.com/ubbleai/docs/main/cko_doc_logo.png"
   description: |
     # Introduction
     Welcome to the checkout.com identity verification (ex ubble) API documentation, which will enable you to build a seamless identity verification experience for your customers.
@@ -33,7 +33,7 @@ info:
 
     ## Identity verification flow
 
-    ![](https://raw.githubusercontent.com/kenji-ubble/kenji-ubble/main/doc_diagram.png)
+    ![](https://raw.githubusercontent.com/ubbleai/docs/main/sequence_diagram.png)
 
     ## Step 1: Request an identity verification
 
@@ -353,7 +353,7 @@ info:
     The life cycle of a verification is defined by the successive events and status of the verification.
     This information is directly available in the webhook body.
 
-    ![](https://raw.githubusercontent.com/kenji-ubble/kenji-ubble/main/life%20cycle%20diagram.png)
+    ![](https://raw.githubusercontent.com/ubbleai/docs/main/life_cycle_diagram.png)
 
     ## Events
 
@@ -436,7 +436,7 @@ info:
     </colgroup>
     <thead>
       <tr>
-        <th class="tg-fymr"><nobr><code>summary</code></nobr></th>
+        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
         <th class="tg-fymr"><code>summary</code></th>
         <th class="tg-fymr">Description</th>
       </tr>
@@ -459,7 +459,7 @@ info:
     </colgroup>
     <thead>
       <tr>
-        <th class="tg-fymr"><nobr><code>summary</code></nobr></th>
+        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
         <th class="tg-fymr"><code>summary</code></th>
         <th class="tg-fymr">Description</th>
       </tr>
@@ -607,7 +607,7 @@ info:
     </colgroup>
     <thead>
       <tr>
-        <th class="tg-fymr"><nobr><code>summary</code></nobr></th>
+        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
         <th class="tg-fymr"><code>summary</code></th>
         <th class="tg-fymr">Description</th>
       </tr>
@@ -630,6 +630,9 @@ info:
         <td class="tg-0pky">62103</td>
         <td class="tg-0pky">document_damaged</td>
         <td class="tg-0pky">Applicant has submitted a damaged document</td>
+      </tr>
+      <tr>
+        <td class="tg-dvid" colspan="3">Copy issue</td>
       </tr>
       <tr>
         <td class="tg-0pky">62201</td>
@@ -711,7 +714,7 @@ info:
     </colgroup>
     <thead>
       <tr>
-        <th class="tg-fymr"><nobr><code>summary</code></nobr></th>
+        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
         <th class="tg-fymr"><code>summary</code></th>
         <th class="tg-fymr">Description</th>
       </tr>
