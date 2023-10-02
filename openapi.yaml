@@ -1,0 +1,2106 @@
+openapi: 3.0.3
+
+info:
+  title: Checkout.com - Identity Verification
+  x-logo:
+    url: "https://raw.githubusercontent.com/kenji-ubble/kenji-ubble/main/CKO_logo.png"
+  description: |
+    # Introduction
+    Welcome to the checkout.com identity verification (ex ubble) API documentation, which will enable you to build a seamless identity verification experience for your customers.
+
+    The API accepts and returns `application/json` type.
+
+    If you have any questions or if you want to test our product, please contact us: support@ubble.ai.
+
+    # Get Started
+    This section describes the easiest way to integrate your environment with our API. At the end of this section you will be able to create and get the results of an identity verification.
+
+    ## Before you start
+    ### Get your credentials
+
+    We use both mutual Transport Layer Security and basic authentication. You must then authenticate your calls by including your basic authentication credentials ( `client_id` and `client_secret`) and your mTLS certificate in API calls.
+
+    Open the dashboard [dashboard](https://dashboard.ubble.ai) and navigate to the "security" tab to create your credentials and your certificate. If you need an account, please contact support@ubble.ai.
+
+    Your credentials and certificates carry many privileges, so be sure to keep them secure. Do not share your secret API keys or API certificates in publicly accessible areas such as GitHub, client-side code, and so forth.
+
+    ### Prepare a webhook and a redirect URL
+    You will need to define a webhook when generating an identity verification. It will enable you to be notified of each event and to make decisions.
+
+    For security reasons all our webhook calls are signed, can be whitelisted or can even request an authentication. You will find all details about webhook implementation in the webhook section.
+
+    Finally you will need to provide a redirect URL. This URL will be used to redirect the applicant at the end of the verification.
+
+    ## Identity verification flow
+
+    ![](https://raw.githubusercontent.com/kenji-ubble/kenji-ubble/main/doc_diagram.png)
+
+    ## Step 1: Request an identity verification
+
+    You will have to include the declared name of the applicant in your call, as well as the `webhook_url` and `redirect_url` you should have prepared before. All the details to create an identity verification can be found in the [endpoint section](#tag/Identity-verifications).
+  
+    The call will return an identity verification object and the unique identifier of the identity verification. We strongly advise you to store it in your backend because you will need it to get the detailed results.
+
+    ## Step 2: Redirect the applicant
+
+    The identity verification object also includes the `verification_url` in the `_links` attribute. This URL will be used to redirect applicants to our web application.
+
+    At this step, we strongly advise you to use web redirection. We've built an integration example showcasing [how to integrate our product in a web app](https://github.com/ubbleai/integration_examples/tree/master/web).
+
+    All the details to use another integration can be found in the [integration section](#section/Integration).
+
+    ## Step 3: Manage the applicant return
+
+    When applicants terminate the verification, they are redirected to the `redirect_url` you have defined when creating the identity verification.
+
+    The verification process can be synchronous or asynchronous, and so the results may not be available when the applicant is redirected.
+
+    All the details to manage the applicant return can be found in the [integration section](#section/Integration).
+
+    ## Step 4: Make your decision
+
+    Thanks to the webhook you have defined, you will be notified of each event regarding the identity verification. An event is a change in the verification lifecycle. You will find the list of events in the event section.
+
+    The webhook body will include the event type as well as the `status` of the identity verification. At this step, you should wait for the `status` to be one of `approved`, `declined` or `retry_required`.
+
+    If the `status` is `approved`, you should accept the applicant request.
+
+    If the `status` is `declined`, you should refuse it.
+
+    If the `status` is `retry-required`, you should request a retry using the [retry endpoint](#tag/Identity-verifications/operation/retry_identity_verification) and redirect the applicant on the new `verification_url` you will get.
+
+    If the `status` is `refused`, you should propose an alternative to the applicant.
+
+    For more details see the [identity verification results section](#section/Identity-verification-results).
+
+    ## Step 5: Get the detailed results
+
+    You may have to get the detailed results, particularly when the verification is `approved`.
+
+    All the details to retrieve an identity verification can be found in the [endpoint section](#tag/Identity-verifications/operation/retrieve_identity_verification). You will only need the unique identifier you got when creating the identity verification.
+
+    # Integration
+    As mentioned in the [get started section](#section/Get-Started), applicants should be redirected toward our web application to perform the verification. In this section you will find all the information you need to make this redirection as seamless as possible.
+
+    <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center;">
+      <div style="margin-right: 20px; margin-top: 14px; font-size: 24px; color: #f8c92e; vertical-align: center;">⚠️</div>
+      <div style="display: table-cell; vertical-align: center;">
+        <p>Please note the default expiration time is 15 minutes. In this case you will need to request a retry. See the <a href="#section/Identity-verification-results">identity verification results section</a> for more details.</p>
+      </div>
+    </div>
+
+    ## Customization
+    To properly integrate the identity verification, you should customize the user journey with your account manager. You will be able to define: colors, logo, font, button radius and introduction sentence as detailed here: [Customise your Ubble Experience - Ubble](https://www.ubble.ai/customise-your-ubble-experience/).
+
+    If you need it, you can create several user journey and provide the `user_journey_id` when creating an identity verification.
+
+    ## Web redirection
+
+    ### Integration
+    You can redirect the applicant by using web redirection. We support the current versions of all the major browsers.
+
+    We've built an [integration example](https://github.com/ubbleai/integration_examples/tree/master/web) showcasing how to integrate our product in a web app.
+
+    Web Redirection is compatible with the following browsers / OS. We do not ensure the compatibility of our service with beta versions of browsers / OS.
+
+    | Desktop      | Chrome | Firefox | Safari | Internet Explorer | Edge | Opera |
+    |--------------|--------|---------|--------|-------------------|------|-------|
+    | Min. Version | ≥ 53   | ≥ 52    | ≥ 11.1 | -                 | ≥ 16 | ≥ 58  |
+
+    | Android      | Chrome for Android | Firefox for Android | Samsung Internet | IE Mobile |
+    |--------------|--------------------|---------------------|------------------|-----------|
+    | Min. Version | ≥ 73               | ≥ 66                | ≥ 6.2            | -         |
+
+    | iOS          | Safari Mobile | Chrome | All other browsers |
+    |--------------|---------------|--------|--------------------|
+    | Min. Version | ≥ 11.0        | ≥ 14.3 | -                  |
+
+    To integrate our product in your website, create an identity verification in your backend, pass the URL to your web app and simply add it as a link:
+
+    ```html
+      <a href="`${verificationUrl}`"></a>
+    ```
+
+    ### Applicant return
+    Applicants are redirected to the redirect URL you defined when they terminated the journey. This return is associated with an event that you will find both in the webhook notification and as a parameter in the redirect URL, as well as a response_code when the capture is not completed.
+
+    Example of redirect URL: `?id=idv_01h2623ysfkhpn7czed0bw8fd6&event=capture_abortion&response_code=61101`
+
+    If the event is `capture_completion`, you will have to wait for the next event to make your decision. You can either ask applicants to perform additional checks, or make them wait until results are available. Please also note that in some cases the `check_completion` event can occur almost simultaneously.
+
+    If the event is `capture_abortion` we advise you to request a retry. See the [retry section](#section/Identity-verification-results/Retry-management) to implement it.
+
+    If the event is `capture_refusal` we advise you to propose an alternative to the applicant.
+
+    If the event is `expiration`, the user tried to open a link that was already expired. We advise you to request a retry. SSee the [retry section](#section/Identity-verification-results/Retry-management) to implement it.
+
+    For more details about these events please see the [lifecycle section](#section/Identity-verification-results/Lifecycle).
+
+    ## Webview
+    For a more integrated user experience in your mobile application, you can redirect the applicant using a webview.
+
+    ### iOS
+    You will find here an integration example:
+
+    - [iOS >= 13](https://github.com/ubbleai/integration_examples/tree/master/ios), on **iOS >= 14.3** WebRTC features work perfectly inside the [WKWebView](https://developer.apple.com/documentation/webkit/wkwebview).
+
+    On iOS <= 12, due to limited webview compatibility, the verification process must be completed in Safari App.
+
+    For iOS Native you will have to open Safari using the open method:
+    ```swift
+    UIApplication.shared.open(verificationUrl, options: [:])
+    ```
+
+    ### Android
+    You will find here [an integration example for android - webview version >= 53](https://github.com/ubbleai/integration_examples/tree/master/android)
+
+    ### React-native
+    You will find here [an integration example for react-native - react-native webview >= 8.0](https://github.com/ubbleai/integration_examples/tree/master/UbbleReactNative)
+
+    ### Flutter
+
+    If you wish to use Ubble with Flutter, you can use the [flutter_inappwebview](https://inappwebview.dev/docs/).
+
+    Make sure to follow the [WebRTC API](https://inappwebview.dev/docs/webrtc-api/) section of the documentation to ensure we're able to launch a video stream.
+
+    ### Applicant return
+    Applicants are redirected to the redirect URL you defined when they terminated the journey. In webview integration, we are expecting a deeplink to redirect the applicant on your mobile application. 
+
+    The return is associated with an event that you will find both in the webhook notification and as a parameter in the redirect URL. 
+
+    Example of redirect URL: `?id=01h2623ysfkhpn7czed0bw8fd6&event=capture_abortion&response_code=61101`
+
+    If the event is `capture_completion`, you will have to wait for the next event to make your decision. You can either ask applicants to perform additional checks, or make them wait until results are available. 
+
+    Please also note that in some cases the `check_completion` event can occur almost simultaneously, and consequently the results can be available when the applicant is redirected. 
+
+    If the event is `capture_abortion`,  we advise you to request a retry. See the [retry section](#section/Identity-verification-results/Retry-management) to implement it. 
+
+    If the event is `capture_refusal`, we advise you to propose an alternative to the applicant.
+
+    For more details about these events, please see the [lifecycle section](#section/Identity-verification-results/Lifecycle)
+
+    ## Iframe integration
+    When using the Desktop-to-Mobile redirection flow, we recommend that you use our Iframe integration on **desktop** described below:
+
+      Include the SDK as a script tag.
+      
+      If you need an example of Iframe usage, you can use our [iframe tester](https://ubbleai.github.io/iframe-tester/)
+      
+      <div class="center-column"></div>
+      
+      ```html
+      <script
+        src="https://cdn.ubble.ai/iframe-sdk-1.0.0.js"
+        type="application/javascript"
+      ></script>
+      ```
+      
+      We expect your page to implement a global method `onUbbleReady` that will be triggered when the SDK is loaded
+      
+      <div class="center-column"></div>
+      
+      ```js
+      function onUbbleReady() {}
+      ```
+      
+      <br/>
+      
+      Initialize a new Ubble IDV object:
+      
+      <div class="center-column"></div>
+      
+      ```js
+      function onUbbleReady() {
+        const ubbleIDV = new Ubble.IDV(document.getElementById("ubble"), options);
+      }
+      ```
+      
+      <br /> <br />
+      
+      **API**
+      
+      ##### `elementId`: string | Element
+      
+      <div class="center-column"></div>
+      
+      ```js
+      new Ubble.IDV("ubble", options);
+      new Ubble.IDV(document.getElementById("ubble"), options);
+      ```
+      
+      ##### `options` Object
+      
+      - `width`: Iframe width in px
+      - `height`: Iframe height in px
+      - `allowCamera`: Boolean, indicating whether you want to capture video inside the iframe. This field should be false if you redirect the users via Desktop-to-Mobile redirection
+      - `verificationUrl`: Verification url (e.g. https://id.ubble.ai/{unique identifier})
+        events:
+      - `onComplete(completeEvent)`: Event triggered when the user completes the capture
+      
+      <div class="center-column"></div>
+      
+      ```json
+      {
+        "event": "capture_completion",
+        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=capture_completion"
+      }
+      ```
+
+      - `onRefused(refusedEvent)`: Event triggered when the applicant refused to complete the verification
+      
+      <div class="center-column"></div>
+      
+      ```json
+      {
+        "event": "capture_refusal",
+        "responseCode": 63001,
+        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=capture_completion"
+      }
+      ```
+      
+      - `onAbort(abortEvent)`: Event triggered when the verification is aborted
+      
+      <div class="center-column"></div>
+      
+      ```json
+      {
+        "event": "capture_abortion",
+        "responseCode": 61111,
+        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=capture_abortion&response_code=63001"
+      }
+      ```
+      
+      - `onExpired`: Event triggered when the verification link has expired
+      
+      <div class="center-column"></div>
+      
+      ```json
+      {
+        "event": "expiration",
+        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=capture_aborted&response_code=63001"`
+      }
+      ```
+      
+      <br /> <br />
+      
+      **Methods**
+      
+      ##### `destroy()`
+      
+      <div class="center-column"></div>
+      
+      ```js
+      const ubbleIDV = new Ubble.IDV("id", {
+        events: {
+          onComplete(event) {
+            console.log(`Done with ubble flow: ${event}`);
+            ubbleIDV.destroy();
+          },
+        },
+      });
+      ```
+      
+      <br /><br />
+      
+      **Full example**
+      
+      <div class="center-column"></div>
+      
+      ```js
+      const ubbleIDV = new Ubble.IDV("idv", {
+        width: "500",
+        height: "600",
+        allowCamera: true,
+        verificationUrl: "https://id.ubble.ai/11111111-1111-1111-1111-111111111111",
+        events: {
+          onComplete(event) {
+            ubbleIDV.destroy();
+          },
+          onAbort(event) {
+            ubbleIDV.destroy();
+          },
+          onExpired(event) {
+            ubbleIDV.destroy();
+          }
+          onRefused(event) {
+            ubbleIDV.destroy();
+          }
+        },
+      });
+      ```
+      
+      <br /><br />
+      **Known Issues**
+      <br /><br />
+      
+      - Make sure you did not forget to add a semicolon in the header `Content-Security-Policy: frame-src https://*.domain_name.fr;`
+      - Make sure beforehand the use of the camera has been allowed
+      
+      <div class="center-column"></div>
+
+    ## Mobile redirection
+    Both for security reasons and because it improves the conversion rate, we redirect all applicants from desktop to mobile. Nevertheless we ensure a synchronisation between desktop and mobile to redirect applicants to their desktop at the end of the journey.
+
+    Applicants can use either QR code or SMS sending to perform this redirection. To make the SMS redirection smoother, you can provide the phone number of the applicant when creating an identity verification: we use it to prefill the associated field during the redirection. For more details see the [identity verification endpoint](#tag/Identity-verifications/operation/create_identity_verification).
+
+    # Identity verification results
+
+    This section details all the information you can get about an identity verification.
+    
+    ## Lifecycle
+
+    The life cycle of a verification is defined by the successive events and status of the verification.
+    This information is directly available in the webhook body.
+
+    ![](https://raw.githubusercontent.com/kenji-ubble/kenji-ubble/main/life%20cycle%20diagram.png)
+
+    ## Events
+
+    An event is a change in the verification lifecycle that triggers a notification.
+
+    | <div style="width:12em">Events</div> | Description                                                                                                                       |
+    |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+    | `creation`                           | You created an identity verification                                                                                              |
+    | `start`                              | The applicant has been redirected to the web application                                                                          |
+    | `capture_completion`                 | The applicant completed the capture                                                                                               |
+    | `checks_completion`                  | We completed the checks                                                                                                           |
+    | `expiration`                         | The link expired without applicant being redirected to the web application, please note the default expiration time is 15 minutes |
+    | `capture_refusal`                    | The applicant explicitly refused to perform the verification                                                                      |
+    | `capture_abortion`                   | The applicant terminated the capture without completing it                                                                        |
+    | `checks_inconclusive`                | The applicant did not provide the assets required to perform the checks                                                           |
+    | `retry_requested`                    | You requested a retry for this identity verification                                                                              |
+    | `anonymization`                      | The verification has been anonymized and was in the status `retry_required`, retry is no longer available                         |
+    | `audit_completion`                   | The verification has been audited and the status may have been updated                                                            |
+    | `report_created`                     | The pdf report is available                                                                                                      |
+
+    ## Status
+
+    The `status` is defined by the position of the verification in the lifecycle and indicates the decision to make.
+
+    | <div style="width:12em">Status</div> | Description                                                                                                                                                   |
+    |--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | `pending`                            | The identity verification is available, <br>you should redirect the applicant to the web application using the verification URL.                              |
+    | `capture_in_progress`                | The applicant is performing the capture, <br>you should wait for status change.                                                                               |
+    | `checks_in_progress`                 | We are performing the checks, <br>you should wait for status change.                                                                                          |
+    | `approved`                           | All checks are valid, <br>you should accept to the applicant request.                                                                                         |
+    | `declined`                           | An irregularity has been detected when performing checks,<br>You should refuse the applicant request. <br>If needed you request a new identity verification.  |
+    | `retry_required`                     | We could not perform all the checks,<br>you should request a retry for this identity verification.                                                            |
+    | `inconclusive`                       | The checks have not been completed but retry is not longer available                                                                                          |
+    | `refused`                            | The applicant refused to perform the verification, <br>you should propose an alternative.                                                                     |
+
+    ## Response codes
+
+    When the status is `retry_required`, `declined`, `refused` or `approved`, you will also get additional information in the webhook body with the `response_codes` attribute.
+    It will include both a numeric code and a string, as detailed in the example below
+
+    ```json
+    "response-codes": [
+      {"code": 61310, "summary": "document_front_not_captured"},
+      {"code": 62102, "summary": "document_not_accepted"},
+    ]
+    ```
+    You will find below the exhaustive list of these codes. 
+
+    <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center;">
+      <div style="margin-right: 20px; margin-top: 14px; font-size: 24px; color: #f8c92e; vertical-align: center;">⚠️</div>
+      <div style="display: table-cell; vertical-align: center;">
+        <p>Please note that we consider adding new response codes as backward compatible.</p>
+        <p>You should then build you business rules on status and use response codes as additional information, rather than use response codes as required information.</p>
+      </div>
+    </div>
+
+    ## List of response codes
+
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0}
+    .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+      font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+      font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-dvid{background-color:#efefef;border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
+    .tg .tg-fymr{background-color:#f0f0f0;border-color:inherit;font-weight:bold;text-align:left;vertical-align:top;}
+    .tg .tg-y698{background-color:#c4c4c4;border-color:inherit;text-align:left;vertical-align:top}
+    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+    .one {width: 5%}
+    .two {width: 40%}
+    .three {width: 0%}
+    </style>
+
+    ### Status: `approved`
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr><code>summary</code></nobr></th>
+        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-0pky">10000</td>
+        <td class="tg-0pky">approved</td>
+        <td class="tg-0pky">Approved</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ### Status: `retry_required`
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr><code>summary</code></nobr></th>
+        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-dvid" colspan="3">Applicant engagement issue</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61101</td>
+        <td class="tg-0pky">applicant_never_started</td>
+        <td class="tg-0pky">Applicant was probably not redirected to the application and never started the flow</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61111</td>
+        <td class="tg-0pky">applicant_not_ready</td>
+        <td class="tg-0pky">Applicant explicitly stated that they wanted to perform the identity verification later by clicking on the dedicated button</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61112</td>
+        <td class="tg-0pky">applicant_no_document</td>
+        <td class="tg-0pky">Applicant explicitly stated that they did not have their document with them by clicking on the dedicated button</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61113</td>
+        <td class="tg-0pky">camera_access_refused</td>
+        <td class="tg-0pky">Applicant did not give access to the camera despite the dedicated instructions</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61121</td>
+        <td class="tg-0pky">applicant_drop</td>
+        <td class="tg-0pky">Applicant left the process before the capture phase and the verification URL expired (by default the expiration time is 15 minutes)</td>
+      </tr>
+      <tr>
+        <td class="tg-fymr" colspan="3"><span style="font-weight:bold">Technical issue</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61201</td>
+        <td class="tg-0pky">connexion_insufficient</td>
+        <td class="tg-0pky">Applicant did not have a sufficient connexion to perform the capture</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61202</td>
+        <td class="tg-0pky">browser_not_supported</td>
+        <td class="tg-0pky">Applicant’s browser was not suitable for video streaming</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61203</td>
+        <td class="tg-0pky">camera_not_found</td>
+        <td class="tg-0pky">Applicant’s device did not have any camera</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61204</td>
+        <td class="tg-0pky">focus_lost</td>
+        <td class="tg-0pky">Applicant switched tabs/application while performing the id verification</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61205</td>
+        <td class="tg-0pky">sms_not_received</td>
+        <td class="tg-0pky">Applicant did not receive the SMS</td>
+      </tr>
+      <tr>
+        <td class="tg-fymr" colspan="3"><span style="font-weight:bold">Document capture issue</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61301</td>
+        <td class="tg-0pky">document_video_blurry</td>
+        <td class="tg-0pky">Applicant’s document video is too blurry<br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61302</td>
+        <td class="tg-0pky">document_video_lighting_issue</td>
+        <td class="tg-0pky">Applicant performed the document capture under poor lighting conditions</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61310</td>
+        <td class="tg-0pky">document_front_not_captured</td>
+        <td class="tg-0pky">Applicant has not captured the front of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61311</td>
+        <td class="tg-0pky">document_back_not_captured</td>
+        <td class="tg-0pky">Applicant has not captured the back of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61312</td>
+        <td class="tg-0pky">document_partially_hidden</td>
+        <td class="tg-0pky">Applicant hides part of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61313</td>
+        <td class="tg-0pky">document_not_tilted</td>
+        <td class="tg-0pky">Applicant did not present a dynamic view of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-fymr" colspan="3"><span style="font-weight:bold">Face capture issue</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61401</td>
+        <td class="tg-0pky">face_video_blurry</td>
+        <td class="tg-0pky">Applicant’s video of their face is too blurry <br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61402</td>
+        <td class="tg-0pky">face_video_lighting_issue</td>
+        <td class="tg-0pky">Applicant performed their identity verification under poor lighting conditions</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61410</td>
+        <td class="tg-0pky">face_not_captured</td>
+        <td class="tg-0pky">Applicant has not presented a face</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61411</td>
+        <td class="tg-0pky">face_partially_hidden</td>
+        <td class="tg-0pky">Applicant did not show the full front view of their face</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61412</td>
+        <td class="tg-0pky">face_not_turned</td>
+        <td class="tg-0pky">Applicant did not move to prove the liveness</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61414</td>
+        <td class="tg-0pky">various_faces_detected</td>
+        <td class="tg-0pky">Applicant also captured another person face</td>
+      </tr>
+      <tr>
+        <td class="tg-fymr" colspan="3"><span style="font-weight:bold">Internal error</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61901</td>
+        <td class="tg-0pky">internal_error</td>
+        <td class="tg-0pky">An internal error prevents us from completing the verification, we do our best to reduce the occurrence of this case</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ### Status: `declined`
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr><code>summary</code></nobr></th>
+        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-dvid" colspan="3">Document issue</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62101</td>
+        <td class="tg-0pky">document_expired</td>
+        <td class="tg-0pky">Applicant presented an expired document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62102</td>
+        <td class="tg-0pky">document_not_accepted</td>
+        <td class="tg-0pky">Applicant presented a document which is not accepted</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62103</td>
+        <td class="tg-0pky">document_damaged</td>
+        <td class="tg-0pky">Applicant has submitted a damaged document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62201</td>
+        <td class="tg-0pky">document_photocopy</td>
+        <td class="tg-0pky">Applicant presented a photocopy of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62202</td>
+        <td class="tg-0pky">document_screenshot</td>
+        <td class="tg-0pky">Applicant presented the document on a screen</td>
+      </tr>
+      <tr>
+        <td class="tg-dvid" colspan="3">Identity fraud</td>
+      </tr>
+
+      <tr>
+        <td class="tg-0pky">62301</td>
+        <td class="tg-0pky">document_counterfeit</td>
+        <td class="tg-0pky">Applicant has submitted a counterfeit or falsification</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62302</td>
+        <td class="tg-0pky">document_stolen</td>
+        <td class="tg-0pky">Applicant presented a document declared as stolen or lost</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62303</td>
+        <td class="tg-0pky">document_swap</td>
+        <td class="tg-0pky">Applicant presented the front and back of two different documents</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62304</td>
+        <td class="tg-0pky">face_mismatch</td>
+        <td class="tg-0pky">Applicant does not match the photograph of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62305</td>
+        <td class="tg-0pky">face_not_live</td>
+        <td class="tg-0pky">Applicant has presented a photography or a video of someone else's face on a screen or on a physical medium</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62306</td>
+        <td class="tg-0pky">face_alteration</td>
+        <td class="tg-0pky">Applicant has altered their appearance</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62307</td>
+        <td class="tg-0pky">videos_digital_alteration</td>
+        <td class="tg-0pky">Applicant has digitally altered the videos</td>
+      </tr>
+      <tr>
+      <tr>
+        <td class="tg-dvid" colspan="3">Suspicious behavior</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62401</td>
+        <td class="tg-0pky">declared_identity_mismatch</td>
+        <td class="tg-0pky">Applicant’s identity does not match with the expected one</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62402</td>
+        <td class="tg-0pky">suspicious_device</td>
+        <td class="tg-0pky">Applicant used a device that has been technically altered</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62403</td>
+        <td class="tg-0pky">consent_unclear</td>
+        <td class="tg-0pky">Applicant seems to have performed the capture against their will</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ### Status: `refused`
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr><code>summary</code></nobr></th>
+        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-0pky">63001</td>
+        <td class="tg-0pky">applicant_refusal</td>
+        <td class="tg-0pky">Applicant explicitly refused to do the verification process by clicking on the dedicated button</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ## Retry management 
+    When the `status` of the identity verification is `retry_required` we advise you to request a retry. You will need the `identity_verification_id`, as well as a webhook and a redirect URL.
+
+    All information to request a retry can be found in the [endpoint section](#tag/Identity-verifications/operation/retry_identity_verification).
+
+    We strongly advise you to use the `response_codes` to guide the `applicant` toward success. For example, if the response codes indicate that the connection of the `applicant` is not sufficient, you should give this information to the `applicant`.
+
+    <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center;">
+      <div style="margin-right: 20px; margin-top: 14px; font-size: 24px; color: #f8c92e; vertical-align: center;">⚠️</div>
+      <div style="display: table-cell; vertical-align: center;">
+        <p>Please note that you cannot request a retry if the <code>status</code> is <code>declined</code>. If you still want to onboard the concerned applicant, you should request a new verification and indicate the <code>applicant_id</code>. For more details see the <a href="#section/Applicants">applicant section</a>.</p>
+      </div>
+    </div>
+
+    ## Detailed results
+
+    If you need, you can get the full results by using the [retrieve an identity verification endpoint](#tag/Identity-verifications/operation/retrieve_identity_verification). 
+    
+    ### Retrieve a verification
+    
+    The endpoint will mainly include the following information.
+
+    | Attribute              | Description                                                                                                    |
+    |------------------------|----------------------------------------------------------------------------------------------------------------|
+    | status                 | Indicates the position in the lifecycle as well as the action to be taken                                      |
+    | response_codes         | Indicates the cause when the status is refused, declined or retry_required                                     |
+    | verified_identity      | Includes all information about the identity of the `applicant` when the verification is `approved`            |
+    | documents              | Includes all information that has been extracted from the document, as well as the best images of the document |
+    | face                   | Includes the best image of the face                                                                            |
+    | pdf_report             | Includes all information in a pdf format                                                                       |
+
+    Please note that the information we extract from the document can be configured with your account manager.
+
+    ## PDF report
+    
+    For approved or declined checks, you can also retrieve detailed results in pdf format.
+    
+    In order not to penalize the response time of our products, we have decoupled the API response and the pdf generation.
+    
+    You'll therefore receive a `report_created` event a few seconds after the `check_completion` event, telling you that the pdf report is ready. 
+    Use the dedicated endpoint to retrieve it.
+
+    ## API response signing
+
+    The API response signature can be activated by your account manager.
+    
+    This signature can be used to verify that the API response has been issued by Ubble and has not been altered.
+
+    #### Verifying Response signature
+
+    The `Ubble-Signature` header contains:
+    - the timestamp of the request, for example, `1635236316.377888`
+    - the signing key identifier and version, for example, `3456-live-v1`
+    - the signature itself, for example, `5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd`
+
+    Format of response signature:
+    ```
+      <timestamp>:<user_journey_id>-<test or live verification>-<key version>:<signature>
+    ```
+
+    Response signature example:
+    ```
+      1635236316.377888:3456-live-v1:5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd
+    ```
+
+    We use an asymmetric key signing algorithm of type ECDSA with a sha2-512 hashing algorithm to sign the API response. 
+
+    On your side, you can verify the signature against the received body by using the public key associated with the signature key. There are two public keys, for test verifications and live verifications respectively. You can download them from the client dashboard. 
+
+    The keys have a validity of one year and will be automatically renewed. Upon renewal you will have to re-download the public key from the dashboard. 
+
+    To detect a key rotation, look at the signature version in the API response. To verify that response, use the public key with the same version of the signature key. 
+
+    Don’t worry about losing older versions of the public key, you can download all versions of the public key from the dashboard.
+   
+    #### Verifying Images
+    You can also verify that the images has not been altered by using the image hashes available in the API response body.
+    
+    Images are hashed using the sha2-256 hashing algorithm and the same signature key than the one used to sign the API response.
+    <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center;">
+    <div style="margin-right: 20px; margin-top: 14px; font-size: 24px; color: #f8c92e; vertical-align: center;">⚠️</div>
+    <div style="display: table-cell; vertical-align: center;">
+      <p>For the data to be valid, both verification stages must be valid : the response signature verification and the images verification.</p>
+    </div>
+    </div>
+  
+    ## Data management
+    You can configure data retention together with your account manager, in accordance with your purpose for using the data. At the end of this time, the identity verifications are anonymized, which means all personal or sensitive data are deleted. The default storage time is 90 days.
+  
+    If needed, you can also request the anonymization of an identity verification through the [anonymization endpoint](#tag/Identity-verifications/operation/anonymize_identity_verification). 
+
+    # Applicants
+
+    You can use applicant object to match the verifications with your customer database. 
+
+    ## Creation
+    When you create an identity verification, an applicant is automatically created and the call returns an `applicant_id`.
+
+    You can also directly create an applicant, using the [create endpoint](#tag/applicants/operation/create_applicant). In this case you will be able to define the `external_applicant_id`, that should correspond to the unique identifier of the applicant in your database, as well as the `mail` of the applicant.
+
+    If the applicant is already created, you can also patch this information using the [update endpoint](#tag/applicants/operation/update_applicant).
+
+    ## Applicant file 
+    You can request several verifications for the same applicant. You only need to indicate the concerned `applicant_id` when creating the verification.
+
+    If and only if an identity verification is `approved`, the verified identity is added to the `applicant` file. To find this information, use the [retrieve an applicant endpoint.](#tag/applicants/operation/retrieve_applicant).
+
+    # Webhooks
+
+    ## Configuration
+    When creating an identity verification, you need to provide the webhook you want to be notified on. 
+  
+    You will be notified of each event on identity verifications. For more details see the [event section](#section/Identity-verification-results/Events).
+
+    To help you integrate your webhook you can trigger it with the standard answers, see [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
+
+    ## Retry
+    We expect that you will return us a 200 or 201 status code within 10 seconds before we retry, up to 2 retries will be performed. If needed, you can trigger webhook notifications manually using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
+
+    ## Body 
+    The webhook body contains the following information: 
+
+    | Attribute                | Description                                                                             |
+    |--------------------------|-----------------------------------------------------------------------------------------|
+    | applicant_id             | ID of the applicant, useful to recognize them                                           |
+    | external_applicant_id    | Your applicant ID, only if you updated it in the applicant object                       |
+    | user_journey_id          | ID of the user journey                                                                  |
+    | identity_verification_id | ID of the identity verification                                                         |
+    | status                   | status of the identity verification                                                     |
+    | response_codes           | list of response codes                                                                  |
+
+    ### Example
+    ```json
+      {
+          "specversion": "2.0",
+          "type": "ai.ubble.identity-verification.capture_completion.v2",
+          "subject": "idv_5hxpdwegjcbujpth3wdo55d3vm",
+          "id": "evt_5hxpdwegjcbujpth3wdo55d3vm",
+          "time": "2023-03-22T17:31:00Z",
+          "datacontenttype": "application/json",
+          "data": {
+              "applicant_id": "apl_5hxpdwegjcbujpth3wdo55d3vm",
+              "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
+              "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
+              "status": "declined",
+              "response_codes": [
+                  {"code": 61310, "summary": "document_front_not_captured"},
+                  {"code": 62102, "summary": "document_not_accepted"}
+              ]
+          }
+      }
+    ```
+
+    ## Signature
+    For security reasons all our webhook calls are signed.
+
+    `Ubble-Signature` header contains the timestamp of the signature plus the signature itself. This allow you to ensure the content of the webhook was not modified.
+
+    The timestamp is prefixed by `ts=`, and the signature is prefixed by `v1=`. Example: `ts=1492774577,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd`
+
+    To compare the signature, you will need the webhook secret signature. There is one for signature for test verifications and one for live verifications. You can find them in the dashboard.
+
+    ## Security
+    ### Webhook IP whitelisting
+    For security purposes, if you need to whitelist our incoming api calls, see our [public ip](https://docs.outscale.com/en/userguide/OUTSCALE-Public-IPs.html).
+
+    ### Webhooks Authentication
+    You can also choose to authentify our webhook calls against OAuth2. 
+    Please contact your account manager in order set up the authentication. 
+    You will need to provide:
+    - URL Token, 
+    - `CLIENT_ID`, 
+    - `CLIENT_SECRET` 
+    - (Optionally) A refresh token URL.
+
+    # API standards
+
+    This section describes the standards we use to ensure the consistency of our API. 
+    
+    ## Required tag
+    ### required
+    Attributes tagged as `required` **MUST** be present in requests and responses.
+
+    ### null values
+    Attributes not marked as `required` can be null. In that case the attribute is not sent in the response.
+
+    ## Resources identifiers
+    ### Format
+    `{prefix}_{lower-case base-32 encoded GUID}`
+
+    ### Resources identifiers formatting
+
+    | resource name          | prefix | example                         |
+    |------------------------|--------|---------------------------------|
+    | applicants             | apl    | apl_tkoi5db4hryu5cei5vwoabr7we  |
+    | identity-verifications | idv    | idv_tkoi5db4hryu5cei5vwoabr7we  |
+    | user-journey           | usj    | usj_tkoi5db4hryu5cei5vwoabr7we  |
+
+    ## Content type
+    The API accepts and returns `application/json` type.
+
+    ## Error handling
+    Errors 4xx and 5xx are formatted as follows:
+    - `error_type`: a short descirption code
+    - `error_codes`: a list of more detailed codes
+
+    Error codes and error types can be formatted as follows:
+    - `{target/attribute}__{error}`
+    - `{nested_object}__{object_attribute}__{error}`
+
+    ```json
+    {
+      "error_type": "invalid_request",
+      "error_codes": [
+        "birth_date__invalid_format",
+        "first_name__required",
+        "phone_number__country_code__invalid"
+      ]
+    }
+    ````
+
+    ## Common Objects/Properties
+
+    | name         | format                                                                                                                                              | example                                                                     |
+    |--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+    | countries    | - Apply ISO 3166-1 alpha-2                                                                                                                          | FR                                                                          |
+    | date-time    | - Apply ISO8601<br /> - Always UTC time                                                                                                             | 2017-07-21T17:32:28Z                                                        |
+    | phone number | - Country code with '+' sign (+33 for example) <br /> - Number with potential spaces, hyphens or trailing zero(s)  | {<br />    "country_code": "+44",<br />    "number": "1234 567890"<br /> }  |
+
+  version: 2.0.0
+
+servers:
+  - url: https://api.ubble.ai/v2/
+
+tags:
+  - name: identity verifications
+    description: Identity verification endpoints documentation.
+  - name: applicants
+    description: Applicant management endpoints documentation.
+
+x-tagGroups:
+  - name: Endpoints documentation
+    tags:
+      - Identity verifications
+      - Applicants
+paths:
+  /v2/identity-verifications:
+    post:
+      tags:
+        - Identity verifications
+      summary: Create an identity verification
+      description: This endpoint allows you to create and identity verification. You should get a `201` response and the identity verification resource containing the `_links/verification_url`.
+      operationId: create_identity_verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Only required data:
+                $ref: "#/components/examples/identity_verification_creation_request_body_min"
+              All possible data:
+                $ref: "#/components/examples/identity_verification_creation_request_body_max"
+              Use an existing applicant:
+                $ref: "#/components/examples/identity_verification_creation_request_body_min_plus_apl"
+            schema:
+              $ref: "#/components/schemas/IdentityVerification"
+      responses:
+        "201":
+          description: Identity verification created
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/identity_verification_creation_response_body"
+              schema:
+                required: [applicant_id, user_journey_id]
+                allOf:
+                  - $ref: "#/components/schemas/IdentityVerificationCreate"
+      callbacks:
+        statusChanged:
+          "{$request.body#/webhook_url}":
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    example:
+                      {
+                        "specversion": "2.0",
+                        "type": "ai.ubble.identity-verification.capture_completion.v2",
+                        "subject": "idv_5hxpdwegjcbujpth3wdo55d3vm",
+                        "id": "evt_5hxpdwegjcbujpth3wdo55d3vm",
+                        "time": "2023-03-22T17:31:00Z",
+                        "datacontenttype": "application/json",
+                        "data":
+                          {
+                            "applicant_id": "apl_5hxpdwegjcbujpth3wdo55d3vm",
+                            "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
+                            "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
+                            "status": "declined",
+                            "response_codes":
+                              [
+                                {
+                                  "code": 61310,
+                                  "summary": "document_front_not_captured",
+                                },
+                                {
+                                  "code": 62102,
+                                  "summary": "document_not_accepted",
+                                },
+                              ],
+                          },
+                      }
+                    schema:
+                      $ref: "#/components/schemas/Event"
+              responses:
+                "200":
+                  description: Your server returns this code if it accepts the callback.
+                "201":
+                  description: Your server returns this code if it accepts the callback.
+
+  /v2/identity-verifications/{identity_verification_id}/retry:
+    post:
+      tags:
+        - Identity verifications
+      summary: Retry an identity verification
+      description: |
+        This endpoint allows you to retry an identity verification with the `retry_required` status.
+
+        If the verification status is not `retry_required`, this endpoint will return an error.
+
+        You will need to provide the ID of the failed verification in the URL.
+
+        You should get a `200` response and the identity verification resource containing the new `_links/verification_url`
+
+      operationId: retry_identity_verification
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Empty body accepted:
+                $ref: "#/components/examples/identity_verification_retry_request_body_min"
+              All possible data:
+                $ref: "#/components/examples/identity_verification_retry_request_body_max"
+            schema:
+              $ref: "#/components/schemas/IdentityVerificationRetryRequest"
+
+      responses:
+        "200":
+          description: The verification has been retried successfully
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/identity_verification_creation_response_body"
+              schema:
+                required: [applicant_id, user_journey_id]
+                allOf:
+                  - $ref: "#/components/schemas/IdentityVerification"
+        "400":
+          description: The provided ID is not valid
+        "404":
+          description: The provided ID does not correspond to a failed verification
+        "409":
+          description: The verification has already succeeded
+        "500":
+          description: An error occurred while retrying the verification
+
+  /v2/identity-verifications/{identity_verification_id}:
+    get:
+      tags:
+        - Identity verifications
+      summary: Retrieve an identity verification
+      description: This endpoint allows you to get the detailed results of an identity verification.
+      operationId: retrieve_identity_verification
+      parameters:
+        - name: identity_verification_id
+          required: true
+          in: path
+          description: ID of the identity verification
+          schema:
+            $ref: "#/components/schemas/IdentityVerificationId"
+      responses:
+        "200":
+          description: Identity verification retrieved
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/identity_verification_response_body"
+              schema:
+                required: [applicant_id, user_journey_id]
+                allOf:
+                  - $ref: "#/components/schemas/IdentityVerification"
+
+  /v2/identity-verifications/{identity_verification_id}/anonymize:
+    post:
+      tags:
+        - Identity verifications
+      summary: Anonymize an identity verification
+      description: Anonymize the personal data of an identity verification with the specified ID.
+      operationId: anonymize_identity_verification
+      parameters:
+        - name: identity_verification_id
+          in: path
+          description: ID of the identity verification to anonymize
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Identity verification anonymization requested
+          content:
+            application/json:
+              example:
+                id: idv_tkoi5db4hryu5cei5vwoabr7we
+                _links:
+                  self:
+                    href: https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we
+              schema:
+                required: [applicant_id, user_journey_id]
+                allOf:
+                  - $ref: "#/components/schemas/IdentityVerification"
+        "404":
+          description: Identity verification not found
+        "400":
+          description: Bad request. The identity verification cannot be anonymized.
+        "500":
+          description: Internal server error
+      
+  /v2/identity-verifications/{identity_verification_id}/pdf-report:
+    get:
+      tags:
+        - Identity verifications
+      summary: Retrieve PDF report of an identity verification
+      description: |
+        This endpoint allows you to retrieve a PDF report containing all the information of the identity verification.
+
+        Please note that this report is only available for verifications in statuses `declined` and `approved` once you receive the `report_created` event.
+        
+
+      operationId: pdf_identity_verification
+      parameters:
+        - name: identity_verification_id
+          in: path
+          description: ID of the identity verification
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Operation success
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/identity_verification_pdf_response_body"
+              schema:
+                required: [pdf_report]
+                allOf:
+                  - $ref: "#/components/schemas/IdentityVerificationPdf"
+        "404":
+          description: The PDF is not available
+
+  /v2/identity-verifications/{identity_verification_id}/notify:
+    post:
+      tags:
+        - Identity verifications
+      summary: Request webhook notification
+      operationId: notify_identity_verification
+      description: This endpoint can be used to initiate a webhook call containing the latest event of an identity verification.
+      parameters:
+        - name: identity_verification_id
+          in: path
+          description: ID of the identity verification to notify
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhook_url:
+                  type: string
+                  format: uri
+      responses:
+        "204":
+          description: Notification succesfully requested
+
+  /v2/applicants:
+    post:
+      tags:
+        - Applicants
+      summary: Create an Applicant
+      description: This section describes all endpoints related to applicants. It will enable you to create and manage applicant objects.
+      operationId: create_applicant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Applicant"
+            examples:
+              All possible data:
+                $ref: "#/components/examples/applicant_creation_request_body"
+
+      responses:
+        "201":
+          description: Applicant successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Applicant"
+              examples:
+                Always replies:
+                  $ref: "#/components/examples/applicant_response_body"
+          links:
+            RetrieveApplicantById:
+              operationId: retrieve_applicant
+              parameters:
+                applicant_id: "$response.body#/id"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                Invalid phone number:
+                  value:
+                    {
+                      "error_type": "request_invalid",
+                      "error_codes": ["phone_number__invalid_format"],
+                    }
+
+  /v2/applicants/{applicant_id}:
+    get:
+      tags:
+        - Applicants
+      summary: Retrieve an Applicant
+      description: Retrieve an Applicant
+      operationId: retrieve_applicant
+      parameters:
+        - name: applicant_id
+          required: true
+          in: path
+          description: ID of Applicant to return
+          schema:
+            $ref: "#/components/schemas/ApplicantId"
+      responses:
+        "200":
+          description: applicant retrieved succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Applicant"
+              examples:
+                Always replies:
+                  $ref: "#/components/examples/applicant_response_body"
+        "404":
+          description: "Applicant not found"
+
+    patch:
+      tags:
+        - Applicants
+      summary: Update an Applicant
+      description: Update an Applicant
+      operationId: update_applicant
+      parameters:
+        - name: applicant_id
+          required: true
+          in: path
+          description: ID of Applicant to return
+          schema:
+            $ref: "#/components/schemas/ApplicantId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Applicant"
+            examples:
+              All possible data:
+                $ref: "#/components/examples/applicant_creation_request_body"
+      responses:
+        "200":
+          description: applicant updated succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Applicant"
+              examples:
+                Always replies:
+                  $ref: "#/components/examples/applicant_response_body"
+        "404":
+          description: Applicant not found
+        "400":
+          description: Bad request. One or more input parameters are invalid
+        "500":
+          description: Internal server error
+
+  /v2/applicants/{applicant_id}/anonymize:
+    post:
+      tags:
+        - Applicants
+      summary: Anonymize an Applicant
+      description: Anonymize the personal data of an applicant with the specified ID.
+      operationId: anonymize_applicant
+      parameters:
+        - name: applicant_id
+          in: path
+          description: ID of the applicant to anonymize
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: applicant anonymized succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Applicant"
+              examples:
+                Always replies:
+                  $ref: "#/components/examples/applicant_response_body_anonymized"
+        "404":
+          description: Identity verification not found
+        "400":
+          description: Bad request. The applicant cannot be anonymized.
+        "500":
+          description: Internal server error
+
+components:
+  examples:
+    identity_verification_creation_request_body_min:
+      value:
+        declared_data:
+          name: David Vincent
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+
+    identity_verification_creation_request_body_min_plus_apl:
+      value:
+        applicant_id: apl_tkoi5db4hryu5cei5vwoabr7we
+        declared_data:
+          name: David Vincent
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+
+    identity_verification_creation_request_body_max:
+      value:
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: apl_tkoi5db4hryu5cei5vwoabr7we
+        declared_data:
+          name: David Vincent
+          birth_date: 1934-10-02
+        phone_number:
+          country_code: "+1"
+          number: "2068133616"
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+
+    identity_verification_retry_request_body_min:
+      value: {}
+
+    identity_verification_retry_request_body_max:
+      value:
+        phone_number:
+          country_code: "+1"
+          number: "2068133616"
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+
+    identity_verification_response_body:
+      value:
+        id: idv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: apl_tkoi5db4hryu5cei5vwoabr7we
+        status: declined
+        response_codes:
+          - { "code": 61310, "summary": "document_front_not_captured" }
+          - { "code": 62102, "summary": "document_not_accepted" }
+        verified_identity:
+          full_name: David Vincent
+          birth_date: 1934-10-02
+        declared_data:
+          name: David Vincent
+          birth_date: 1934-10-02
+        documents:
+          - full_name: David Vincent
+            birth_date: 1934-10-02
+            document_type: ID
+            document_issuing_country: US
+            front_image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555
+        face:
+          image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4
+        phone_number:
+          country_code: "+1"
+          number: "2068133616"
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we"
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
+
+    identity_verification_creation_response_body:
+      value:
+        id: idv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: apl_tkoi5db4hryu5cei5vwoabr7we
+        status: pending
+        response_codes: []
+        declared_data:
+          name: David Vincent
+          birth_date: 1934-10-02
+        documents: []
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we"
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
+
+    identity_verification_pdf_response_body:
+      value:
+        pdf_report: www.pdf.com
+            
+    applicant_creation_request_body:
+      value:
+        external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
+        email: david.vincent@courriel.ml
+
+    applicant_response_body:
+      value:
+        id: apl_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
+        email: david.vincent@courriel.ml
+        _links:
+          self:
+            href: https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we
+
+    applicant_response_body_anonymized:
+      value:
+        id: apl_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
+        _links:
+          self:
+            href: https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we
+    address_example_american:
+      value:
+        address_line1: 4022 Laguna St
+        address_line2: Flat 456
+        city: Santa Barbara
+        zip: 93101
+        country: US
+
+  schemas:
+    IdentityVerification:
+      type: object
+      required: [id]
+      properties:
+        id:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/IdentityVerificationId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/IdentityVerificationBase"
+    IdentityVerificationCreate:
+      type: object
+      required: [id]
+      properties:
+        id:
+          $ref: "#/components/schemas/IdentityVerificationId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/IdentityVerificationCreateBase"
+
+    IdentityVerificationBase:
+      type: object
+      required:
+        [declared_data, status, webhook_url, redirect_url, _links]
+      properties:
+        user_journey_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        status:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/VerificationStatuses"
+        response_codes:
+          type: array
+          readOnly: true
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        verified_identity:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/Identity"
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
+        documents:
+          type: array
+          readOnly: true
+          minItems: 0
+          maxItems: 2
+          items:
+            $ref: "#/components/schemas/Document"
+        face:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/Face"
+        phone_number:
+          $ref: "#/components/schemas/PhoneNumber"
+        webhook_url:
+          type: string
+          format: uri
+        redirect_url:
+          type: string
+          format: uri
+        _links:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/IdentityVerificationLinks"
+
+    IdentityVerificationCreateBase:
+      type: object
+      required:
+        [declared_data, status, webhook_url, redirect_url, _links]
+      properties:
+        user_journey_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        status:
+          $ref: "#/components/schemas/VerificationStatuses"
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
+        documents:
+          type: array
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/Document"
+        face:
+          allOf:
+            - $ref: '#/components/schemas/VerificationFace'
+          readOnly: true
+        response_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseCodes'
+          readOnly: true
+        verified_identity:
+          allOf:
+            - $ref: '#/components/schemas/VerificationIdentity'
+          readOnly: true
+        phone_number:
+          $ref: "#/components/schemas/PhoneNumber"
+        webhook_url:
+          type: string
+          format: uri
+        redirect_url:
+          type: string
+          format: uri
+        _links:
+          $ref: "#/components/schemas/IdentityVerificationLinks"
+
+    IdentityVerificationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+        - $ref: "#/components/schemas/ApplicantLink"
+        - $ref: "#/components/schemas/ActiveLink"
+
+    IdentityVerificationPdf:
+        type: object
+        properties:
+          pdf_report:
+            type: string
+            format: uri
+
+    DeclaredData:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        birth_date:
+          type: string
+          format: date
+
+    Document:
+      type: object
+      required: [document_type, document_issuing_country, front_image_signed_url]
+      readOnly: true
+      allOf:
+        - $ref: "#/components/schemas/Identity"
+        - properties:
+            personal_number:
+              type: string
+              maxLength: 255
+            tax_identification_number:
+              type: string
+              maxLength: 255
+            document_type:
+              $ref: "#/components/schemas/DocumentTypes"
+            document_issuing_country:
+              $ref: "#/components/schemas/CountryCode"
+            document_number:
+              type: string
+              maxLength: 255
+            document_expiry_date:
+              type: string
+              format: date
+            document_issue_date:
+              type: string
+              format: date
+            document_issue_place:
+              type: string
+              maxLength: 255
+            document_mrz:
+              type: string
+              pattern: ^([A-Z0-9<]{2}[A-Z0-9<]{1,38}[\n\r])+([A-Z0-9<]{2}[A-Z0-9<]{1,44}[\n\r])?([A-Z0-9<]{2}[A-Z0-9<]{1,44}[\n\r])?$
+            front_image_signed_url:
+              $ref: "#/components/schemas/PreSignedUrl"
+            back_image_signed_url:
+              $ref: "#/components/schemas/PreSignedUrl"
+
+    Identity:
+      type: object
+      required: [full_name, birth_date]
+      readOnly: true
+      properties:
+        full_name:
+          type: string
+          minLength: 2
+          maxLength: 510
+          readOnly: true
+        first_names:
+          type: string
+          minLength: 1
+          maxLength: 255
+          readOnly: true
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          readOnly: true
+        last_name_at_birth:
+          type: string
+          minLength: 1
+          maxLength: 255
+          readOnly: true
+        birth_date:
+          type: string
+          format: date
+          readOnly: true
+        birth_place:
+          type: string
+          minLength: 1
+          maxLength: 255
+          readOnly: true
+        nationality:
+          $ref: "#/components/schemas/CountryCode"
+        gender:
+          $ref: "#/components/schemas/Gender"
+
+    Face:
+      type: object
+      required: [image_signed_url]
+      readOnly: true
+      properties:
+        image_signed_url:
+          $ref: "#/components/schemas/PreSignedUrl"
+
+    Pdf:
+      type: object
+      required: [signed_url]
+      readOnly: true
+      properties:
+        signed_url:
+          $ref: "#/components/schemas/PreSignedUrl"
+
+    IdentityVerificationRetryRequest:
+      type: object
+      properties:
+        phone_number:
+          $ref: "#/components/schemas/PhoneNumber"
+        webhook_url:
+          type: string
+          format: uri
+        redirect_url:
+          type: string
+          format: uri
+
+    Event:
+      type: object
+      required: [specversion, type, subject, id, time, datacontenttype, data]
+      properties:
+        specversion:
+          type: string
+          description: The version of the CloudEvents specification.
+          example: "2.0"
+        type:
+          type: string
+          description: The type of the CloudEvent.
+          example: "ai.ubble.identity-verification.capture_completion.v2"
+        subject:
+          type: string
+          description: The identifier of the subject of the event.
+          example: "idv_5hxpdwegjcbujpth3wdo55d3vm"
+        id:
+          type: string
+          description: The identifier of the event.
+          example: "evt_5hxpdwegjcbujpth3wdo55d3vm"
+        time:
+          type: string
+          format: date-time
+          description: The time when the event occurred.
+          example: "2023-03-22T17:31:00Z"
+        datacontenttype:
+          type: string
+          description: The content type of the data attribute.
+          example: "application/json"
+        data:
+          type: object
+          description: The event payload.
+          example:
+            {
+              "applicant_id": "apl_5hxpdwegjcbujpth3wdo55d3vm",
+              "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
+              "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
+              "status": "declined",
+              "response_codes":
+                [
+                  { "code": 61310, "summary": "document_front_not_captured" },
+                  { "code": 62102, "summary": "document_not_accepted" },
+                ],
+            }
+    ApplicantLink:
+      type: object
+      required: [applicant]
+      properties:
+        applicant:
+          $ref: "#/components/schemas/HalLink"
+
+    ActiveLink:
+      type: object
+      required: [verification_url]
+      properties:
+        verification_url:
+          $ref: "#/components/schemas/HalLink"
+
+    ApplicantRelation:
+      type: object
+      properties:
+        id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+
+    Applicant:
+      required: [id]
+      properties:
+        id:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/BaseApplicant"
+        - $ref: "#/components/schemas/ApplicantsLinks"
+
+    BaseApplicant:
+      type: object
+      properties:
+        external_applicant_id:
+          type: string
+          example: "ext_osdfdfdb4hryu5cei5vwoabrk5k"
+        email:
+          type: string
+          format: email
+          example: david.vincent@courriel.ml
+
+    ApplicantsLinks:
+      type: object
+      required: [_links]
+      properties:
+        _links:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/SelfLink"
+
+    Attempt:
+      type: object
+      properties:
+        state:
+          $ref: "#/components/schemas/AttemptStates"
+        link:
+          type: string
+          format: uri
+          example: https://id.ubble.ai/4hryu5cei5/
+
+    DocumentTypes:
+      type: string
+      description: Type of document.
+      enum:
+        - driving license
+        - ID
+        - passport
+        - residence permit
+
+    VerificationStatuses:
+      type: string
+      description: Status of the identity verification.
+      readOnly: true
+      enum:
+        - pending
+        - capture_in_progress
+        - checks_in_progress
+        - approved
+        - declined
+        - retry_required
+        - refused
+
+    AttemptStates:
+      type: string
+      description: States of an attempt.
+      enum:
+        - pending_redirection
+        - capture_in_progress
+        - checks_in_progress
+        - completed
+        - expired
+        - capture_aborted
+        - capture_refused
+        - checks_aborted
+
+    ResponseCodes:
+      type: object
+      description: The code giving more details about the result.
+      readOnly: true
+      properties:
+        response_code:
+          $ref: "#/components/schemas/ResponseCode"
+        response_summary:
+          $ref: "#/components/schemas/ResponseSummary"
+
+    ResponseSummary:
+      type: string
+      description: A descriptive code of the response code.
+      readOnly: true
+
+    ResponseCode:
+      type: integer
+      description: The numeric code of the response code.
+      readOnly: true
+      minimum: 10000
+      maximum: 69999
+
+    ApplicantId:
+      type: string
+      description: Applicant unique identifier.
+      pattern: ^apl_\w+$
+      example: apl_tkoi5db4hryu5cei5vwoabr7we
+      readOnly: true
+
+    IdentityVerificationId:
+      type: string
+      description: Identity verification unique identifier.
+      pattern: ^idv_\w+$
+      example: idv_tkoi5db4hryu5cei5vwoabr7we
+      readOnly: true
+
+    UserJourneyId:
+      type: string
+      description: User journey unique identifier.
+      pattern: ^usj_\w+$
+      example: usj_tkoi5db4hryu5cei5vwoabr7we
+      readOnly: true
+
+    Address:
+      type: object
+      description: Postal address.
+      required: [address_line1, city, zip, country]
+      properties:
+        address_line1:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: 4022 Laguna St
+        address_line2:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: Flat 456
+        city:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: Santa Barbara
+        zip:
+          type: string
+          minLength: 2
+          maxLength: 20
+          example: 93101
+        country:
+          $ref: "#/components/schemas/CountryCode"
+
+    CountryCode:
+      type: string
+      format: ISO 3166-1 alpha-2
+      pattern: ^[A-Za-z]{2}$
+      example: US
+
+    Gender:
+      type: string
+      description: Person gender.
+      example: M
+      enum:
+        - M
+        - F
+
+    PhoneNumber:
+      type: object
+      required: [country_code, number]
+      properties:
+        country_code:
+          $ref: "#/components/schemas/PhonePrefix"
+        number:
+          $ref: "#/components/schemas/DomesticPhoneNumber"
+
+    PhonePrefix:
+      type: string
+      format: international phone prefix
+      pattern: ^\+(\d+)$
+      example: "+33"
+
+    DomesticPhoneNumber:
+      type: string
+      format: domestic phone number
+      pattern: ^\d{1,14}$
+      example: "2068133616"
+
+    SelfLink:
+      type: object
+      required: [self]
+      readOnly: true
+      properties:
+        self:
+          $ref: "#/components/schemas/HalLink"
+
+    HalLink:
+      type: object
+      required: [href]
+      properties:
+        href:
+          type: string
+          format: uri
+
+    PreSignedUrl:
+      type: string
+      format: uri
+      description: Pre-signed URL
+      example: https://storage-b.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4
+
+    DatedObject:
+      type: object
+      required: [created_on, modified_on]
+      properties:
+        created_on:
+          description: UTC Date time when the resource was created
+          type: string
+          format: date-time
+          example: 2017-07-21T17:32:28Z
+          readOnly: true
+        modified_on:
+          description: UTC Date time when the resource was modified
+          type: string
+          format: date-time
+          example: 2017-07-21T17:40:32Z
+          readOnly: true
+
+    VerificationFace:
+      type: object
+      properties:
+        image_signed_url:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+        - image_signed_url
+
+    VerificationIdentity:
+      type: object
+      description: IdentitySerializer for our main Identity model
+      properties:
+        first_names:
+          type: string
+          nullable: true
+          readOnly: true
+        full_name:
+          type: string
+          nullable: true
+          readOnly: true
+        last_name:
+          type: string
+          nullable: true
+          readOnly: true
+        last_name_at_birth:
+          type: string
+          nullable: true
+          readOnly: true
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        birth_place:
+          type: string
+          nullable: true
+          maxLength: 255
+        nationality:
+          type: string
+          readOnly: true
+        gender:
+          nullable: true
+          oneOf:
+            - $ref: '#/components/schemas/GenderA47Enum'
+            - $ref: '#/components/schemas/BlankEnum'
+            - $ref: '#/components/schemas/NullEnum'
+      required:
+        - first_names
+        - full_name
+        - last_name
+        - last_name_at_birth
+        - nationality
+
+    GenderA47Enum:
+      enum:
+        - M
+        - F
+        - NA
+      type: string
+      description: |-
+        * `M` - M
+        * `F` - F
+        * `NA` - NA
+
+    BlankEnum:
+      enum:
+        - ''
+
+    NullEnum:
+      enum:
+        - null
