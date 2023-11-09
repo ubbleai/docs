@@ -419,14 +419,15 @@ info:
     .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
       font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
     .tg .tg-dvid{background-color:#efefef;border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
-    .tg .tg-fymr{background-color:#f0f0f0;border-color:inherit;font-weight:bold;text-align:left;vertical-align:top;}
-    .tg .tg-y698{background-color:#c4c4c4;border-color:inherit;text-align:left;vertical-align:top}
-    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-    .one {width: 5%}
-    .two {width: 20%}
+    .tg .tg-fymr{background-color:#f0f0f0;border-color:inherit;font-weight:bold;text-align:left;vertical-align:center;}
+    .tg .tg-center{border-color:inherit;text-align:center;vertical-align:center}
+    .tg .tg-y698{background-color:#c4c4c4;border-color:inherit;text-align:left;vertical-align:center}
+    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:center}
+    .one {width: 10%}
+    .two {width: 30%}
     .three {width: 30%}
-    .four {width: 10%}
-    .five {width: 10%}
+    .four {width: 15%}
+    .five {width: 15%}
     </style>
 
     ### Status: `approved`
@@ -452,8 +453,8 @@ info:
         <td class="tg-0pky">10000</td>
         <td class="tg-0pky">approved</td>
         <td class="tg-0pky">Approved</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
     </tbody>
     </table>
@@ -484,36 +485,36 @@ info:
         <td class="tg-0pky">61101</td>
         <td class="tg-0pky">applicant_never_started</td>
         <td class="tg-0pky">Applicant was probably not redirected to the application and never started the flow</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61111</td>
         <td class="tg-0pky">applicant_not_ready</td>
         <td class="tg-0pky">Applicant explicitly stated that they wanted to perform the identity verification later by clicking on the dedicated button</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>       
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>       
       </tr>
       <tr>
         <td class="tg-0pky">61112</td>
         <td class="tg-0pky">applicant_no_document</td>
         <td class="tg-0pky">Applicant explicitly stated that they did not have their document with them by clicking on the dedicated button</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61113</td>
         <td class="tg-0pky">camera_access_refused</td>
         <td class="tg-0pky">Applicant did not give access to the camera despite the dedicated instructions</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61121</td>
         <td class="tg-0pky">applicant_drop</td>
         <td class="tg-0pky">Applicant left the process before the capture phase and the verification URL expired (by default the expiration time is 15 minutes)</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-fymr" colspan="5"><span style="font-weight:bold">Technical issue</span></td>
@@ -522,36 +523,36 @@ info:
         <td class="tg-0pky">61201</td>
         <td class="tg-0pky">connexion_insufficient</td>
         <td class="tg-0pky">Applicant did not have a sufficient connexion to perform the capture</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61202</td>
         <td class="tg-0pky">browser_not_supported</td>
         <td class="tg-0pky">Applicant’s browser was not suitable for video streaming</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61203</td>
         <td class="tg-0pky">camera_not_found</td>
         <td class="tg-0pky">Applicant’s device did not have any camera</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61204</td>
         <td class="tg-0pky">focus_lost</td>
         <td class="tg-0pky">Applicant switched tabs/application while performing the id verification</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61205</td>
         <td class="tg-0pky">sms_not_received</td>
         <td class="tg-0pky">Applicant did not receive the SMS</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-fymr" colspan="5"><span style="font-weight:bold">Document capture issue</span></td>
@@ -560,50 +561,50 @@ info:
         <td class="tg-0pky">61301</td>
         <td class="tg-0pky">document_video_blurry</td>
         <td class="tg-0pky">Applicant’s document video is too blurry<br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61302</td>
         <td class="tg-0pky">document_video_lighting_issue</td>
         <td class="tg-0pky">Applicant performed the document capture under poor lighting conditions</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61310</td>
         <td class="tg-0pky">document_front_not_captured</td>
         <td class="tg-0pky">Applicant has not captured the front of the document</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61311</td>
         <td class="tg-0pky">document_back_not_captured</td>
         <td class="tg-0pky">Applicant has not captured the back of the document</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61312</td>
         <td class="tg-0pky">document_partially_hidden</td>
         <td class="tg-0pky">Applicant hides part of the document</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61313</td>
         <td class="tg-0pky">document_not_tilted</td>
         <td class="tg-0pky">Applicant did not present a dynamic view of the document</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61314</td>
         <td class="tg-0pky">document_challenge_timeout</td>
         <td class="tg-0pky">Applicant failed to meet the document challenge and the verification expired</td>
-        <td class="tg-0pky">&#10060;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-fymr" colspan="5"><span style="font-weight:bold">Face capture issue</span></td>
@@ -612,50 +613,50 @@ info:
         <td class="tg-0pky">61401</td>
         <td class="tg-0pky">face_video_blurry</td>
         <td class="tg-0pky">Applicant’s video of their face is too blurry <br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61402</td>
         <td class="tg-0pky">face_video_lighting_issue</td>
         <td class="tg-0pky">Applicant performed their identity verification under poor lighting conditions</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61410</td>
         <td class="tg-0pky">face_not_captured</td>
         <td class="tg-0pky">Applicant has not presented a face</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61411</td>
         <td class="tg-0pky">face_partially_hidden</td>
         <td class="tg-0pky">Applicant did not show the full front view of their face</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61412</td>
         <td class="tg-0pky">face_not_turned</td>
         <td class="tg-0pky">Applicant did not move to prove the liveness</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61413</td>
         <td class="tg-0pky">face_challenge_timeout</td>
         <td class="tg-0pky">Applicant failed to meet the face challenge and the verification expired</td>
-        <td class="tg-0pky">&#10060;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">61414</td>
         <td class="tg-0pky">various_faces_detected</td>
         <td class="tg-0pky">Applicant also captured another person face</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-fymr" colspan="5"><span style="font-weight:bold">Internal error</span></td>
@@ -664,8 +665,8 @@ info:
         <td class="tg-0pky">61901</td>
         <td class="tg-0pky">internal_error</td>
         <td class="tg-0pky">An internal error prevents us from completing the verification, we do our best to reduce the occurrence of this case</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
     </tbody>
     </table>
@@ -676,6 +677,8 @@ info:
       <col class="one" />
       <col class="two" />
       <col class="three" />
+      <col class="four" />
+      <col class="five" />
     </colgroup>
     <thead>
       <tr>
@@ -694,22 +697,22 @@ info:
         <td class="tg-0pky">62101</td>
         <td class="tg-0pky">document_expired</td>
         <td class="tg-0pky">Applicant presented an expired document</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62102</td>
         <td class="tg-0pky">document_not_accepted</td>
         <td class="tg-0pky">Applicant presented a document which is not accepted</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62103</td>
         <td class="tg-0pky">document_damaged</td>
         <td class="tg-0pky">Applicant has submitted a damaged document</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-dvid" colspan="5">Copy issue</td>
@@ -718,15 +721,15 @@ info:
         <td class="tg-0pky">62201</td>
         <td class="tg-0pky">document_photocopy</td>
         <td class="tg-0pky">Applicant presented a photocopy of the document</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62202</td>
         <td class="tg-0pky">document_screenshot</td>
         <td class="tg-0pky">Applicant presented the document on a screen</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-dvid" colspan="5">Identity fraud</td>
@@ -736,57 +739,57 @@ info:
         <td class="tg-0pky">62301</td>
         <td class="tg-0pky">document_counterfeit</td>
         <td class="tg-0pky">Applicant has submitted a counterfeit or falsification</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62302</td>
         <td class="tg-0pky">document_stolen</td>
         <td class="tg-0pky">Applicant presented a document declared as stolen or lost</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62303</td>
         <td class="tg-0pky">document_swap</td>
         <td class="tg-0pky">Applicant presented the front and back of two different documents</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62304</td>
         <td class="tg-0pky">face_mismatch</td>
         <td class="tg-0pky">Applicant does not match the photograph of the document</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62305</td>
         <td class="tg-0pky">face_not_live</td>
         <td class="tg-0pky">Applicant has presented a photography or a video of someone else's face on a screen or on a physical medium</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62306</td>
         <td class="tg-0pky">face_alteration</td>
         <td class="tg-0pky">Applicant has altered their appearance</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62307</td>
         <td class="tg-0pky">videos_digital_alteration</td>
         <td class="tg-0pky">Applicant has digitally altered the videos</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62399</td>
         <td class="tg-0pky">generic_fraud</td>
         <td class="tg-0pky">Generic code when a fraud has been detected within a certified identity verification</td>
-        <td class="tg-0pky">&#10060;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
       <tr>
@@ -796,22 +799,22 @@ info:
         <td class="tg-0pky">62401</td>
         <td class="tg-0pky">declared_identity_mismatch</td>
         <td class="tg-0pky">Applicant’s identity does not match with the expected one</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62402</td>
         <td class="tg-0pky">suspicious_device</td>
         <td class="tg-0pky">Applicant used a device that has been technically altered</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-0pky">62403</td>
         <td class="tg-0pky">consent_unclear</td>
         <td class="tg-0pky">Applicant seems to have performed the capture against their will</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
     </tbody>
     </table>
@@ -839,8 +842,8 @@ info:
         <td class="tg-0pky">63001</td>
         <td class="tg-0pky">applicant_refusal</td>
         <td class="tg-0pky">Applicant explicitly refused to do the verification process by clicking on the dedicated button</td>
-        <td class="tg-0pky">&#9989;</td>
-        <td class="tg-0pky">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
     </tbody>
     </table>
