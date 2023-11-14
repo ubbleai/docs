@@ -1050,11 +1050,12 @@ info:
     The API accepts and returns `application/json` type.
 
     ## Error handling
-    Errors 4xx and 5xx are formatted as follows:
-    - `error_type`: a short descirption code
+    For HTTP error codes 400 and 422 the response body will contain:
+    - `error_type`: a short description code
     - `error_codes`: a list of more detailed codes
-
+    
     Error codes and error types can be formatted as follows:
+    - `{error}`
     - `{target/attribute}__{error}`
     - `{nested_object}__{object_attribute}__{error}`
 
