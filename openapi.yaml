@@ -124,15 +124,15 @@ info:
     ### Applicant return
     Applicants are redirected to the redirect URL you defined when they terminated the journey. This return is associated with an event that you will find both in the webhook notification and as a parameter in the redirect URL, as well as a response_code when the capture is not completed.
 
-    Example of redirect URL: `?id=idv_01h2623ysfkhpn7czed0bw8fd6&event=capture_abortion&response_code=61101`
+    Example of redirect URL: `?id=idv_01h2623ysfkhpn7czed0bw8fd6&event=identity_verification_capture_aborted&response_code=61101`
 
-    If the event is `capture_completion`, you will have to wait for the next event to make your decision. You can either ask applicants to perform additional checks, or make them wait until results are available. Please also note that in some cases the `check_completion` event can occur almost simultaneously.
+    If the event is `identity_verification_audit_completed`, you will have to wait for the next event to make your decision. You can either ask applicants to perform additional checks, or make them wait until results are available. Please also note that in some cases the `check_completion` event can occur almost simultaneously.
 
-    If the event is `capture_abortion` we advise you to request a retry. See the [retry section](#section/Identity-verification-results/Retry-management) to implement it.
+    If the event is `identity_verification_capture_aborted` we advise you to request a retry. See the [retry section](#section/Identity-verification-results/Retry-management) to implement it.
 
-    If the event is `capture_refusal` we advise you to propose an alternative to the applicant.
+    If the event is `identity_verification_capture_refused` we advise you to propose an alternative to the applicant.
 
-    If the event is `expiration`, the user tried to open a link that was already expired. We advise you to request a retry. SSee the [retry section](#section/Identity-verification-results/Retry-management) to implement it.
+    If the event is `identity_verification_link_expired`, the user tried to open a link that was already expired. We advise you to request a retry. SSee the [retry section](#section/Identity-verification-results/Retry-management) to implement it.
 
     For more details about these events please see the [lifecycle section](#section/Identity-verification-results/Lifecycle).
 
@@ -168,15 +168,15 @@ info:
 
     The return is associated with an event that you will find both in the webhook notification and as a parameter in the redirect URL. 
 
-    Example of redirect URL: `?id=01h2623ysfkhpn7czed0bw8fd6&event=capture_abortion&response_code=61101`
+    Example of redirect URL: `?id=01h2623ysfkhpn7czed0bw8fd6&event=identity_verification_capture_aborted&response_code=61101`
 
-    If the event is `capture_completion`, you will have to wait for the next event to make your decision. You can either ask applicants to perform additional checks, or make them wait until results are available. 
+    If the event is `identity_verification_capture_completed`, you will have to wait for the next event to make your decision. You can either ask applicants to perform additional checks, or make them wait until results are available. 
 
-    Please also note that in some cases the `check_completion` event can occur almost simultaneously, and consequently the results can be available when the applicant is redirected. 
+    Please also note that in some cases the `identity_verification_checks_completed` event can occur almost simultaneously, and consequently the results can be available when the applicant is redirected. 
 
-    If the event is `capture_abortion`,  we advise you to request a retry. See the [retry section](#section/Identity-verification-results/Retry-management) to implement it. 
+    If the event is `identity_verification_capture_aborted`,  we advise you to request a retry. See the [retry section](#section/Identity-verification-results/Retry-management) to implement it. 
 
-    If the event is `capture_refusal`, we advise you to propose an alternative to the applicant.
+    If the event is `identity_verification_capture_refused`, we advise you to propose an alternative to the applicant.
 
     For more details about these events, please see the [lifecycle section](#section/Identity-verification-results/Lifecycle)
 
@@ -242,8 +242,8 @@ info:
       
       ```json
       {
-        "event": "capture_completion",
-        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=capture_completion"
+        "event": "identity_verification_capture_completed",
+        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_aborted"
       }
       ```
 
@@ -253,9 +253,9 @@ info:
       
       ```json
       {
-        "event": "capture_refusal",
+        "event": "identity_verification_capture_refused",
         "responseCode": 63001,
-        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=capture_completion"
+        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_aborted"
       }
       ```
       
@@ -265,9 +265,9 @@ info:
       
       ```json
       {
-        "event": "capture_abortion",
+        "event": "identity_verification_capture_aborted",
         "responseCode": 61111,
-        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=capture_abortion&response_code=63001"
+        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_aborted&response_code=63001"
       }
       ```
       
@@ -277,8 +277,8 @@ info:
       
       ```json
       {
-        "event": "expiration",
-        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=capture_aborted&response_code=63001"`
+        "event": "identity_verification_link_expired",
+        "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_aborted&response_code=63001"`
       }
       ```
       
@@ -359,20 +359,20 @@ info:
 
     An event is a change in the verification lifecycle that triggers a notification.
 
-    | <div style="width:12em">Events</div> | Description                                                                                                                       |
-    |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-    | `creation`                           | You created an identity verification                                                                                              |
-    | `start`                              | The applicant has been redirected to the web application                                                                          |
-    | `capture_completion`                 | The applicant completed the capture                                                                                               |
-    | `checks_completion`                  | We completed the checks                                                                                                           |
-    | `expiration`                         | The link expired without applicant being redirected to the web application, please note the default expiration time is 15 minutes |
-    | `capture_refusal`                    | The applicant explicitly refused to perform the verification                                                                      |
-    | `capture_abortion`                   | The applicant terminated the capture without completing it                                                                        |
-    | `checks_inconclusive`                | The applicant did not provide the assets required to perform the checks                                                           |
-    | `retry_requested`                    | You requested a retry for this identity verification                                                                              |
-    | `anonymization`                      | The verification has been anonymized and was in the status `retry_required`, retry is no longer available                         |
-    | `audit_completion`                   | The verification has been audited and the status may have been updated                                                            |
-    | `report_created`                     | The pdf report is available                                                                                                      |
+    | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
+    |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+    | `identity_verification_created`                           | You created an identity verification                                                                                              |
+    | `identity_verification_started`                           | The applicant has been redirected to the web application                                                                          |
+    | `identity_verification_capture_completed`                 | The applicant completed the capture                                                                                               |
+    | `identity_verification_checks_completed`                  | We completed the checks                                                                                                           |
+    | `identity_verification_link_expired`                      | The link expired without applicant being redirected to the web application, please note the default expiration time is 15 minutes |
+    | `identity_verification_capture_refused`                   | The applicant explicitly refused to perform the verification                                                                      |
+    | `identity_verification_capture_aborted`                   | The applicant terminated the capture without completing it                                                                        |
+    | `identity_verification_checks_inconclusive`               | The applicant did not provide the assets required to perform the checks                                                           |
+    | `identity_verification_retry_requested`                   | You requested a retry for this identity verification                                                                              |
+    | `identity_verification_anonymized`                        | The verification has been anonymized and was in the status `retry_required`, retry is no longer available                         |
+    | `identity_verification_audit_completed`                   | The verification has been audited and the status may have been updated                                                            |
+    | `identity_verification_report_created`                    | The pdf report is available                                                                                                      |
 
     ## Status
 
@@ -887,30 +887,30 @@ info:
     
     In order not to penalize the response time of our products, we have decoupled the API response and the pdf generation.
     
-    You'll therefore receive a `report_created` event a few seconds after the `check_completion` event, telling you that the pdf report is ready. 
+    You'll therefore receive a `identity_verification_report_created` event a few seconds after the `identity_verification_checks_completed` event, telling you that the pdf report is ready. 
     Use the dedicated endpoint to retrieve it.
 
     ## API response signing
 
     The API response signature can be activated by your account manager.
     
-    This signature can be used to verify that the API response has been issued by Ubble and has not been altered.
+    This signature can be used to verify that the API response has been issued by Checkout.com and has not been altered.
 
     #### Verifying Response signature
 
-    The `Ubble-Signature` header contains:
+    The `Cko-Signature` header contains:
     - the timestamp of the request, for example, `1635236316.377888`
     - the signing key identifier and version, for example, `3456-live-v1`
     - the signature itself, for example, `5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd`
 
     Format of response signature:
     ```
-      <timestamp>:<user_journey_id>-<test or live verification>-<key version>:<signature>
+      <timestamp>:<organization_id>-<test or live verification>-<key version>:<signature>
     ```
 
     Response signature example:
     ```
-      1635236316.377888:3456-live-v1:5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd
+      1635236316.377888:3456-production-v1:5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd
     ```
 
     We use an asymmetric key signing algorithm of type ECDSA with a sha2-512 hashing algorithm to sign the API response. 
@@ -983,7 +983,7 @@ info:
     ```json
       {
           "specversion": "2.0",
-          "type": "ai.ubble.identity-verification.capture_completion.v2",
+          "type": "identity_verification_capture_completed",
           "subject": "idv_5hxpdwegjcbujpth3wdo55d3vm",
           "id": "evt_5hxpdwegjcbujpth3wdo55d3vm",
           "time": "2023-03-22T17:31:00Z",
@@ -1138,7 +1138,7 @@ paths:
                     example:
                       {
                         "specversion": "2.0",
-                        "type": "ai.ubble.identity-verification.capture_completion.v2",
+                        "type": "identity_verification_capture_completed",
                         "subject": "idv_5hxpdwegjcbujpth3wdo55d3vm",
                         "id": "evt_5hxpdwegjcbujpth3wdo55d3vm",
                         "time": "2023-03-22T17:31:00Z",
@@ -1287,7 +1287,7 @@ paths:
       description: |
         This endpoint allows you to retrieve a PDF report containing all the information of the identity verification.
 
-        Please note that this report is only available for verifications in statuses `declined` and `approved` once you receive the `report_created` event.
+        Please note that this report is only available for verifications in statuses `declined` and `approved` once you receive the `identity_verification_report_created` event.
         
 
       operationId: pdf_identity_verification
@@ -1883,7 +1883,7 @@ components:
         type:
           type: string
           description: The type of the CloudEvent.
-          example: "ai.ubble.identity-verification.capture_completion.v2"
+          example: "identity_verification_capture_completed"
         subject:
           type: string
           description: The identifier of the subject of the event.
