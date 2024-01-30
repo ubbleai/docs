@@ -72,7 +72,7 @@ info:
       "created_on": "2017-07-21T17:32:28Z",
       "modified_on": "2017-07-21T17:40:32Z",
       "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr7we",
-      "applicant_id": "apl_tkoi5db4hryu5cei5vwoabr7we",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7we",
       "status": "pending",
       "response_codes": [],
       "declared_data": {
@@ -87,7 +87,7 @@ info:
           "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
         },
         "applicant": {
-          "href": "https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we"
+          "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
         },
         "verification_url": {
           "href": "https://id.ubble.ai/4hryu5cei5/"
@@ -119,11 +119,11 @@ info:
         "specversion": "2.0",
         "type": "identity_verification_capture_completed",
         "subject": "idv_5hxpdwegjcbujpth3wdo55d3vm",
-        "id": "evt_5hxpdwegjcbujpth3wdo55d3vm",
+        "id": "evnt_5hxpdwegjcbujpth3wdo55d3vm",
         "time": "2023-03-22T17:31:00Z",
         "datacontenttype": "application/json",
         "data": {
-            "applicant_id": "apl_5hxpdwegjcbujpth3wdo55d3vm",
+            "applicant_id": "aplt_5hxpdwegjcbujpth3wdo55d3vm",
             "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
             "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
             "status": "declined",
@@ -152,7 +152,7 @@ info:
       "created_on": "2017-07-21T17:32:28Z",
       "modified_on": "2017-07-21T17:40:32Z",
       "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr7we",
-      "applicant_id": "apl_tkoi5db4hryu5cei5vwoabr7we",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7we",
       "status": "declined",
       "response_codes": [
         {
@@ -195,7 +195,7 @@ info:
           "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
         },
         "applicant": {
-          "href": "https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we"
+          "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
         },
         "verification_url": {
           "href": "https://id.ubble.ai/4hryu5cei5/"
@@ -920,12 +920,19 @@ info:
         <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
-        <td class="tg-fymr" colspan="5"><span style="font-weight:bold">Internal error</span></td>
+        <td class="tg-fymr" colspan="5"><span style="font-weight:bold">Other issues</span></td>
       </tr>
       <tr>
         <td class="tg-0pky">61901</td>
         <td class="tg-0pky">internal_error</td>
         <td class="tg-0pky">An internal error prevents us from completing the verification, we do our best to reduce the occurrence of this case</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61911</td>
+        <td class="tg-0pky">corrupted_videos</td>
+        <td class="tg-0pky">The received videos cannot be played</td>
         <td class="tg-center">&#9989;</td>
         <td class="tg-center">&#9989;</td>
       </tr>
@@ -1325,7 +1332,7 @@ info:
 
     To help you integrate your webhook you can trigger it with the standard answers, see [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
 
-    ## body
+    ## Body
 
     The webhook body contains the following information: 
 
@@ -1344,11 +1351,11 @@ info:
           "specversion": "2.0",
           "type": "identity_verification_capture_completed",
           "subject": "idv_5hxpdwegjcbujpth3wdo55d3vm",
-          "id": "evt_5hxpdwegjcbujpth3wdo55d3vm",
+          "id": "evnt_5hxpdwegjcbujpth3wdo55d3vm",
           "time": "2023-03-22T17:31:00Z",
           "datacontenttype": "application/json",
           "data": {
-              "applicant_id": "apl_5hxpdwegjcbujpth3wdo55d3vm",
+              "applicant_id": "aplt_5hxpdwegjcbujpth3wdo55d3vm",
               "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
               "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
               "status": "declined",
@@ -1386,10 +1393,10 @@ info:
 
     ## Signature
     For security reasons all our webhook calls are signed.
+    
+    `Cko-Signature` header contains the timestamp of the signature plus the signature itself. This allow you to ensure the content of the webhook was not modified.
 
-    `Ubble-Signature` header contains the timestamp of the signature plus the signature itself. This allow you to ensure the content of the webhook was not modified.
-
-    The timestamp is prefixed by `ts=`, and the signature is prefixed by `v1=`. Example: `ts=1492774577,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd`
+    The header has the following format: "{timestamp}:{signature version}:{signature}" the format follows. Example: `1706285972.415666:1-test-v1:MIGGAkFt55yXjDDD0IFgVg+kH7++bJql/UfL8YcwOgaKvb0r/Zj/c/ULPKn7YUr3ddAi3PsCP2rPMnvEMBMGmPIB292nQgJBHR5H/Nk1BLWDvOf5VWjn+OmtU1J84m5NTvIxkkV9kcgyk1mUwUfAJGNoU5LhyYjBqwiU+CwkTVJa844qitcqhZg=`
 
     To compare the signature, you will need the webhook secret signature. There is one for signature for test verifications and one for live verifications. You can find them in the dashboard.
 
@@ -1416,11 +1423,11 @@ info:
 
     ### Resources identifiers formatting
 
-    | resource name          | prefix | example                         |
-    |------------------------|--------|---------------------------------|
-    | applicants             | apl    | apl_tkoi5db4hryu5cei5vwoabr7we  |
-    | identity-verifications | idv    | idv_tkoi5db4hryu5cei5vwoabr7we  |
-    | user-journey           | usj    | usj_tkoi5db4hryu5cei5vwoabr7we  |
+    | resource name          | prefix  | example                         |
+    |------------------------|---------|---------------------------------|
+    | applicants             | aplt    | aplt_tkoi5db4hryu5cei5vwoabr7we |
+    | identity-verifications | idv     | idv_tkoi5db4hryu5cei5vwoabr7we  |
+    | user-journey           | usj     | usj_tkoi5db4hryu5cei5vwoabr7we  |
 
     ## Content type
     The API accepts and returns `application/json` type.
@@ -1488,7 +1495,7 @@ paths:
               All possible data:
                 $ref: "#/components/examples/identity_verification_creation_request_body_max"
               Use an existing applicant:
-                $ref: "#/components/examples/identity_verification_creation_request_body_min_plus_apl"
+                $ref: "#/components/examples/identity_verification_creation_request_body_min_plus_aplt"
             schema:
               $ref: "#/components/schemas/IdentityVerification"
       responses:
@@ -1516,12 +1523,12 @@ paths:
                         "specversion": "2.0",
                         "type": "identity_verification_capture_completed",
                         "subject": "idv_5hxpdwegjcbujpth3wdo55d3vm",
-                        "id": "evt_5hxpdwegjcbujpth3wdo55d3vm",
+                        "id": "evnt_5hxpdwegjcbujpth3wdo55d3vm",
                         "time": "2023-03-22T17:31:00Z",
                         "datacontenttype": "application/json",
                         "data":
                           {
-                            "applicant_id": "apl_5hxpdwegjcbujpth3wdo55d3vm",
+                            "applicant_id": "aplt_5hxpdwegjcbujpth3wdo55d3vm",
                             "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
                             "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
                             "status": "declined",
@@ -1643,7 +1650,7 @@ paths:
                 id: idv_tkoi5db4hryu5cei5vwoabr7we
                 _links:
                   self:
-                    href: https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we
+                    href: https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
               schema:
                 required: [applicant_id, user_journey_id]
                 allOf:
@@ -1864,9 +1871,9 @@ components:
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
 
-    identity_verification_creation_request_body_min_plus_apl:
+    identity_verification_creation_request_body_min_plus_aplt:
       value:
-        applicant_id: apl_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: David Vincent
         webhook_url: https://my.api/events/
@@ -1875,7 +1882,7 @@ components:
     identity_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: apl_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: David Vincent
           birth_date: 1934-10-02
@@ -1902,7 +1909,7 @@ components:
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: apl_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         status: declined
         response_codes:
           - { "code": 61310, "summary": "document_front_not_captured" }
@@ -1930,7 +1937,7 @@ components:
           self:
             href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
           applicant:
-            href: "https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we"
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
@@ -1940,7 +1947,7 @@ components:
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: apl_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         status: pending
         response_codes: []
         declared_data:
@@ -1953,7 +1960,7 @@ components:
           self:
             href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
           applicant:
-            href: "https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we"
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
@@ -1968,24 +1975,24 @@ components:
 
     applicant_response_body:
       value:
-        id: apl_tkoi5db4hryu5cei5vwoabr7we
+        id: aplt_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
         email: david.vincent@courriel.ml
         _links:
           self:
-            href: https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we
+            href: https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
 
     applicant_response_body_anonymized:
       value:
-        id: apl_tkoi5db4hryu5cei5vwoabr7we
+        id: aplt_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
         _links:
           self:
-            href: https://api.ubble.ai/v2/applicants/apl_tkoi5db4hryu5cei5vwoabr7we
+            href: https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
     address_example_american:
       value:
         address_line1: 4022 Laguna St
@@ -2267,7 +2274,7 @@ components:
         id:
           type: string
           description: The identifier of the event.
-          example: "evt_5hxpdwegjcbujpth3wdo55d3vm"
+          example: "evnt_5hxpdwegjcbujpth3wdo55d3vm"
         time:
           type: string
           format: date-time
@@ -2282,7 +2289,7 @@ components:
           description: The event payload.
           example:
             {
-              "applicant_id": "apl_5hxpdwegjcbujpth3wdo55d3vm",
+              "applicant_id": "aplt_5hxpdwegjcbujpth3wdo55d3vm",
               "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
               "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
               "status": "declined",
@@ -2416,8 +2423,8 @@ components:
     ApplicantId:
       type: string
       description: Applicant unique identifier.
-      pattern: ^apl_\w+$
-      example: apl_tkoi5db4hryu5cei5vwoabr7we
+      pattern: ^aplt_\w+$
+      example: aplt_tkoi5db4hryu5cei5vwoabr7we
       readOnly: true
 
     IdentityVerificationId:
