@@ -2187,6 +2187,8 @@ components:
               $ref: "#/components/schemas/PreSignedUrl"
             back_image_signed_url:
               $ref: "#/components/schemas/PreSignedUrl"
+            signature_image_signed_url:
+              $ref: "#/components/schemas/PreSignedUrl"
 
     Identity:
       type: object
