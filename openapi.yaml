@@ -2367,10 +2367,10 @@ components:
       type: string
       description: Type of document.
       enum:
-        - driving license
+        - Driving license
         - ID
-        - passport
-        - residence permit
+        - Passport
+        - Residence Permit
 
     VerificationStatuses:
       type: string
