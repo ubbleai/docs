@@ -2597,7 +2597,6 @@ components:
         - full_name
         - last_name
         - last_name_at_birth
-        - nationality
 
     GenderA47Enum:
       enum:
