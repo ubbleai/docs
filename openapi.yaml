@@ -1196,7 +1196,7 @@ info:
 
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
       <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
-      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/notify</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/retry</span>
     </div>
 
     Request example
