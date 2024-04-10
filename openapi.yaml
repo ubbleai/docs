@@ -1477,7 +1477,7 @@ x-tagGroups:
       - Identity verifications
       - Applicants
 paths:
-  /v2/identity-verifications:
+  /v2/create-and-start-idv:
     post:
       tags:
         - Identity verifications
