@@ -867,6 +867,13 @@ info:
         <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
+        <td class="tg-0pky">61315</td>
+        <td class="tg-0pky">document_barcode_unreadable</td>
+        <td class="tg-0pky">The barcode of the document is unreadable</td>
+        <td class="tg-center">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
+      </tr>
+      <tr>
         <td class="tg-fymr" colspan="5"><span style="font-weight:bold">Face capture issue</span></td>
       </tr>
       <tr>
