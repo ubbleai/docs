@@ -104,7 +104,7 @@ info:
     The identity verification response contains a `_links.verification_url.href` field. You should send the user to this URL to redirect them to the Identity Verification web application.
 
     To test this step, open the URL on your browser and follow the instructions displayed.
-  
+    
     ## Step 3: Verify webhook notifications
 
     If you've configured your webhook receiver, you'll be notified of events that occur during the identity verification flow via webhooks. Among other information, the webhooks will contain:
@@ -529,6 +529,8 @@ info:
     When you request an identity verification, you'll be notified about events throughout the verification's lifecycle via webhooks.
     
     ## Verification statuses
+    
+    ![](https://raw.githubusercontent.com/ubbleai/docs/main/life_cycle_diagram.png)
 
     The webhooks also return the current `status` of the identity verification. The follow-up action you should take depends on the `status` value returned:
 
@@ -870,8 +872,8 @@ info:
         <td class="tg-0pky">61315</td>
         <td class="tg-0pky">document_barcode_unreadable</td>
         <td class="tg-0pky">The barcode of the document is unreadable</td>
-        <td class="tg-center">&#9989;</td>
         <td class="tg-center">&#10060;</td>
+        <td class="tg-center">&#9989;</td>
       </tr>
       <tr>
         <td class="tg-fymr" colspan="5"><span style="font-weight:bold">Face capture issue</span></td>
@@ -1296,7 +1298,7 @@ info:
     To detect a key rotation, look at the signature version in the API response. To verify that response, use the public key with the same version of the signature key. 
 
     Don’t worry about losing older versions of the public key, you can download all versions of the public key from the dashboard.
-   
+    
     #### Verifying Images
     You can also verify that the images has not been altered by using the image hashes available in the API response body.
     
@@ -1311,9 +1313,193 @@ info:
     ## Data management
 
     You can configure data retention together with your account manager, in accordance with your purpose for using the data. At the end of this time, the identity verifications are anonymized, which means all personal or sensitive data are deleted. The default storage time is 90 days.
-  
+    
     If needed, you can also request the anonymization of an identity verification through the [anonymization endpoint](#tag/Identity-verifications/operation/anonymize_identity_verification). 
+    
+    # AML Verification
+    
+    In partnership with ComplyAdvantage, we propose an Identity verification and AML screening bundle. After having verified the applicant's identity you will be able to:  
+    
+    Search them in the Politically Exposed Person (PEP) lists, Sanction lists and Adverse media database,
+    
+    Get a risk score based on a customized model,
+    
+    Manually investigate cases,
+    
+    Monitor an applicant and get notified if an alert is raised.
+    
+    Please note that this offer is only available if you subscribed to both services, reach out your account manager if you have any questions.
+    
+    ## Create an AML verification
+    
+    To use it, you will first need an `applicant_id` and an approved identity verification. 
 
+    You can then request an AML verification and include the following fields:
+    
+    - `applicant_id` - the unique identifier of the applicant.
+    
+    - `webhook_url` - the URL where you want to be notified when the status of the AML verification change.
+    
+    - `screening_configuration_identifier` - the identifier of the configuration you want to use to screen the applicant. It can be defined and retrieved via the ComplyAdvantage dashboard.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/aml-verifications</span>
+    </div>
+    
+    Request example
+
+    ```json
+    {
+        "webhook_url": "{{WEBHOOK_URL}}",
+        "applicant_id": "aplt_01hr4p9j0etqw34wyv2h4ac27k",
+        "search_parameters": {
+            "search_profile_id": "e3b6c5b6-fcc2-43e3-9e8c-7e378e320a2p"
+        },
+    }
+    ```
+    
+    Response example
+    
+    ```json
+    {
+        "id": "amlv_01hr7269mkxva7msc443jz4jbf",
+        "applicant_id": "aplt_01hr7269ksxqjgqxbh4vaqmry8",
+        "created_on": "2024-03-05T10:22:48.481031Z",
+        "modified_on": "2024-03-05T10:22:49.327277Z",
+        "status": "review_required",
+        "webhook_url": "https://my.api/events/",
+        "monitored": false,
+        "search_parameters": {
+            "search_profile_id": "e3b6c5b6-fcc2-43e3-9e8c-7e378e320a2p"
+        },
+        "_links": {
+            "self": {
+                "href": "https://api.ubble.ai/api/v2/aml-verifications/amlv_01hr7269mkxva7msc443jz4jbf"
+            }
+        }
+    }
+    ```
+
+    Make a note of the AML verification `id` value in the response. You'll need this to retrieve the detailed results later.
+    
+    ## Set up an initial risk scoring 
+    
+    You can get an initial risk scoring based on a model that you can customize in the ComplyAdvantage dashboard. 
+    
+    The applicant will then be scored before the AML verification has been performed. The result of this scoring will be available as a `risk_level` in the results and can be one of `LOW`, `MEDIUM`, `HIGH` or `PROHIBITED`.
+    
+    If the risk level is `PROHIBITED`, the AML verification is not performed and the `status` is declined. If the risk level is `LOW`, `MEDIUM` or `HIGH`, the AML verification will be performed and the results will depend on raised alerts. See below for more details.
+    
+    ## Verify webhook notification
+    
+    You'll be notified of events that occur during the AML verification process via webhooks. Among other information, the webhooks will contain:
+    
+    - the event `type` - for example, `aml_verification_created`,
+    
+    - the AML verification `status` - for example, `created` or `review_required`.
+    
+    Example
+    
+    ```json
+    {
+      "specversion": "2.0",
+      "type": "aml_verification_created",
+      "subject": "amlv_01hr7269mkxva7msc443jz4jbf",
+      "id": "evnt_01hr7269ry3g8skc630q4ec75g",
+      "time": "2024-03-05T10:22:48Z",
+      "datacontenttype": "application/json",
+      "data": {
+        "aml_verification_id": "amlv_01hr7269mkxva7msc443jz4jbf",
+        "status": "created",
+        "applicant_id": "aplt_01hr7269ksxqjgqxbh4vaqmry8"
+      }
+    }
+    ```
+    
+    When the AML verification is completed, you will receive a webhook notification with the event `type` field set to `aml_verification_completed`, and the body will include the `status` of the AML verification. See the section below.
+    
+    ## Handle AML verification results
+    
+    The webhooks also return the current `status` of the AML verification. The follow-up action you should take depends on the `status` value returned:
+    
+    | <div style="width:12em">Status</div>     | Description                                                                                              | Recommended action                    |
+    |------------------------------------------|----------------------------------------------------------------------------------------------------------|---------------------------------------|
+    | `created`                                | The AML verification has been created.                                                                   | Wait for a change in `status`.        |
+    | `screening_in_progress`                  | The risk scoring or AML verification is in progress.                                                     | Wait for a change in `status`.        |
+    | `approved`                               | The initial risk scoring is not `PROHIBITED` and there are no alerts.                                     | Accept the applicant’s request.       |
+    | `declined`                               | The initial risk scoring is `PROHIBITED`.                                                                | Refuse the applicant’s request.       |
+    | `review_required`                        | The initial risk scoring is not `PROHIBITED` but there are screening alerts and a case has been created. | Manually investigate the case.        |
+    
+    You can also get this status by calling the following endpoint with the unique `id` returned in the create AML verification response:
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/aml-verifications/{aml_verification_id}</span>
+    </div>
+    
+    Response example
+    
+    ```json
+    {
+        "id": "amlv_01hr7269mkxva7msc443jz4jbf",
+        "applicant_id": "aplt_01hr7269ksxqjgqxbh4vaqmry8",
+        "created_on": "2024-03-05T10:22:48.481031Z",
+        "modified_on": "2024-03-05T10:22:49.327277Z",
+        "status": "review_required",
+        "webhook_url": "https://my.api/events/",
+        "monitored": false,
+        "search_parameters": {
+            "search_profile_id": "e3b6c5b6-fcc2-43e3-9e8c-7e378e320a2p"
+        },
+        "_links": {
+            "self": {
+                "href": "https://myweb.site/?query-param=hello"
+            }
+        }
+    }
+    ```
+    
+    ## Manually investigate the results
+    
+    If the `status` is `review_required` you might want to investigate the case and determine if the applicant can access your service or not. You can do it via the ComplyAdvantage case management tool. 
+    
+    You will be able to review the alerts and to determine if you accept the risk associated to the case or not.
+    
+    If you accept it, the status will switch to `approved`.
+    
+    If you refuse it, the status will switch to `declined`.
+    
+    You will be notified if you change the `status` of an AML verification. The `event_type` field will be set to `aml_onboarding_review_completed` and the body will include the new `status`.
+    
+    Example
+    
+    ```json
+    {
+      "specversion": "2.0",
+      "type": "aml_onboarding_review_completed",
+      "subject": "amlv_01hr7269mkxva7msc443jz4jbf",
+      "id": "evnt_01hr7269ry3g8skc630q4ec75g",
+      "time": "2024-03-05T10:22:48Z",
+      "datacontenttype": "application/json",
+      "data": {
+        "status": approved,
+      }
+    }
+    ```
+
+    ## Monitor a search
+    
+    If an applicant is monitored, you be notified if an alert is raised. 
+    
+    The `status` of the AML verification will switch to `review_required`.
+    
+    In this case, you will get a notification with the `event_type` field set to `aml_monitoring_alert` and the body will include the new `status`.
+    
+    You can then use the ComplyAdvantage case management tool to manually investigate the results. 
+    
+    When the review is completed, you will get a notification with the `event_type` field set to `aml_monitoring_review_completed` and the body will include the new `status, depending of you decision to accept or not the risk related to the monitoring case.
+    
     # Applicants
 
     ## Creation
@@ -1368,15 +1554,13 @@ info:
               "response_codes": [
                   {"code": 62301, "summary": "document_counterfeit"},
                   {"code": 62304, "summary": "face_mismatch"}
-                  
+    
               ]
           }
       }
     ```
 
     ## Events
-
-    ![](https://raw.githubusercontent.com/ubbleai/docs/main/life_cycle_diagram.png)
 
     | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
     |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
@@ -1392,6 +1576,12 @@ info:
     | `identity_verification_anonymized`                        | The verification has been anonymized and was in the status `retry_required`, retry is no longer available                         |
     | `identity_verification_audit_completed`                   | The verification has been audited and the status may have been updated                                                            |
     | `identity_verification_report_created`                    | The pdf report is available                                                                                                       |
+    | `aml_verification_created`                                | You created an AML verification.                                                                                                  |
+    | `aml_onboarding_in_progress`                              | We launched the AML onboarding workflow.                                                                                          |
+    | `aml_onboarding_completed`                                | ComplyAdvantage has completed the onboarding workflow and the `status` has been updated.                                          |
+    | `aml_onboarding_review_completed`                         | You manually reviewed the AML cases and changed the `status`.                                                                      |
+    | `aml_monitoring_alert`                                    | ComplyAdvantage has raised an alert for a monitored applicant and we updated the `status`.                                        |
+    | `aml_monitoring_review_completed`                         | You manually reviewed the AML cases and changed the `status`.                                                                      |
 
     ## Retry
 
@@ -1433,6 +1623,7 @@ info:
     |------------------------|---------|---------------------------------|
     | applicants             | aplt    | aplt_tkoi5db4hryu5cei5vwoabr7we |
     | identity-verifications | idv     | idv_tkoi5db4hryu5cei5vwoabr7we  |
+    | aml-verifications      | amlv    | amlv_tkoi5db4hryu5cei5vwoabr7we |
     | user-journey           | usj     | usj_tkoi5db4hryu5cei5vwoabr7we  |
 
     ## Content type
@@ -1475,6 +1666,8 @@ servers:
 tags:
   - name: identity verifications
     description: Identity verification endpoints documentation.
+  - name: AML verifications
+    description: AML verification endpoints documentation.
   - name: applicants
     description: Applicant management endpoints documentation.
 
@@ -1482,6 +1675,7 @@ x-tagGroups:
   - name: Endpoints documentation
     tags:
       - Identity verifications
+      - AML verifications
       - Applicants
 paths:
   /v2/create-and-start-idv:
@@ -1667,7 +1861,7 @@ paths:
           description: Bad request. The identity verification cannot be anonymized.
         "500":
           description: Internal server error
-      
+
   /v2/identity-verifications/{identity_verification_id}/pdf-report:
     get:
       tags:
@@ -1677,7 +1871,7 @@ paths:
         This endpoint allows you to retrieve a PDF report containing all the information of the identity verification.
 
         Please note that this report is only available for verifications in statuses `declined` and `approved` once you receive the `identity_verification_report_created` event.
-        
+      
 
       operationId: pdf_identity_verification
       parameters:
@@ -1868,6 +2062,64 @@ paths:
         "500":
           description: Internal server error
 
+  /v2/aml-verifications:
+    post:
+      tags:
+        - AML verifications
+      summary: Create an AML verification
+      description: This endpoint allows you to create an AML verification. You should get a `201` response.
+      operationId: create_aml_verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Only required data:
+                $ref: "#/components/examples/aml_verification_creation_request_body_min"
+              All possible data:
+                $ref: "#/components/examples/aml_verification_creation_request_body_max"
+            schema:
+              $ref: "#/components/schemas/AMLVerification"
+      responses:
+        "201":
+          description: AML verification created
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/aml_verification_response_body"
+              schema:
+                required: [applicant_id]
+                allOf:
+                  - $ref: "#/components/schemas/AMLVerificationOutput"
+
+  /v2/aml-verifications/{aml_verification_id}:
+    get:
+      tags:
+        - AML verifications
+      summary: Retrieve an AML verification
+      description: This endpoint allows you to get the detailed results of an AML verification.
+      operationId: retrieve_aml_verification
+      parameters:
+        - name: aml_verification_id
+          required: true
+          in: path
+          description: ID of the AML verification
+          schema:
+            $ref: "#/components/schemas/AMLVerificationId"
+      responses:
+        "200":
+          description: AML verification retrieved
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/aml_verification_response_body"
+              schema:
+                required: [applicant_id]
+                allOf:
+                  - $ref: "#/components/schemas/AMLVerificationOutput"
+
 components:
   examples:
     identity_verification_creation_request_body_min:
@@ -1973,7 +2225,43 @@ components:
     identity_verification_pdf_response_body:
       value:
         pdf_report: www.pdf.com
-            
+
+    aml_verification_creation_request_body_min:
+      value:
+        search_parameters:
+          search_profile_id: 011e5c14-2222-738c-8852-dfdbbe53f233
+        webhook_url: https://my.api/events/
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+
+    aml_verification_creation_request_body_max:
+      value:
+        search_parameters:
+          search_profile_id: 011e5c14-2222-738c-8852-dfdbbe53f233
+        webhook_url: https://my.api/events/
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        monitored: false
+
+    aml_verification_patch_request_body:
+      value:
+        monitored: false
+
+    aml_verification_response_body:
+      value:
+        id: amlv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        status: created
+        webhook_url: https://my.api/events/
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        search_parameters:
+          search_profile_id: 8eb79430-c014-41e5-be73-2c2c091322b8
+        monitored: false
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/aml-verifications/amlv_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+
     applicant_creation_request_body:
       value:
         external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
@@ -2008,6 +2296,7 @@ components:
         country: US
 
   schemas:
+    # Identity Verification schemas
     IdentityVerification:
       type: object
       required: [id]
@@ -2019,7 +2308,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/IdentityVerificationBase"
-          
+
     IdentityVerificationOutput:
       type: object
       required: [id]
@@ -2140,11 +2429,11 @@ components:
         - $ref: "#/components/schemas/ActiveLink"
 
     IdentityVerificationPdf:
-        type: object
-        properties:
-          pdf_report:
-            type: string
-            format: uri
+      type: object
+      properties:
+        pdf_report:
+          type: string
+          format: uri
 
     DeclaredData:
       type: object
@@ -2622,3 +2911,114 @@ components:
     NullEnum:
       enum:
         - null
+
+    # AML verification schemas
+    AMLVerification:
+      type: object
+      required: [id]
+      properties:
+        id:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/AMLVerificationId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/AMLVerificationBase"
+
+    AMLVerificationOutput:
+      type: object
+      required: [id]
+      properties:
+        id:
+          $ref: "#/components/schemas/AMLVerificationId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/AMLVerificationCreateBase"
+
+    AMLVerificationPatchInput:
+      type: object
+      required: [monitored]
+      properties:
+        monitored:
+          type: boolean
+
+    AMLVerificationId:
+      type: string
+      description: AML verification unique identifier.
+      pattern: ^amlv_\w+$
+      example: amlv_tkoi5db4hryu5cei5vwoabr7we
+      readOnly: true
+
+    AMLVerificationBase:
+      type: object
+      required:
+        [status, webhook_url, _links, applicant_id, search_parameters]
+      allOf:
+        - properties:
+            status:
+              readOnly: true
+              allOf:
+                - $ref: "#/components/schemas/AMLVerificationStatuses"
+            webhook_url:
+              type: string
+              format: uri
+            applicant_id:
+              readOnly: false
+              allOf:
+                - $ref: "#/components/schemas/ApplicantId"
+            search_parameters:
+              $ref: "#/components/schemas/SearchParameters"
+            monitored:
+              type: boolean
+            _links:
+              readOnly: true
+              allOf:
+                - $ref: "#/components/schemas/AMLVerificationLinks"
+
+    AMLVerificationCreateBase:
+      type: object
+      required:
+        [status, webhook_url, _links]
+      allOf:
+        - $ref: "#/components/schemas/AMLVerificationBase"
+
+    AMLVerificationStatuses:
+      type: string
+      description: Status of the AML verification.
+      readOnly: true
+      enum:
+        - created
+        - screening_in_progress
+        - approved
+        - declined
+        - review_required
+
+    SearchParameters:
+      type: object
+      required: [search_profile_id]
+      description: ComplyAdvantage search inputs
+      properties:
+        search_profile_id:
+          type: string
+          description: Search profile id
+          example: "12345678-1234-1234-1234-123456789012"
+
+    AMLVerificationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+        - $ref: "#/components/schemas/ApplicantLink"
+
+    DetailsLink:
+      type: object
+      required: [details]
+      properties:
+        details:
+          $ref: "#/components/schemas/HalLink"
+
+    DashboardReviewLink:
+      type: object
+      required: [dashboard_review]
+      properties:
+        dashboard_review:
+          $ref: "#/components/schemas/HalLink"
