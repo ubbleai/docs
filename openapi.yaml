@@ -1354,7 +1354,7 @@ info:
         "webhook_url": "{{WEBHOOK_URL}}",
         "applicant_id": "aplt_01hr4p9j0etqw34wyv2h4ac27k",
         "search_parameters": {
-            "search_profile_id": "e3b6c5b6-fcc2-43e3-9e8c-7e378e320a2p"
+            "configuration_identifier": "e3b6c5b6-fcc2-43e3-9e8c-7e378e320a2p"
         },
     }
     ```
@@ -1371,7 +1371,7 @@ info:
         "webhook_url": "https://my.api/events/",
         "monitored": false,
         "search_parameters": {
-            "search_profile_id": "e3b6c5b6-fcc2-43e3-9e8c-7e378e320a2p"
+            "configuration_identifier": "e3b6c5b6-fcc2-43e3-9e8c-7e378e320a2p"
         },
         "_links": {
             "self": {
@@ -1450,7 +1450,7 @@ info:
         "webhook_url": "https://my.api/events/",
         "monitored": false,
         "search_parameters": {
-            "search_profile_id": "e3b6c5b6-fcc2-43e3-9e8c-7e378e320a2p"
+            "configuration_identifier": "e3b6c5b6-fcc2-43e3-9e8c-7e378e320a2p"
         },
         "_links": {
             "self": {
@@ -2229,14 +2229,14 @@ components:
     aml_verification_creation_request_body_min:
       value:
         search_parameters:
-          search_profile_id: 011e5c14-2222-738c-8852-dfdbbe53f233
+          configuration_identifier: 011e5c14-2222-738c-8852-dfdbbe53f233
         webhook_url: https://my.api/events/
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
 
     aml_verification_creation_request_body_max:
       value:
         search_parameters:
-          search_profile_id: 011e5c14-2222-738c-8852-dfdbbe53f233
+          configuration_identifier: 011e5c14-2222-738c-8852-dfdbbe53f233
         webhook_url: https://my.api/events/
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         monitored: false
@@ -2254,7 +2254,7 @@ components:
         webhook_url: https://my.api/events/
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         search_parameters:
-          search_profile_id: 8eb79430-c014-41e5-be73-2c2c091322b8
+          configuration_identifier: 8eb79430-c014-41e5-be73-2c2c091322b8
         monitored: false
         _links:
           self:
@@ -2995,12 +2995,12 @@ components:
 
     SearchParameters:
       type: object
-      required: [search_profile_id]
+      required: [configuration_identifier]
       description: ComplyAdvantage search inputs
       properties:
-        search_profile_id:
+        configuration_identifier:
           type: string
-          description: Search profile id
+          description: Configuration identifier
           example: "12345678-1234-1234-1234-123456789012"
 
     AMLVerificationLinks:
