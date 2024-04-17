@@ -1316,7 +1316,7 @@ info:
     
     If needed, you can also request the anonymization of an identity verification through the [anonymization endpoint](#tag/Identity-verifications/operation/anonymize_identity_verification). 
     
-    # AML Verification
+    # AML Verification (Coming soon)
     
     In partnership with ComplyAdvantage, we propose an Identity verification and AML screening bundle. After having verified the applicant's identity you will be able to:  
     
