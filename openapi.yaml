@@ -2334,10 +2334,8 @@ components:
 
     attempt_creation_response_body:
       value:
-        phone_number:
-          country_code: "+1"
-          number: "2068133616"
         redirect_url: https://myweb.site?query-param=hello
+        verification_url: https://id.ubble.ai/4hryu5cei5/
 
     identity_verification_response_body:
       value:
