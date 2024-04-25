@@ -13,7 +13,7 @@ info:
 
     The following represents a typical identity verification flow:
 
-     <img src="https://raw.githubusercontent.com/ubbleai/docs/main/intro_diagram.png" alt="intro_diagram" width="800" height="auto">
+     <img src="https://raw.githubusercontent.com/ubbleai/docs/main/intro_diagram_v2.1.png" alt="intro_diagram" width="800" height="auto">
 
     1. **You request an identity verification.** You'll receive a unique URL that you need to redirect the user to.
     2. **You redirect the user.** You have full control over how to [manage the verification redirection](#section/Manage-verification-redirection) to ensure a smooth user experience.
@@ -45,7 +45,7 @@ info:
     You will find all details about webhook implementation in the [webhook section](#section/Webhooks).
     - You'll also need to provide a redirect URL. The user will be redirected to this URL once verification is completed.
 
-    ## Step 1: Request an identity verification
+    ## Step 1: Create and start an identity verification
     To request an identity verification, you must include the following fields:
     - `name` - the full name provided by the user
     - `webhook_url` - the URL to get notifications
@@ -97,14 +97,14 @@ info:
 
     Make a note of the identity verification `id` value in the response. You'll need it to retrieve the detailed verification results later.
 
-    For more details, see our the [request an identity verification endpoint](#tag/Identity-verifications).
+    For more details, see our the [CREATE AND START AN IDENTITY VERIFICATION endpoint.](#tag/Identity-verifications).
 
     ## Step 2: Perform a test verification
 
     The identity verification response contains a `_links.verification_url.href` field. You should send the user to this URL to redirect them to the Identity Verification web application.
 
     To test this step, open the URL on your browser and follow the instructions displayed.
-    
+  
     ## Step 3: Verify webhook notifications
 
     If you've configured your webhook receiver, you'll be notified of events that occur during the identity verification flow via webhooks. Among other information, the webhooks will contain:
@@ -205,12 +205,22 @@ info:
 
     For more details, see our the [retrieve an identity verification endpoint](#tag/Identity-verifications/operation/retrieve_identity_verification). 
 
-    # Manage verification redirection
+    # Manage applicant redirection
     
-    When you request an [identity verification](#section/Get-Started), you’ll receive a `verification_url` in the response. Redirect your user to this URL so they can perform the verification.
-
     To ensure a smooth user experience, you can control how the redirection is handled.
-
+    
+    ## Manage applicant attempts 
+    
+    URL expires after 15 minutes, so in order to always redirect applicants to a valid URL we advise you to dynamically create attempts.
+    
+    To do that, you must first create an applicant and create an identity verification. You can then use "create an attempt" endpoint each time you need to <b>create an attempt</b>.
+    
+    You will also be able to use additional features through this endpoint:
+    
+    - Pre-select language and document category for applicants,
+    
+    - Secure the URL by enforcing the opening from a specific referrer.
+    
     ## Customize the verification user experience
 
     Contact your Account Manager or support.idv@checkout.com to customize the verification user experience.
@@ -529,8 +539,6 @@ info:
     When you request an identity verification, you'll be notified about events throughout the verification's lifecycle via webhooks.
     
     ## Verification statuses
-    
-    ![](https://raw.githubusercontent.com/ubbleai/docs/main/life_cycle_diagram.png)
 
     The webhooks also return the current `status` of the identity verification. The follow-up action you should take depends on the `status` value returned:
 
@@ -540,6 +548,19 @@ info:
           <th style="width: 25%" scope="col">Status</th>
           <th style="width: 35%" scope="col">Description</th>
           <th style="width: 40%" scope="col">Recommended action</th>
+        </tr>
+        <tr>
+          <td style="width: 25%">
+            <p><code>created</code></p>
+          </td>
+          <td style="width: 35%">
+            <p>The identity verification has been created</p>
+          </td>
+          <td style="width: 40%">
+            <p>
+              Create an attempt or wait for the attempt to be created if you use the `Create and start an identity verification` endpoint. 
+            </p>
+          </td>
         </tr>
         <tr>
           <td style="width: 25%">
@@ -641,6 +662,81 @@ info:
             <p>
               Propose an alternative method of identity verification to the user.
             </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    ## Attempt state
+
+    <table style="width: 100%">
+      <tbody>
+        <tr>
+          <th style="width: 35%" scope="col">Status</th>
+          <th style="width: 65%" scope="col">Description</th>
+        </tr>
+        <tr>
+          <td style="width: 35%">
+            <p><code>pending_redirection</code></p>
+          </td>
+          <td style="width: 65%">
+            <p>The attempt has been created and applicant can be redirected.  </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 35%">
+            <p><code>capture_in_progress</code></p>
+          </td>
+          <td style="width: 65%">
+            <p>The attempt has been <code>started</code> by the applicant. </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 35%">
+            <p><code>checks_in_progress</code></p>
+          </td>
+          <td style="width: 65%">
+            <p>The applicant completed the capture, we are performing checks. </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 35%">
+            <p><code>completed</code></p>
+          </td>
+          <td style="width: 65%">
+            <p>We completed the checks. Identity verification is closed.   </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 35%">
+            <p><code>expired</code></p>
+          </td>
+          <td style="width: 65%">
+            <p>The link expired without the applicant being redirected to the web application. Please note that the default expiration time is 15 minutes. </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 35%">
+            <p><code>capture_refused</code></p>
+          </td>
+          <td style="width: 65%">
+            <p>The applicant explicitly refused to perform the attempt. Identity verification is closed.  </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 35%">
+            <p><code>capture_aborted</code></p>
+          </td>
+          <td style="width: 65%">
+            <p>The applicant left the capture without completing it. </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 35%">
+            <p><code>checks_inconclusive</code></p>
+          </td>
+          <td style="width: 65%">
+            <p>The applicant terminated the capture but did not provide the assets required to perform the checks. </p>
           </td>
         </tr>
       </tbody>
@@ -1198,13 +1294,14 @@ info:
 
     ## Retry management
 
-    When the identity verification status is `retry_required`, you can request a retry. To do this, you'll need:
-    - the identity_verification_id
-    - a redirect URL
-
+    When the identity verification status is `retry_required`, you should create a new attempt when the applicant is ready to perform the verification again.
+    To do this you need:
+    - The identity_verification_id
+    - A redirect URL
+    
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
       <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
-      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/retry</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
     </div>
 
     Request example
@@ -1298,7 +1395,7 @@ info:
     To detect a key rotation, look at the signature version in the API response. To verify that response, use the public key with the same version of the signature key. 
 
     Don’t worry about losing older versions of the public key, you can download all versions of the public key from the dashboard.
-    
+   
     #### Verifying Images
     You can also verify that the images has not been altered by using the image hashes available in the API response body.
     
@@ -1313,7 +1410,7 @@ info:
     ## Data management
 
     You can configure data retention together with your account manager, in accordance with your purpose for using the data. At the end of this time, the identity verifications are anonymized, which means all personal or sensitive data are deleted. The default storage time is 90 days.
-    
+  
     If needed, you can also request the anonymization of an identity verification through the [anonymization endpoint](#tag/Identity-verifications/operation/anonymize_identity_verification). 
     
     # AML Verification (Coming soon)
@@ -1554,7 +1651,7 @@ info:
               "response_codes": [
                   {"code": 62301, "summary": "document_counterfeit"},
                   {"code": 62304, "summary": "face_mismatch"}
-    
+                  
               ]
           }
       }
@@ -1565,7 +1662,9 @@ info:
     | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
     |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
     | `identity_verification_created`                           | You created an identity verification                                                                                              |
+    | `identity_verification_opened`                            | You created a first attempt and the verification URL is available                                                                                              |
     | `identity_verification_started`                           | The applicant has been redirected to the web application                                                                          |
+    | `identity_verification_reset`                             | You created a new attempt while the status was `pending`                                                                    |
     | `identity_verification_capture_completed`                 | The applicant completed the capture                                                                                               |
     | `identity_verification_checks_completed`                  | We completed the checks                                                                                                           |
     | `identity_verification_link_expired`                      | The link expired without applicant being redirected to the web application, please note the default expiration time is 15 minutes |
@@ -1670,15 +1769,91 @@ tags:
     description: AML verification endpoints documentation.
   - name: applicants
     description: Applicant management endpoints documentation.
+  - name: attempts
+    description: Attempt management endpoints documentation.
 
 x-tagGroups:
   - name: Endpoints documentation
     tags:
       - Identity verifications
-      - AML verifications
       - Applicants
+      - Attempts
 paths:
   /v2/create-and-start-idv:
+    post:
+      tags:
+        - Identity verifications
+      summary: Create and start an identity verification
+      description: This endpoint allows you to create and identity verification. You should get a `201` response and the identity verification resource containing the `_links/verification_url`.
+      operationId: create_and_start_identity_verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Only required data:
+                $ref: "#/components/examples/identity_verification_creation_helper_request_body_min"
+              All possible data:
+                $ref: "#/components/examples/identity_verification_creation_helper_request_body_max"
+              Use an existing applicant:
+                $ref: "#/components/examples/identity_verification_creation_helper_request_body_min_plus_aplt"
+            schema:
+              $ref: "#/components/schemas/IdentityVerificationHelper"
+      responses:
+        "201":
+          description: Identity verification created
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_helper_response_body:
+                  $ref: "#/components/examples/identity_verification_creation_helper_response_body"
+              schema:
+                required: [applicant_id, user_journey_id]
+                allOf:
+                  - $ref: "#/components/schemas/IdentityVerificationHelperOutput"
+      callbacks:
+        statusChanged:
+          "{$request.body#/webhook_url}":
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    example:
+                      {
+                        "specversion": "2.0",
+                        "type": "identity_verification_capture_completed",
+                        "subject": "idv_5hxpdwegjcbujpth3wdo55d3vm",
+                        "id": "evnt_5hxpdwegjcbujpth3wdo55d3vm",
+                        "time": "2023-03-22T17:31:00Z",
+                        "datacontenttype": "application/json",
+                        "data":
+                          {
+                            "applicant_id": "aplt_5hxpdwegjcbujpth3wdo55d3vm",
+                            "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
+                            "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
+                            "status": "declined",
+                            "response_codes":
+                              [
+                                {
+                                  "code": 61310,
+                                  "summary": "document_front_not_captured",
+                                },
+                                {
+                                  "code": 62102,
+                                  "summary": "document_not_accepted",
+                                },
+                              ],
+                          },
+                      }
+                    schema:
+                      $ref: "#/components/schemas/Event"
+              responses:
+                "200":
+                  description: Your server returns this code if it accepts the callback.
+                "201":
+                  description: Your server returns this code if it accepts the callback.
+  /v2/identity-verifications:
     post:
       tags:
         - Identity verifications
@@ -1691,11 +1866,11 @@ paths:
           application/json:
             examples:
               Only required data:
-                $ref: "#/components/examples/identity_verification_creation_request_body_min"
+                $ref: "#/components/examples/identity_verification_creation_helper_request_body_min"
               All possible data:
-                $ref: "#/components/examples/identity_verification_creation_request_body_max"
+                $ref: "#/components/examples/identity_verification_creation_helper_request_body_max"
               Use an existing applicant:
-                $ref: "#/components/examples/identity_verification_creation_request_body_min_plus_aplt"
+                $ref: "#/components/examples/identity_verification_creation_helper_request_body_min_plus_aplt"
             schema:
               $ref: "#/components/schemas/IdentityVerification"
       responses:
@@ -1704,8 +1879,8 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
-                  $ref: "#/components/examples/identity_verification_creation_response_body"
+                identity_verification_creation_helper_response_body:
+                  $ref: "#/components/examples/identity_verification_creation_helper_response_body"
               schema:
                 required: [applicant_id, user_journey_id]
                 allOf:
@@ -1753,53 +1928,6 @@ paths:
                 "201":
                   description: Your server returns this code if it accepts the callback.
 
-  /v2/identity-verifications/{identity_verification_id}/retry:
-    post:
-      tags:
-        - Identity verifications
-      summary: Retry an identity verification
-      description: |
-        This endpoint allows you to retry an identity verification with the `retry_required` status.
-
-        If the verification status is not `retry_required`, this endpoint will return an error.
-
-        You will need to provide the ID of the failed verification in the URL.
-
-        You should get a `200` response and the identity verification resource containing the new `_links/verification_url`
-
-      operationId: retry_identity_verification
-      requestBody:
-        content:
-          application/json:
-            examples:
-              Empty body accepted:
-                $ref: "#/components/examples/identity_verification_retry_request_body_min"
-              All possible data:
-                $ref: "#/components/examples/identity_verification_retry_request_body_max"
-            schema:
-              $ref: "#/components/schemas/IdentityVerificationRetryRequest"
-
-      responses:
-        "200":
-          description: The verification has been retried successfully
-          content:
-            application/json:
-              examples:
-                identity_verification_creation_response_body:
-                  $ref: "#/components/examples/identity_verification_creation_response_body"
-              schema:
-                required: [applicant_id, user_journey_id]
-                allOf:
-                  - $ref: "#/components/schemas/IdentityVerificationOutput"
-        "400":
-          description: The provided ID is not valid
-        "404":
-          description: The provided ID does not correspond to a failed verification
-        "409":
-          description: The verification has already succeeded
-        "500":
-          description: An error occurred while retrying the verification
-
   /v2/identity-verifications/{identity_verification_id}:
     get:
       tags:
@@ -1820,7 +1948,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                identity_verification_creation_helper_response_body:
                   $ref: "#/components/examples/identity_verification_response_body"
               schema:
                 required: [applicant_id, user_journey_id]
@@ -1871,7 +1999,7 @@ paths:
         This endpoint allows you to retrieve a PDF report containing all the information of the identity verification.
 
         Please note that this report is only available for verifications in statuses `declined` and `approved` once you receive the `identity_verification_report_created` event.
-      
+        
 
       operationId: pdf_identity_verification
       parameters:
@@ -1887,7 +2015,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                identity_verification_creation_helper_response_body:
                   $ref: "#/components/examples/identity_verification_pdf_response_body"
               schema:
                 required: [pdf_report]
@@ -1922,6 +2050,49 @@ paths:
       responses:
         "204":
           description: Notification succesfully requested
+
+  /v2/identity-verifications/{identity_verification_id}/attempts:
+    post:
+      tags:
+        - Attempts
+      summary: Create an Attempt
+      description: This endpoint allows you to create a new Attempt. It is possible when the identity-verification is in one of
+        the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
+      operationId: create_attempt
+      parameters:
+        - name: identity_verification_id
+          in: path
+          description: ID of the identity verification to notify
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Minimal body:
+                $ref: "#/components/examples/attempt_creation_request_body_min"
+              All possible data:
+                $ref: "#/components/examples/attempt_creation_request_body_max"
+            schema:
+              $ref: "#/components/schemas/AttemptRequest"
+      responses:
+        "201":
+          description: Attempt created
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/attempt_creation_response_body"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/AttemptResponse"
+        "404":
+          description: The provided verification ID is not valid
+        "409":
+          description: The current verification status does not allow the creation of a new attempt. The verification status must be either `created`, `pending`, `capture_in_progress`, or `retry_required`
+        "500":
+          description: An error occurred while retrying the verification
 
   /v2/applicants:
     post:
@@ -2122,14 +2293,14 @@ paths:
 
 components:
   examples:
-    identity_verification_creation_request_body_min:
+    identity_verification_creation_helper_request_body_min:
       value:
         declared_data:
           name: David Vincent
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
 
-    identity_verification_creation_request_body_min_plus_aplt:
+    identity_verification_creation_helper_request_body_min_plus_aplt:
       value:
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
@@ -2137,7 +2308,7 @@ components:
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
 
-    identity_verification_creation_request_body_max:
+    identity_verification_creation_helper_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
@@ -2150,16 +2321,21 @@ components:
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
 
-    identity_verification_retry_request_body_min:
-      value: {}
+    attempt_creation_request_body_min:
+      value:
+        redirect_url: https://myweb.site?query-param=hello
 
-    identity_verification_retry_request_body_max:
+    attempt_creation_request_body_max:
       value:
         phone_number:
           country_code: "+1"
           number: "2068133616"
-        webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
+
+    attempt_creation_response_body:
+      value:
+        redirect_url: https://myweb.site?query-param=hello
+        verification_url: https://id.ubble.ai/4hryu5cei5/
 
     identity_verification_response_body:
       value:
@@ -2199,7 +2375,7 @@ components:
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
-    identity_verification_creation_response_body:
+    identity_verification_creation_helper_response_body:
       value:
         id: idv_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
@@ -2296,8 +2472,7 @@ components:
         country: US
 
   schemas:
-    # Identity Verification schemas
-    IdentityVerification:
+    IdentityVerificationHelper:
       type: object
       required: [id]
       properties:
@@ -2307,9 +2482,9 @@ components:
             - $ref: "#/components/schemas/IdentityVerificationId"
       allOf:
         - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/IdentityVerificationBase"
+        - $ref: "#/components/schemas/IdentityVerificationHelperBase"
 
-    IdentityVerificationOutput:
+    IdentityVerificationHelperOutput:
       type: object
       required: [id]
       properties:
@@ -2317,9 +2492,9 @@ components:
           $ref: "#/components/schemas/IdentityVerificationId"
       allOf:
         - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/IdentityVerificationCreateBase"
+        - $ref: "#/components/schemas/IdentityVerificationHelperBase"
 
-    IdentityVerificationBase:
+    IdentityVerificationHelperBase:
       type: object
       required:
         [declared_data, status, webhook_url, redirect_url, _links]
@@ -2372,10 +2547,80 @@ components:
           allOf:
             - $ref: "#/components/schemas/IdentityVerificationLinks"
 
+    IdentityVerification:
+      type: object
+      required: [id]
+      properties:
+        id:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/IdentityVerificationId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/IdentityVerificationBase"
+
+    IdentityVerificationOutput:
+      type: object
+      required: [id]
+      properties:
+        id:
+          $ref: "#/components/schemas/IdentityVerificationId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/IdentityVerificationCreateBase"
+
+    IdentityVerificationBase:
+      type: object
+      required:
+        [applicant_id, declared_data, status, webhook_url, _links]
+      properties:
+        user_journey_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        status:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/VerificationStatuses"
+        response_codes:
+          type: array
+          readOnly: true
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        verified_identity:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/Identity"
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
+        documents:
+          type: array
+          readOnly: true
+          minItems: 0
+          maxItems: 2
+          items:
+            $ref: "#/components/schemas/Document"
+        face:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/Face"
+        webhook_url:
+          type: string
+          format: uri
+        _links:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/IdentityVerificationLinks"
+
     IdentityVerificationCreateBase:
       type: object
       required:
-        [declared_data, status, webhook_url, redirect_url, _links, verification_policy_version]
+        [declared_data, status, webhook_url, _links]
       properties:
         user_journey_id:
           readOnly: false
@@ -2407,16 +2652,12 @@ components:
           allOf:
             - $ref: '#/components/schemas/VerificationIdentity'
           readOnly: true
-        phone_number:
-          $ref: "#/components/schemas/PhoneNumber"
         webhook_url:
-          type: string
-          format: uri
-        redirect_url:
           type: string
           format: uri
         verification_policy_version:
           type: string
+          readOnly: true
           description: returned ONLY for certified verifications
         _links:
           $ref: "#/components/schemas/IdentityVerificationLinks"
@@ -2540,14 +2781,24 @@ components:
         signed_url:
           $ref: "#/components/schemas/PreSignedUrl"
 
-    IdentityVerificationRetryRequest:
+    AttemptResponse:
       type: object
+      required: [redirect_url]
+      properties:
+        id:
+          type: string
+        state:
+          type: string
+        verification_url:
+          type: string
+          format: uri
+
+    AttemptRequest:
+      type: object
+      required: [redirect_url]
       properties:
         phone_number:
           $ref: "#/components/schemas/PhoneNumber"
-        webhook_url:
-          type: string
-          format: uri
         redirect_url:
           type: string
           format: uri
