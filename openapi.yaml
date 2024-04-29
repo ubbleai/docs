@@ -104,7 +104,7 @@ info:
     The identity verification response contains a `_links.verification_url.href` field. You should send the user to this URL to redirect them to the Identity Verification web application.
 
     To test this step, open the URL on your browser and follow the instructions displayed.
-  
+    
     ## Step 3: Verify webhook notifications
 
     If you've configured your webhook receiver, you'll be notified of events that occur during the identity verification flow via webhooks. Among other information, the webhooks will contain:
@@ -1318,7 +1318,7 @@ info:
     To detect a key rotation, look at the signature version in the API response. To verify that response, use the public key with the same version of the signature key. 
 
     Don’t worry about losing older versions of the public key, you can download all versions of the public key from the dashboard.
-   
+    
     #### Verifying Images
     You can also verify that the images has not been altered by using the image hashes available in the API response body.
     
@@ -1333,7 +1333,7 @@ info:
     ## Data management
 
     You can configure data retention together with your account manager, in accordance with your purpose for using the data. At the end of this time, the identity verifications are anonymized, which means all personal or sensitive data are deleted. The default storage time is 90 days.
-  
+    
     If needed, you can also request the anonymization of an identity verification through the [anonymization endpoint](#tag/Identity-verifications/operation/anonymize_identity_verification). 
     
     # AML Verification (Coming soon)
@@ -1574,7 +1574,7 @@ info:
               "response_codes": [
                   {"code": 62301, "summary": "document_counterfeit"},
                   {"code": 62304, "summary": "face_mismatch"}
-                  
+    
               ]
           }
       }
@@ -1692,8 +1692,6 @@ tags:
     description: AML verification endpoints documentation.
   - name: applicants
     description: Applicant management endpoints documentation.
-  - name: attempts
-    description: Attempt management endpoints documentation.
 
 x-tagGroups:
   - name: Endpoints documentation
@@ -1848,7 +1846,7 @@ paths:
         This endpoint allows you to retrieve a PDF report containing all the information of the identity verification.
 
         Please note that this report is only available for verifications in statuses `declined` and `approved` once you receive the `identity_verification_report_created` event.
-        
+      
 
       operationId: pdf_identity_verification
       parameters:
@@ -1903,7 +1901,7 @@ paths:
   /v2/identity-verifications/{identity_verification_id}/attempts:
     post:
       tags:
-        - Attempts
+        - Identity verifications
       summary: Create an Attempt
       description: This endpoint allows you to create a new Attempt. It is possible when the identity-verification is in one of
         the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
