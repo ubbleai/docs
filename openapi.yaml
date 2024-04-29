@@ -217,12 +217,6 @@ info:
     
     To do that, you must first create an applicant and create an identity verification. You can then use "create an attempt" endpoint each time you need to <b>create an attempt</b>.
     
-    You will also be able to use additional features through this endpoint:
-    
-    - Pre-select language and document category for applicants,
-    
-    - Secure the URL by enforcing the opening from a specific referrer.
-    
     ## Customize the verification user experience
 
     Contact your Account Manager or support.idv@checkout.com to customize the verification user experience.
@@ -540,11 +534,9 @@ info:
 
     When you request an identity verification, you'll be notified about events throughout the verification's lifecycle via webhooks.
     
-    ## lifecycle
-    
-     <img src="https://raw.githubusercontent.com/ubbleai/docs/main/verification_attempt_diagram.png" alt="intro_diagram" width="800" height="auto">
-    
     ## Verification statuses
+    
+    ![](https://raw.githubusercontent.com/ubbleai/docs/main/life_cycle_diagram.png)
 
     The webhooks also return the current `status` of the identity verification. The follow-up action you should take depends on the `status` value returned:
 
@@ -1593,9 +1585,9 @@ info:
     | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
     |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
     | `identity_verification_created`                           | You created an identity verification                                                                                              |
-    | `identity_verification_opened`                            | You created a first attempt and the verification URL is available                                                                                              |
+    | `identity_verification_opened`                            | You created a first attempt and the verification URL is available                                                                 |
     | `identity_verification_started`                           | The applicant has been redirected to the web application                                                                          |
-    | `identity_verification_reset`                             | You created a new attempt while the status was `pending`                                                                    |
+    | `identity_verification_reset`                             | You created a new attempt while the status was `pending` or `capture_in_progress`                                                 |
     | `identity_verification_capture_completed`                 | The applicant completed the capture                                                                                               |
     | `identity_verification_checks_completed`                  | We completed the checks                                                                                                           |
     | `identity_verification_link_expired`                      | The link expired without applicant being redirected to the web application, please note the default expiration time is 15 minutes |
@@ -1606,12 +1598,12 @@ info:
     | `identity_verification_anonymized`                        | The verification has been anonymized and was in the status `retry_required`, retry is no longer available                         |
     | `identity_verification_audit_completed`                   | The verification has been audited and the status may have been updated                                                            |
     | `identity_verification_report_created`                    | The pdf report is available                                                                                                       |
-    | `aml_verification_created`                                | You created an AML verification.                                                                                                  |
-    | `aml_onboarding_in_progress`                              | We launched the AML onboarding workflow.                                                                                          |
-    | `aml_onboarding_completed`                                | ComplyAdvantage has completed the onboarding workflow and the `status` has been updated.                                          |
-    | `aml_onboarding_review_completed`                         | You manually reviewed the AML cases and changed the `status`.                                                                      |
-    | `aml_monitoring_alert`                                    | ComplyAdvantage has raised an alert for a monitored applicant and we updated the `status`.                                        |
-    | `aml_monitoring_review_completed`                         | You manually reviewed the AML cases and changed the `status`.                                                                      |
+    | `aml_verification_created`                                | You created an AML verification                                                                                                   |
+    | `aml_onboarding_in_progress`                              | We launched the AML onboarding workflow                                                                                           |
+    | `aml_onboarding_completed`                                | ComplyAdvantage has completed the onboarding workflow and the `status` has been updated                                           |
+    | `aml_onboarding_review_completed`                         | You manually reviewed the AML cases and changed the `status`                                                                      |
+    | `aml_monitoring_alert`                                    | ComplyAdvantage has raised an alert for a monitored applicant and we updated the `status`                                         |
+    | `aml_monitoring_review_completed`                         | You manually reviewed the AML cases and changed the `status`                                                                      |
 
     ## Retry
 
@@ -1709,7 +1701,6 @@ x-tagGroups:
       - Identity verifications
       - AML verifications
       - Applicants
-      - Attempts
 paths:
   /v2/create-and-start-idv:
     post:
@@ -1724,85 +1715,11 @@ paths:
           application/json:
             examples:
               Only required data:
-                $ref: "#/components/examples/identity_verification_creation_helper_request_body_min"
+                $ref: "#/components/examples/identity_verification_creation_request_body_min"
               All possible data:
-                $ref: "#/components/examples/identity_verification_creation_helper_request_body_max"
+                $ref: "#/components/examples/identity_verification_creation_request_body_max"
               Use an existing applicant:
-                $ref: "#/components/examples/identity_verification_creation_helper_request_body_min_plus_aplt"
-            schema:
-              $ref: "#/components/schemas/IdentityVerificationHelper"
-      responses:
-        "201":
-          description: Identity verification created
-          content:
-            application/json:
-              examples:
-                identity_verification_creation_helper_response_body:
-                  $ref: "#/components/examples/identity_verification_creation_helper_response_body"
-              schema:
-                required: [applicant_id, user_journey_id]
-                allOf:
-                  - $ref: "#/components/schemas/IdentityVerificationHelperOutput"
-      callbacks:
-        statusChanged:
-          "{$request.body#/webhook_url}":
-            post:
-              requestBody:
-                required: true
-                content:
-                  application/json:
-                    example:
-                      {
-                        "specversion": "2.0",
-                        "type": "identity_verification_capture_completed",
-                        "subject": "idv_5hxpdwegjcbujpth3wdo55d3vm",
-                        "id": "evnt_5hxpdwegjcbujpth3wdo55d3vm",
-                        "time": "2023-03-22T17:31:00Z",
-                        "datacontenttype": "application/json",
-                        "data":
-                          {
-                            "applicant_id": "aplt_5hxpdwegjcbujpth3wdo55d3vm",
-                            "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
-                            "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
-                            "status": "declined",
-                            "response_codes":
-                              [
-                                {
-                                  "code": 61310,
-                                  "summary": "document_front_not_captured",
-                                },
-                                {
-                                  "code": 62102,
-                                  "summary": "document_not_accepted",
-                                },
-                              ],
-                          },
-                      }
-                    schema:
-                      $ref: "#/components/schemas/Event"
-              responses:
-                "200":
-                  description: Your server returns this code if it accepts the callback.
-                "201":
-                  description: Your server returns this code if it accepts the callback.
-  /v2/identity-verifications:
-    post:
-      tags:
-        - Identity verifications
-      summary: Create an identity verification
-      description: This endpoint allows you to create and identity verification. You should get a `201` response and the identity verification resource containing the `_links/verification_url`.
-      operationId: create_identity_verification
-      requestBody:
-        required: true
-        content:
-          application/json:
-            examples:
-              Only required data:
-                $ref: "#/components/examples/identity_verification_creation_helper_request_body_min"
-              All possible data:
-                $ref: "#/components/examples/identity_verification_creation_helper_request_body_max"
-              Use an existing applicant:
-                $ref: "#/components/examples/identity_verification_creation_helper_request_body_min_plus_aplt"
+                $ref: "#/components/examples/identity_verification_creation_request_body_min_plus_aplt"
             schema:
               $ref: "#/components/schemas/IdentityVerification"
       responses:
@@ -1811,8 +1728,8 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_helper_response_body:
-                  $ref: "#/components/examples/identity_verification_creation_helper_response_body"
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/identity_verification_creation_response_body"
               schema:
                 required: [applicant_id, user_journey_id]
                 allOf:
@@ -1880,7 +1797,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_helper_response_body:
+                identity_verification_creation_response_body:
                   $ref: "#/components/examples/identity_verification_response_body"
               schema:
                 required: [applicant_id, user_journey_id]
@@ -1947,7 +1864,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_helper_response_body:
+                identity_verification_creation_response_body:
                   $ref: "#/components/examples/identity_verification_pdf_response_body"
               schema:
                 required: [pdf_report]
@@ -2225,14 +2142,14 @@ paths:
 
 components:
   examples:
-    identity_verification_creation_helper_request_body_min:
+    identity_verification_creation_request_body_min:
       value:
         declared_data:
           name: David Vincent
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
 
-    identity_verification_creation_helper_request_body_min_plus_aplt:
+    identity_verification_creation_request_body_min_plus_aplt:
       value:
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
@@ -2240,7 +2157,7 @@ components:
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
 
-    identity_verification_creation_helper_request_body_max:
+    identity_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
@@ -2313,7 +2230,7 @@ components:
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
-    identity_verification_creation_helper_response_body:
+    identity_verification_creation_response_body:
       value:
         id: idv_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
@@ -2410,7 +2327,8 @@ components:
         country: US
 
   schemas:
-    IdentityVerificationHelper:
+    # Identity Verification schemas
+    IdentityVerification:
       type: object
       required: [id]
       properties:
@@ -2420,9 +2338,9 @@ components:
             - $ref: "#/components/schemas/IdentityVerificationId"
       allOf:
         - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/IdentityVerificationHelperBase"
+        - $ref: "#/components/schemas/IdentityVerificationBase"
 
-    IdentityVerificationHelperOutput:
+    IdentityVerificationOutput:
       type: object
       required: [id]
       properties:
@@ -2430,9 +2348,9 @@ components:
           $ref: "#/components/schemas/IdentityVerificationId"
       allOf:
         - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/IdentityVerificationHelperBase"
+        - $ref: "#/components/schemas/IdentityVerificationCreateBase"
 
-    IdentityVerificationHelperBase:
+    IdentityVerificationBase:
       type: object
       required:
         [declared_data, status, webhook_url, redirect_url, _links]
@@ -2485,80 +2403,10 @@ components:
           allOf:
             - $ref: "#/components/schemas/IdentityVerificationLinks"
 
-    IdentityVerification:
-      type: object
-      required: [id]
-      properties:
-        id:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/IdentityVerificationId"
-      allOf:
-        - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/IdentityVerificationBase"
-
-    IdentityVerificationOutput:
-      type: object
-      required: [id]
-      properties:
-        id:
-          $ref: "#/components/schemas/IdentityVerificationId"
-      allOf:
-        - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/IdentityVerificationCreateBase"
-
-    IdentityVerificationBase:
-      type: object
-      required:
-        [applicant_id, declared_data, status, webhook_url, _links]
-      properties:
-        user_journey_id:
-          readOnly: false
-          allOf:
-            - $ref: "#/components/schemas/UserJourneyId"
-        applicant_id:
-          readOnly: false
-          allOf:
-            - $ref: "#/components/schemas/ApplicantId"
-        status:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/VerificationStatuses"
-        response_codes:
-          type: array
-          readOnly: true
-          minItems: 0
-          items:
-            $ref: "#/components/schemas/ResponseCodes"
-        verified_identity:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/Identity"
-        declared_data:
-          $ref: "#/components/schemas/DeclaredData"
-        documents:
-          type: array
-          readOnly: true
-          minItems: 0
-          maxItems: 2
-          items:
-            $ref: "#/components/schemas/Document"
-        face:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/Face"
-        webhook_url:
-          type: string
-          format: uri
-        _links:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/IdentityVerificationLinks"
-
     IdentityVerificationCreateBase:
       type: object
       required:
-        [declared_data, status, webhook_url, _links]
+        [declared_data, status, webhook_url, redirect_url, _links, verification_policy_version]
       properties:
         user_journey_id:
           readOnly: false
@@ -2590,12 +2438,16 @@ components:
           allOf:
             - $ref: '#/components/schemas/VerificationIdentity'
           readOnly: true
+        phone_number:
+          $ref: "#/components/schemas/PhoneNumber"
         webhook_url:
+          type: string
+          format: uri
+        redirect_url:
           type: string
           format: uri
         verification_policy_version:
           type: string
-          readOnly: true
           description: returned ONLY for certified verifications
         _links:
           $ref: "#/components/schemas/IdentityVerificationLinks"
@@ -2726,7 +2578,7 @@ components:
 
     AttemptResponse:
       type: object
-      required: [redirect_url, id]
+      required: [redirect_url, id, _links]
       properties:
         id:
           type: string
