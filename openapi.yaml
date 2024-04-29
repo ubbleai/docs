@@ -1696,9 +1696,9 @@ tags:
 x-tagGroups:
   - name: Endpoints documentation
     tags:
+      - Applicants
       - Identity verifications
       - AML verifications
-      - Applicants
 paths:
   /v2/create-and-start-idv:
     post:
