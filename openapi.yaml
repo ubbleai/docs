@@ -45,7 +45,7 @@ info:
     You will find all details about webhook implementation in the [webhook section](#section/Webhooks).
     - You'll also need to provide a redirect URL. The user will be redirected to this URL once verification is completed.
 
-    ## Step 1: Request an identity verification
+    ## Step 1: Create and start an identity verification
     To request an identity verification, you must include the following fields:
     - `name` - the full name provided by the user
     - `webhook_url` - the URL to get notifications
@@ -97,7 +97,7 @@ info:
 
     Make a note of the identity verification `id` value in the response. You'll need it to retrieve the detailed verification results later.
 
-    For more details, see our the [request an identity verification endpoint](#tag/Identity-verifications).
+    For more details, see our the [CREATE AND START AN IDENTITY VERIFICATION endpoint.](#tag/Identity-verifications).
 
     ## Step 2: Perform a test verification
 
@@ -205,12 +205,18 @@ info:
 
     For more details, see our the [retrieve an identity verification endpoint](#tag/Identity-verifications/operation/retrieve_identity_verification). 
 
-    # Manage verification redirection
+    # Manage applicant redirection
     
     When you request an [identity verification](#section/Get-Started), you’ll receive a `verification_url` in the response. Redirect your user to this URL so they can perform the verification.
 
     To ensure a smooth user experience, you can control how the redirection is handled.
-
+    
+    ## Manage applicant attempts 
+    
+    URL expires after 15 minutes, so in order to always redirect applicants to a valid URL we advise you to dynamically create attempts.
+    
+    To do that, you must first create an applicant and create an identity verification. You can then use "create an attempt" endpoint each time you need to <b>create an attempt</b>.
+    
     ## Customize the verification user experience
 
     Contact your Account Manager or support.idv@checkout.com to customize the verification user experience.
@@ -543,6 +549,19 @@ info:
         </tr>
         <tr>
           <td style="width: 25%">
+            <p><code>created</code></p>
+          </td>
+          <td style="width: 35%">
+            <p>The identity verification has been created</p>
+          </td>
+          <td style="width: 40%">
+            <p>
+              Create an attempt or wait for the attempt to be created if you use the `Create and start an identity verification` endpoint. 
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 25%">
             <p><code>pending</code></p>
           </td>
           <td style="width: 35%">
@@ -872,8 +891,8 @@ info:
         <td class="tg-0pky">61315</td>
         <td class="tg-0pky">document_barcode_unreadable</td>
         <td class="tg-0pky">The barcode of the document is unreadable</td>
-        <td class="tg-center">&#10060;</td>
         <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
       </tr>
       <tr>
         <td class="tg-fymr" colspan="5"><span style="font-weight:bold">Face capture issue</span></td>
@@ -1198,13 +1217,14 @@ info:
 
     ## Retry management
 
-    When the identity verification status is `retry_required`, you can request a retry. To do this, you'll need:
-    - the identity_verification_id
-    - a redirect URL
-
+    When the identity verification status is `retry_required`, you should create a new attempt when the applicant is ready to perform the verification again.
+    To do this you need:
+    - The identity_verification_id
+    - A redirect URL
+    
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
       <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
-      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/retry</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
     </div>
 
     Request example
@@ -1565,7 +1585,9 @@ info:
     | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
     |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
     | `identity_verification_created`                           | You created an identity verification                                                                                              |
+    | `identity_verification_opened`                            | You created a first attempt and the verification URL is available                                                                 |
     | `identity_verification_started`                           | The applicant has been redirected to the web application                                                                          |
+    | `identity_verification_reset`                             | You created a new attempt while the status was `pending` or `capture_in_progress`                                                 |
     | `identity_verification_capture_completed`                 | The applicant completed the capture                                                                                               |
     | `identity_verification_checks_completed`                  | We completed the checks                                                                                                           |
     | `identity_verification_link_expired`                      | The link expired without applicant being redirected to the web application, please note the default expiration time is 15 minutes |
@@ -1576,12 +1598,12 @@ info:
     | `identity_verification_anonymized`                        | The verification has been anonymized and was in the status `retry_required`, retry is no longer available                         |
     | `identity_verification_audit_completed`                   | The verification has been audited and the status may have been updated                                                            |
     | `identity_verification_report_created`                    | The pdf report is available                                                                                                       |
-    | `aml_verification_created`                                | You created an AML verification.                                                                                                  |
-    | `aml_onboarding_in_progress`                              | We launched the AML onboarding workflow.                                                                                          |
-    | `aml_onboarding_completed`                                | ComplyAdvantage has completed the onboarding workflow and the `status` has been updated.                                          |
-    | `aml_onboarding_review_completed`                         | You manually reviewed the AML cases and changed the `status`.                                                                      |
-    | `aml_monitoring_alert`                                    | ComplyAdvantage has raised an alert for a monitored applicant and we updated the `status`.                                        |
-    | `aml_monitoring_review_completed`                         | You manually reviewed the AML cases and changed the `status`.                                                                      |
+    | `aml_verification_created`                                | You created an AML verification                                                                                                   |
+    | `aml_onboarding_in_progress`                              | We launched the AML onboarding workflow                                                                                           |
+    | `aml_onboarding_completed`                                | ComplyAdvantage has completed the onboarding workflow and the `status` has been updated                                           |
+    | `aml_onboarding_review_completed`                         | You manually reviewed the AML cases and changed the `status`                                                                      |
+    | `aml_monitoring_alert`                                    | ComplyAdvantage has raised an alert for a monitored applicant and we updated the `status`                                         |
+    | `aml_monitoring_review_completed`                         | You manually reviewed the AML cases and changed the `status`                                                                      |
 
     ## Retry
 
@@ -1674,17 +1696,17 @@ tags:
 x-tagGroups:
   - name: Endpoints documentation
     tags:
+      - Applicants
       - Identity verifications
       - AML verifications
-      - Applicants
 paths:
   /v2/create-and-start-idv:
     post:
       tags:
         - Identity verifications
-      summary: Create an identity verification
+      summary: Create and start an identity verification
       description: This endpoint allows you to create and identity verification. You should get a `201` response and the identity verification resource containing the `_links/verification_url`.
-      operationId: create_identity_verification
+      operationId: create_and_start_identity_verification
       requestBody:
         required: true
         content:
@@ -1752,53 +1774,6 @@ paths:
                   description: Your server returns this code if it accepts the callback.
                 "201":
                   description: Your server returns this code if it accepts the callback.
-
-  /v2/identity-verifications/{identity_verification_id}/retry:
-    post:
-      tags:
-        - Identity verifications
-      summary: Retry an identity verification
-      description: |
-        This endpoint allows you to retry an identity verification with the `retry_required` status.
-
-        If the verification status is not `retry_required`, this endpoint will return an error.
-
-        You will need to provide the ID of the failed verification in the URL.
-
-        You should get a `200` response and the identity verification resource containing the new `_links/verification_url`
-
-      operationId: retry_identity_verification
-      requestBody:
-        content:
-          application/json:
-            examples:
-              Empty body accepted:
-                $ref: "#/components/examples/identity_verification_retry_request_body_min"
-              All possible data:
-                $ref: "#/components/examples/identity_verification_retry_request_body_max"
-            schema:
-              $ref: "#/components/schemas/IdentityVerificationRetryRequest"
-
-      responses:
-        "200":
-          description: The verification has been retried successfully
-          content:
-            application/json:
-              examples:
-                identity_verification_creation_response_body:
-                  $ref: "#/components/examples/identity_verification_creation_response_body"
-              schema:
-                required: [applicant_id, user_journey_id]
-                allOf:
-                  - $ref: "#/components/schemas/IdentityVerificationOutput"
-        "400":
-          description: The provided ID is not valid
-        "404":
-          description: The provided ID does not correspond to a failed verification
-        "409":
-          description: The verification has already succeeded
-        "500":
-          description: An error occurred while retrying the verification
 
   /v2/identity-verifications/{identity_verification_id}:
     get:
@@ -1922,6 +1897,49 @@ paths:
       responses:
         "204":
           description: Notification succesfully requested
+
+  /v2/identity-verifications/{identity_verification_id}/attempts:
+    post:
+      tags:
+        - Identity verifications
+      summary: Create an Attempt
+      description: This endpoint allows you to create a new Attempt. It is possible when the identity-verification is in one of
+        the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
+      operationId: create_attempt
+      parameters:
+        - name: identity_verification_id
+          in: path
+          description: ID of the identity verification to notify
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Minimal body:
+                $ref: "#/components/examples/attempt_creation_request_body_min"
+              All possible data:
+                $ref: "#/components/examples/attempt_creation_request_body_max"
+            schema:
+              $ref: "#/components/schemas/AttemptRequest"
+      responses:
+        "201":
+          description: Attempt created
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/attempt_creation_response_body"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/AttemptResponse"
+        "404":
+          description: The provided verification ID is not valid
+        "409":
+          description: The current verification status does not allow the creation of a new attempt. The verification status must be either `created`, `pending`, `capture_in_progress`, or `retry_required`
+        "500":
+          description: An error occurred while retrying the verification
 
   /v2/applicants:
     post:
@@ -2150,16 +2168,27 @@ components:
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
 
-    identity_verification_retry_request_body_min:
-      value: {}
+    attempt_creation_request_body_min:
+      value:
+        redirect_url: https://myweb.site?query-param=hello
 
-    identity_verification_retry_request_body_max:
+    attempt_creation_request_body_max:
       value:
         phone_number:
           country_code: "+1"
           number: "2068133616"
-        webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
+
+    attempt_creation_response_body:
+      value:
+        id: "iatp_tkoi5db4hryu5cei5vwoabrPoQ"
+        phone_number:
+          country_code: "+1"
+          number: "2068133616"
+        redirect_url: https://myweb.site?query-param=hello
+        _links:
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
 
     identity_verification_response_body:
       value:
@@ -2540,14 +2569,32 @@ components:
         signed_url:
           $ref: "#/components/schemas/PreSignedUrl"
 
-    IdentityVerificationRetryRequest:
+    AttemptLinks:
       type: object
+      allOf:
+        - $ref: "#/components/schemas/ActiveLink"
+
+    AttemptResponse:
+      type: object
+      required: [redirect_url, id, _links]
+      properties:
+        id:
+          type: string
+        redirect_url:
+          type: string
+        phone_number:
+          $ref: "#/components/schemas/PhoneNumber"
+        _links:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/AttemptLinks"
+
+    AttemptRequest:
+      type: object
+      required: [redirect_url]
       properties:
         phone_number:
           $ref: "#/components/schemas/PhoneNumber"
-        webhook_url:
-          type: string
-          format: uri
         redirect_url:
           type: string
           format: uri
