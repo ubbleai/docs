@@ -1598,12 +1598,13 @@ info:
     | `identity_verification_anonymized`                        | The verification has been anonymized and was in the status `retry_required`, retry is no longer available                         |
     | `identity_verification_audit_completed`                   | The verification has been audited and the status may have been updated                                                            |
     | `identity_verification_report_created`                    | The pdf report is available                                                                                                       |
-    | `aml_verification_created`                                | You created an AML verification                                                                                                   |
-    | `aml_onboarding_in_progress`                              | We launched the AML onboarding workflow                                                                                           |
-    | `aml_onboarding_completed`                                | ComplyAdvantage has completed the onboarding workflow and the `status` has been updated                                           |
-    | `aml_onboarding_review_completed`                         | You manually reviewed the AML cases and changed the `status`                                                                      |
-    | `aml_monitoring_alert`                                    | ComplyAdvantage has raised an alert for a monitored applicant and we updated the `status`                                         |
-    | `aml_monitoring_review_completed`                         | You manually reviewed the AML cases and changed the `status`                                                                      |
+    | `aml_verification_created`                                | A verification has been created                                                                                                   |
+    | `aml_verification_onboarding_started`                     | Screening has begun                                                                                                               |
+    | `aml_verification_onboarding_completed`                   | Screening has been completed                                                                                                      |
+    | `aml_verification_onboarding_reviewed`                    | Manual review has been completed, customer `status` was updated                                                                   |
+    | `aml_verification_monitoring_alert`                       | A monitoring alert has been detected                                                                                              |
+    | `aml_verification_monitoring_reviewed`                    | Manual review has been completed, customer status was updated                                                                     |
+    | `aml_verification_status_changed`                         | Manual review has been reopened, customer status was updated                                                                      |
 
     ## Retry
 
@@ -1692,13 +1693,15 @@ tags:
     description: AML verification endpoints documentation.
   - name: applicants
     description: Applicant management endpoints documentation.
+  - name: attempts
+    description: Attempt management endpoints documentation.
 
 x-tagGroups:
   - name: Endpoints documentation
     tags:
-      - Applicants
       - Identity verifications
       - AML verifications
+      - Applicants
 paths:
   /v2/create-and-start-idv:
     post:
@@ -1899,6 +1902,34 @@ paths:
           description: Notification succesfully requested
 
   /v2/identity-verifications/{identity_verification_id}/attempts:
+    get:
+      tags:
+        - Identity verifications
+      summary: List attempts (Coming soon)
+      description: This endpoint allows you to list all attempts of a verification
+      operationId: list_attempts
+      parameters:
+        - name: identity_verification_id
+          in: path
+          description: ID of the identity verification
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List attempt
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/attempt_list_response_body"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/AttemptResponseList"
+        "404":
+          description: The provided verification ID is not valid
+        "500":
+          description: An error occurred while fetching the attempts
     post:
       tags:
         - Identity verifications
@@ -1939,7 +1970,43 @@ paths:
         "409":
           description: The current verification status does not allow the creation of a new attempt. The verification status must be either `created`, `pending`, `capture_in_progress`, or `retry_required`
         "500":
-          description: An error occurred while retrying the verification
+          description: An error occurred while creating the attempt
+
+  /v2/identity-verifications/{identity_verification_id}/attempts/{attempt_id}:
+    get:
+      tags:
+        - Identity verifications
+      summary: Retrieve attempts (Coming soon)
+      description: This endpoint allows you to list all attempts of a verification
+      operationId: fetch_attempts
+      parameters:
+        - name: identity_verification_id
+          in: path
+          description: ID of the identity verification
+          required: true
+          schema:
+            type: string
+        - name: attempt_id
+          in: path
+          description: ID of the attempt
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Attempt fetched
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/attempt_get_response_body"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/AttemptResponse"
+        "404":
+          description: The provided verification ID or attempt ID is not valid
+        "500":
+          description: An error occurred while fetching the attempt
 
   /v2/applicants:
     post:
@@ -2179,9 +2246,27 @@ components:
           number: "2068133616"
         redirect_url: https://myweb.site?query-param=hello
 
+    attempt_get_response_body:
+      value:
+        id: "iatp_tkoi5db4hryu5cei5vwoabrPoQ"
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        phone_number:
+          country_code: "+1"
+          number: "2068133616"
+        redirect_url: "https://myweb.site?query-param=hello"
+        status: "created"
+        webhook_url: "https://google.com"
+        response_codes: []
+        _links:
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
+
     attempt_creation_response_body:
       value:
         id: "iatp_tkoi5db4hryu5cei5vwoabrPoQ"
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
         phone_number:
           country_code: "+1"
           number: "2068133616"
@@ -2189,6 +2274,33 @@ components:
         _links:
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
+
+    attempt_list_response_body:
+      value:
+        total_count: 2
+        skip: 10
+        limit: 10
+        data:
+          - id: "iatp_tkoi5db4hryu5cei5vwoabrPoQ"
+            created_on: 2017-07-21T17:32:28Z
+            modified_on: 2017-07-21T17:40:32Z
+            status: "created"
+            webhook_url: "https://google.com"
+            response_codes: []
+            phone_number:
+              country_code: "+1"
+              number: "2068133616"
+            redirect_url: "https://myweb.site?query-param=hello"
+            _links:
+              verification_url:
+                href: "https://id.ubble.ai/4hryu5cei5/"
+        _links:
+          self:
+            href: "https://api.staging.env.ubble.ai/v2/identity-verifications/{verification_id}/attempts"
+          next:
+            href: "https://api.staging.env.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
+          previous:
+            href: "https://api.staging.env.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
 
     identity_verification_response_body:
       value:
@@ -2573,15 +2685,48 @@ components:
       type: object
       allOf:
         - $ref: "#/components/schemas/ActiveLink"
+        - $ref: "#/components/schemas/SelfLink"
+
+    AttemptResponseList:
+      type: object
+      required: [total_count, skip, limit, _links, data]
+      properties:
+        total_count:
+          type: integer
+        skip:
+          type: integer
+        limit:
+          type: integer
+        data:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/AttemptResponse"
+        _links:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/SelfLink"
+            - $ref: "#/components/schemas/NextLink"
+            - $ref: "#/components/schemas/PreviousLink"
 
     AttemptResponse:
       type: object
-      required: [redirect_url, id, _links]
+      required: [webhook_url, redirect_url, id, _links, status]
       properties:
         id:
           type: string
+        status:
+          type: string
         redirect_url:
           type: string
+        webhook_url:
+          type: string
+        response_codes:
+          type: array
+          readOnly: true
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
         phone_number:
           $ref: "#/components/schemas/PhoneNumber"
         _links:
@@ -2854,6 +2999,22 @@ components:
       readOnly: true
       properties:
         self:
+          $ref: "#/components/schemas/HalLink"
+
+    NextLink:
+      type: object
+      required: [next]
+      readOnly: true
+      properties:
+        next:
+          $ref: "#/components/schemas/HalLink"
+
+    PreviousLink:
+      type: object
+      required: [previous]
+      readOnly: true
+      properties:
+        previous:
           $ref: "#/components/schemas/HalLink"
 
     HalLink:
