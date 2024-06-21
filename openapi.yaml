@@ -1905,7 +1905,7 @@ paths:
     get:
       tags:
         - Identity verifications
-      summary: List attempts (Coming soon)
+      summary: List attempts
       description: This endpoint allows you to list all attempts of a verification
       operationId: list_attempts
       parameters:
@@ -1976,7 +1976,7 @@ paths:
     get:
       tags:
         - Identity verifications
-      summary: Retrieve attempts (Coming soon)
+      summary: Retrieve attempts
       description: This endpoint allows you to list all attempts of a verification
       operationId: fetch_attempts
       parameters:
@@ -2711,15 +2711,13 @@ components:
 
     AttemptResponse:
       type: object
-      required: [webhook_url, redirect_url, id, _links, status]
+      required: [webhook_url, redirect_url, id, _links, status, created_on, modified_on, response_codes]
       properties:
         id:
           type: string
         status:
           type: string
         redirect_url:
-          type: string
-        webhook_url:
           type: string
         response_codes:
           type: array
@@ -2733,6 +2731,8 @@ components:
           readOnly: true
           allOf:
             - $ref: "#/components/schemas/AttemptLinks"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
 
     AttemptRequest:
       type: object
