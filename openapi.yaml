@@ -2709,7 +2709,7 @@ components:
 
     AttemptResponse:
       type: object
-      required: [redirect_url, id, _links, status, created_on, modified_on, response_codes]
+      required: [redirect_url, id, _links, status, created_on, modified_on, response_codes, applicant_session_information]
       properties:
         id:
           type: string
@@ -2725,6 +2725,8 @@ components:
             $ref: "#/components/schemas/ResponseCodes"
         phone_number:
           $ref: "#/components/schemas/PhoneNumber"
+        applicant_session_information:
+          $ref: "#/components/schemas/ApplicantSessionInformation"
         _links:
           readOnly: true
           allOf:
@@ -2978,6 +2980,14 @@ components:
           $ref: "#/components/schemas/PhonePrefix"
         number:
           $ref: "#/components/schemas/DomesticPhoneNumber"
+
+    ApplicantSessionInformation:
+      type: object
+      properties:
+        ip_address:
+          type: string
+          description: Ip address of the applicant during the session
+          example: "123:456:789:00"
 
     PhonePrefix:
       type: string
