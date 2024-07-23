@@ -1702,7 +1702,19 @@ x-tagGroups:
       - Identity verifications
       - AML verifications
       - Applicants
+      - Service status
 paths:
+  /health:
+    get:
+      tags:
+        - Service status
+      summary: Retrieve API health
+      description: This endpoint allows you to get the health of our api, anything other than a 200 status code is not OK
+      operationId: retrieve_api_health
+      responses:
+        "200":
+          description: API is OK
+
   /v2/create-and-start-idv:
     post:
       tags:
@@ -2727,6 +2739,8 @@ components:
           $ref: "#/components/schemas/PhoneNumber"
         applicant_session_information:
           $ref: "#/components/schemas/ApplicantSessionInformation"
+        client_information:
+          $ref: "#/components/schemas/ClientInformation"
         _links:
           readOnly: true
           allOf:
@@ -2740,6 +2754,8 @@ components:
       properties:
         phone_number:
           $ref: "#/components/schemas/PhoneNumber"
+        client_information:
+          $ref: "#/components/schemas/ClientInformation"
         redirect_url:
           type: string
           format: uri
@@ -2988,6 +3004,13 @@ components:
           type: string
           description: Ip address of the applicant during the session
           example: "123:456:789:00"
+
+    ClientInformation:
+      type: object
+      properties:
+        pre_selected_residence_country:
+          $ref: "#/components/schemas/CountryCode"
+
 
     PhonePrefix:
       type: string
