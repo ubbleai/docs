@@ -2256,6 +2256,8 @@ components:
         phone_number:
           country_code: "+1"
           number: "2068133616"
+        client_information:
+          pre_selected_residence_country: "FR"
         redirect_url: https://myweb.site?query-param=hello
 
     attempt_get_response_body:
@@ -2267,8 +2269,16 @@ components:
           country_code: "+1"
           number: "2068133616"
         redirect_url: "https://myweb.site?query-param=hello"
-        status: "created"
+        status: "checks_in_progress"
         response_codes: []
+        client_information:
+          pre_selected_residence_country: FR
+        applicant_session_information:
+          ip_address: "123.123.123.01"
+          selected_documents:
+            - country: "FR"
+              document_type: "Passport"
+          
         _links:
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
@@ -2281,6 +2291,8 @@ components:
         phone_number:
           country_code: "+1"
           number: "2068133616"
+        client_information:
+          pre_selected_residence_country: "FR"
         redirect_url: https://myweb.site?query-param=hello
         _links:
           verification_url:
@@ -2295,12 +2307,16 @@ components:
           - id: "iatp_tkoi5db4hryu5cei5vwoabrPoQ"
             created_on: 2017-07-21T17:32:28Z
             modified_on: 2017-07-21T17:40:32Z
-            status: "created"
+            status: "checks_in_progress"
             response_codes: []
             phone_number:
               country_code: "+1"
               number: "2068133616"
             redirect_url: "https://myweb.site?query-param=hello"
+            client_information:
+              pre_selected_residence_country: "FR"
+            applicant_session_information:
+              ip_address: "123.123.123.01"
             _links:
               verification_url:
                 href: "https://id.ubble.ai/4hryu5cei5/"
@@ -3004,6 +3020,23 @@ components:
           type: string
           description: Ip address of the applicant during the session
           example: "123:456:789:00"
+        selected_documents:
+          description: Documents selected by the applicant in selection order
+          type: array
+          readOnly: true
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/SelectedDocument"
+
+    SelectedDocument:
+      type: object
+      description: The code giving more details about the result.
+      readOnly: true
+      properties:
+        country:
+          $ref: "#/components/schemas/CountryCode"
+        document_type:
+          $ref: "#/components/schemas/DocumentTypes"
 
     ClientInformation:
       type: object
