@@ -530,6 +530,35 @@ info:
 
     When the user completes or terminates their verification, use the `destroy()` method for handling user redirection.
 
+    # Signature 
+
+    For enhanced security, all webhook notifications are signed by default. 
+    If you would like to enable signature verification for API responses as well, 
+    please reach out to your account manager to have this feature activated for your organization.
+
+      The `Cko-Signature` header contains:
+      - the timestamp of the request, for example, `1635236316.377888`
+      - the signing key identifier and version, for example, `3456-live-v1`
+      - the signature itself, for example, `5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd`
+
+    Format of signature:
+    ```
+      <timestamp>:<organization_id>-<test or live verification>-<key version>:<signature>
+    ```
+
+    Signature example:
+    ```
+      1635236316.377888:3456-production-v1:5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd
+    ```
+
+    We use an asymmetric key signing algorithm of type ECDSA with a sha2-512 hashing algorithm to create the signatures. 
+
+    On your side, you can verify the signature against the received body by using the public key associated with the signature key. 
+    There are two public keys, for test verifications and live verifications respectively. You can download them from the client dashboard. 
+
+    For coding examples on how to verify the signature, please refer to our examples [repository](https://github.com/ubbleai/code-samples).
+    
+
     # Handle verification results
 
     When you request an identity verification, you'll be notified about events throughout the verification's lifecycle via webhooks.
@@ -1242,28 +1271,20 @@ info:
     Response example
     ```json
     {
-      "value": {
-        "id": "idv_tkoi5db4hryu5cei5vwoabr7we",
-        "created_on": "2017-07-21T17:32:28Z",
-        "modified_on": "2017-07-21T17:40:32Z",
-        "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr7we",
-        "status": "pending",
-        "response_codes": [],
-        "declared_data": {
-          "name": "David Vincent",
-          "birth_date": "1934-10-02"
-        },
-        "documents": [],
+        "id": "iatp_01j57xsx3yx5bhfapmywhgksz1",
+        "created_on": "2023-08-14T07:49:26.274866Z",
+        "modified_on": "2023-08-14T07:49:26.274876Z",
         "redirect_url": "https://example.com?query-param=hello",
+        "status": "pending_redirection",
+        "response_codes": [],
         "_links": {
-          "self": {
-            "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
-          },
-          "verification_url": {
-            "href": "https://idv.ubble.ai/4hryu5cei5/"
-          }
+            "self": {
+                "href": "https://api.ubble.ai/v2/identity-verifications/idv_01j57xs04113rctmbefsc34g97/attempts/iatp_01j57xsx3yx5bhfapmywhgks00"
+            },
+            "verification_url": {
+                "href": "https://id.ubble.ai/e53c4547-88ce-484f-ad0e-f325e5f0ce00"
+            }
         }
-      }
     }
     ```
 
@@ -1286,39 +1307,20 @@ info:
     When the PDF report is ready for you to [retrieve via the API](#tag/Identity-verifications/operation/pdf_identity_verification),
     you'll receive an `identity_verification_report_created` webhook.
 
+    Please note that the generated reports are signed. In order to check the signature, you should use our [public certificate](s3://cdn.ubble.ai/cko_idv_api_signature_public_certificate.crt). We follow the PDF signature standard, where all information necessary is embedded 
+    in the metadata, which is recognized by most PDF readers.
+    You can find an example on how to validate the signature [here](https://github.com/ubbleai/code-samples).
+
+
     ## API response signing
 
     The API response signature can be activated by your account manager.
     
     This signature can be used to verify that the API response has been issued by Checkout.com and has not been altered.
 
-    #### Verifying Response signature
+    Please refer to [signature](#section/Signature) for more details.
 
-    The `Cko-Signature` header contains:
-    - the timestamp of the request, for example, `1635236316.377888`
-    - the signing key identifier and version, for example, `3456-live-v1`
-    - the signature itself, for example, `5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd`
-
-    Format of response signature:
-    ```
-      <timestamp>:<organization_id>-<test or live verification>-<key version>:<signature>
-    ```
-
-    Response signature example:
-    ```
-      1635236316.377888:3456-production-v1:5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd
-    ```
-
-    We use an asymmetric key signing algorithm of type ECDSA with a sha2-512 hashing algorithm to sign the API response. 
-
-    On your side, you can verify the signature against the received body by using the public key associated with the signature key. There are two public keys, for test verifications and live verifications respectively. You can download them from the client dashboard. 
-
-    The keys have a validity of one year and will be automatically renewed. Upon renewal you will have to re-download the public key from the dashboard. 
-
-    To detect a key rotation, look at the signature version in the API response. To verify that response, use the public key with the same version of the signature key. 
-
-    Don’t worry about losing older versions of the public key, you can download all versions of the public key from the dashboard.
-    
+  
     #### Verifying Images
     You can also verify that the images has not been altered by using the image hashes available in the API response body.
     
@@ -1326,7 +1328,7 @@ info:
     <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center; border-radius: 0.5rem;">
     <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; color: #f8c92e; vertical-align: center;">⚠</div>
     <div style="display: table-cell; vertical-align: center;">
-      <p>For the data to be valid, both verification stages must be valid : the response signature verification and the images verification.</p>
+      <p>For the data to be valid, both verification stages must be valid: the response signature verification and the images verification.</p>
     </div>
     </div>
 
@@ -1611,19 +1613,13 @@ info:
     We expect that you will return us a 200 or 201 status code within 10 seconds before we retry, up to 2 retries will be performed. If needed, you can trigger webhook notifications manually using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
 
     ## Signature
-    For security reasons all our webhook calls are signed.
-    
-    `Cko-Signature` header contains the timestamp of the signature plus the signature itself. This allow you to ensure the content of the webhook was not modified.
-
-    The header has the following format: "{timestamp}:{signature version}:{signature}" the format follows. Example: `1706285972.415666:1-test-v1:MIGGAkFt55yXjDDD0IFgVg+kH7++bJql/UfL8YcwOgaKvb0r/Zj/c/ULPKn7YUr3ddAi3PsCP2rPMnvEMBMGmPIB292nQgJBHR5H/Nk1BLWDvOf5VWjn+OmtU1J84m5NTvIxkkV9kcgyk1mUwUfAJGNoU5LhyYjBqwiU+CwkTVJa844qitcqhZg=`
-
-    To compare the signature, you will need the webhook secret signature. There is one for signature for test verifications and one for live verifications. You can find them in the dashboard.
+    For security reasons all our webhook calls are signed, please refer to [signature](#section/Signature) for more details.
 
     ## Security
 
     ### Webhook IP whitelisting
 
-    For security purposes, if you need to whitelist our incoming api calls, see our [public ip](https://docs.outscale.com/en/userguide/OUTSCALE-Public-IPs.html).
+    For security purposes, if you need to whitelist our incoming api calls, see our [public ip addresses](https://docs.outscale.com/en/userguide/OUTSCALE-Public-IPs.html).
 
     # API standards
 
