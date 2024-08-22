@@ -1597,7 +1597,8 @@ info:
     | `identity_verification_capture_aborted`                   | The applicant terminated the capture without completing it                                                                        |
     | `identity_verification_checks_inconclusive`               | The applicant did not provide the assets required to perform the checks                                                           |
     | `identity_verification_retry_requested`                   | You requested a retry for this identity verification                                                                              |
-    | `identity_verification_anonymized`                        | The verification has been anonymized and was in the status `retry_required`, retry is no longer available                         |
+    | `identity_verification_closed`                            | The verification has been forcibly closed                                                                                         |
+    | `identity_verification_anonymized`                        | The verification has been anonymized                                                                                              |
     | `identity_verification_audit_completed`                   | The verification has been audited and the status may have been updated                                                            |
     | `identity_verification_report_created`                    | The pdf report is available                                                                                                       |
     | `aml_verification_created`                                | A verification has been created                                                                                                   |
@@ -1621,6 +1622,1484 @@ info:
 
     For security purposes, if you need to whitelist our incoming api calls, see our [public ip addresses](https://docs.outscale.com/en/userguide/OUTSCALE-Public-IPs.html).
 
+    # Testing (Coming soon)
+    
+    Use the following examples to test different Identity Verification scenarios.
+    
+    ## Successful verification
+    
+    ### Step 1: Configure webhooks
+    
+    Have your webhook server ready to test real-time notifications for each event in this scenario.
+    - identity_verification_created
+    - identity_verification_opened
+    - identity_verification_started
+    - identity_verification_capture_completed
+    - identity_verification_checks_completed
+    
+    ### Step 2: Create an applicant
+    
+    Set the `external_applicant_id` value to `eaplt_1000000000000000000000000`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/applicants</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "email": "toby.arden@example.com"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "aplt_tkoi5db4hryu5cei5vwoabr7we",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "email": "toby.arden@example.com",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+        }
+      }
+    }
+    ```
+    
+    ### Step 3: Create an identity verification
+    
+    Set the `id` you received in the step 1 response as the `applicant_id` value. For example, in this case the response returned `aplt_tkoi5db4hryu5cei5vwoabr7we` as the `id`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7we",
+      "declared_data": {
+        "name": "Toby Arden",
+        "birth_date": "1984-10-02"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr7we",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7we",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr7we",
+      "status": "pending",
+      "response_codes": [],
+      "declared_data": {
+        "name": "Toby Arden",
+        "birth_date": "1984-10-02"
+      },
+      "documents": [],
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ### Step 4: Create an attempt
+    
+    Pass the `id` value from step 2 response as the `identity_verification_id` path parameter.
+    
+    For example, in this case the `id` value returned is `idv_tkoi5db4hryu5cei5vwoabr7we`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+        "phone_number": {
+          "country_code": "+1",
+          "number": "5555700102"
+        },
+        "redirect_url": "https://example.com?query-param=hello"
+    }
+    ```
+    
+    #### Response example
+    
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "5555700102"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "capture_in_progress",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    At this stage, the webhooks are triggered. The `identity_verification_checks_completed` webhook will return the response code `10000`
+    
+    ### (Optional) Step 5: Retrieve an identity verification
+    
+    Pass the `id` value from step 2 response to the `identity_verification_id` path parameter.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}</span>
+    </div>
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr7we",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7we",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr7we",
+      "status": "approved",
+      "response_codes": [
+        {
+          "code": 10000,
+          "summary": "approved"
+        }
+      ],
+      "verified_identity": {
+        "full_name": "Toby Arden",
+        "birth_date": "1984-10-02"
+      },
+      "declared_data": {
+        "name": "Toby Arden",
+        "birth_date": "1984-10-02"
+      },
+      "documents": [
+        {
+          "full_name": "Toby Arden",
+          "birth_date": "1984-10-02",
+          "document_type": "ID",
+          "document_issuing_country": "US",
+          "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+        }
+      ],
+      "face": {
+        "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
+      },
+      "phone_number": {
+        "country_code": "+1",
+        "number": "5555550102"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ## Successful verification on retry after capture aborted
+    
+    ### Step 1: Configure webhooks
+    
+    Set up webhooks to test real-time notifications for each event in this scenario. 
+    
+    Webhooks for first attempt:
+    
+      - identity_verification_created
+      - identity_verification_opened
+      - identity_verification_started
+      - identity_verification_capture_aborted
+    
+    Webhooks for final verdict:
+    
+      - identity_verification_retry_requested
+      - identity_verification_started
+      - identity_verification_capture_completed
+      - identity_verification_checks_completed
+    
+    ### Step 2: Create an applicant
+    
+    Set the value of `external_applicant_id` as `eaplt_61XXXA1000000000000000000`. Replace `61XXX` with any of the response codes starting with 61, that you would like to test for.
+    
+    For example, if you would like to test with response code `61401`, set the `external_application_id` to `eaplt_61401A1000000000000000000`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/applicants</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "external_applicant_id": "eaplt_61401A1000000000000000000",
+      "email": "jia.tsang@example.com"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "aplt_tkoi5db4hryu5cei5vwoabr8hg",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "email": "jia.tsang@example.com",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr8hg"
+        }
+      }
+    }
+    ```
+    
+    ### Step 3: Create an identity verification
+    
+    Set the `id` you received in the step 1 response as the `applicant_id` value. For example, in this case the response returned `aplt_tkoi5db4hryu5cei5vwoabr8hg` as the id.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr8hg",
+      "declared_data": {
+        "name": "Jia Tsang",
+        "birth_date": "1984-10-02"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr8hg",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr8hg",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr8hg",
+      "status": "pending",
+      "response_codes": [],
+      "declared_data": {
+        "name": "Jia Tsang",
+        "birth_date": "1984-10-02"
+      },
+      "documents": [],
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr8hg"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ### Step 4: Create an attempt
+    
+    Pass the `id` value from step 2 response as the `identity_verification_id` path parameter.
+    
+    For example, in this case the `id` value returned is `idv_tkoi5db4hryu5cei5vwoabr8hg`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+        "phone_number": {
+          "country_code": "+1",
+          "number": "5555500102"
+        },
+        "redirect_url": "https://example.com?query-param=hello"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "5555500102"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "capture_in_progress",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    At this stage, the webhooks for the first attempt are triggered. The `identity_verification_capture_aborted` webhook will return the response code starting with 61, that you passed as part of the `external_applicant_id`.
+    
+    
+    ### Step 5: Create another attempt
+    
+    When the `identity_verification_capture_aborted` webhook returns the `retry_required` status, create another attempt.
+    
+    Set the `id` value from step 2 response as the `identity_verification_id` path parameter. For example, in this case the `id` value returned is `idv_tkoi5db4hryu5cei5vwoabr8hg`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+        "phone_number": {
+          "country_code": "+1",
+          "number": "5555500102"
+        },
+        "redirect_url": "https://example.com?query-param=hello"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "5555500102"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "capture_in_progress",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    At this stage, webhooks for the final verdict are triggered. The `identity_verification_checks_completed` webhook will return the response code `10000`.
+
+
+    ### (Optional) Step 6: Retrieve an identity verification
+    
+    Pass the `id` value from step 2 response to the `identity_verification_id` path parameter.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}</span>
+    </div>
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr8hg",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr8hg",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr8hg",
+      "status": "approved",
+      "response_codes": [
+        {
+          "code": 10000,
+          "summary": "approved"
+        }
+      ],
+      "verified_identity": {
+        "full_name": "Jia Tsang",
+        "birth_date": "1984-10-02"
+      },
+      "declared_data": {
+        "name": "Jia Tsang",
+        "birth_date": "1984-10-02"
+      },
+      "documents": [
+        {
+          "full_name": "Jia Tsang",
+          "birth_date": "1984-10-02",
+          "document_type": "ID",
+          "document_issuing_country": "US",
+          "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+        }
+      ],
+      "face": {
+        "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
+      },
+      "phone_number": {
+        "country_code": "+1",
+        "number": "5555550102"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr8hg"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ## Successful verification on retry after checks inconclusive
+    
+    ### Step 1: Configure webhooks
+    
+    Have your webhook server ready to test real-time notifications for each event in this scenario. 
+    
+    Webhooks for first attempt:
+  
+      - identity_verification_created
+      - identity_verification_opened
+      - identity_verification_started
+      - identity_verification_capture_completed
+      - identity_verification_checks_inconclusive
+    
+    Webhooks for final verdict:
+      
+      - identity_verification_retry_requested
+      - identity_verification_started
+      - identity_verification_capture_completed
+      - identity_verification_checks_completed
+    
+    ### Step 2: Create an applicant
+    
+    Set the value of `external_applicant_id` as `eaplt_61XXXA1000000000000000000`. Replace `61XXX` with any of the response codes starting with 61, that you would like to test for.
+  
+    For example, if you would like to test with response code `61310`, set the `external_application_id` to `eaplt_61310A1000000000000000000`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/applicants</span>
+    </div> 
+    
+    #### Request example
+    
+    ```json
+    {
+      "external_applicant_id": "eaplt_61310A1000000000000000000",
+      "email": "jia.tsang@example.com"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "aplt_tkoi5db4hryu5cei5vwoabr7wf",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "email": "jia.tsang@example.com",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7wf"
+        }
+      }
+    }
+    ```
+    
+    ### Step 3: Create an identity verification
+    
+    Set the `id` you received in the step 1 response as the `applicant_id` value. For example, in this case the response returned `aplt_tkoi5db4hryu5cei5vwoabr7wf` as the id.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications</span>
+    </div>
+    
+    #### Request example
+    ```json
+    {
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7wf",
+      "declared_data": {
+        "name": "Jia Tsang",
+        "birth_date": "1995-10-02"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr7wf",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7wf",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr7wf",
+      "status": "pending",
+      "response_codes": [ ],
+      "declared_data": {
+        "name": "Jia Tsang",
+        "birth_date": "1995-10-02"
+      },
+      "documents": [ ],
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7wf"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ### Step 4: Create an attempt
+    
+    Pass the `id` value from step 2 response as the `identity_verification_id` path parameter.
+    
+    For example, in this case the `id` value returned is `idv_tkoi5db4hryu5cei5vwoabr7wf`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+        "phone_number": {
+          "country_code": "+1",
+          "number": "5555500102"
+        },
+        "redirect_url": "https://example.com?query-param=hello"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "5555500102"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "capture_in_progress",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    At this stage, the webhooks for the first attempt are triggered. The `identity_verification_checks_inconclusive` webhook will return the response code starting with 61, that you passed as part of the `external_applicant_id`.
+    
+    
+    ### Step 5: Create another attempt
+    
+    When the `identity_verification_checks_inconclusive` webhook returns the `retry_required` status, create another attempt.
+    
+    Set the `id` value from step 2 response as the `identity_verification_id` path parameter. For example, in this case the `id` value returned is `idv_tkoi5db4hryu5cei5vwoabr7wf`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+        "phone_number": {
+          "country_code": "+1",
+          "number": "5555500102"
+        },
+        "redirect_url": "https://example.com?query-param=hello"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "5555500102"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "capture_in_progress",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    At this stage, webhooks for the final verdict are triggered. The `identity_verification_checks_inconclusive` webhook will return the response code starting with 61 that you passed as part of the `external_applicant_id`.
+
+
+    ### (Optional) Step 6: Retrieve an identity verification
+    
+    Pass the `id` value from step 2 response to the `identity_verification_id` path parameter.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}</span>
+    </div>
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr8hg",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr8hg",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr8hg",
+      "status": "approved",
+      "response_codes": [
+        {
+          "code": 10000,
+          "summary": "approved"
+        }
+      ],
+      "verified_identity": {
+        "full_name": "Jia Tsang",
+        "birth_date": "1984-10-02"
+      },
+      "declared_data": {
+        "name": "Jia Tsang",
+        "birth_date": "1984-10-02"
+      },
+      "documents": [
+        {
+          "full_name": "Jia Tsang",
+          "birth_date": "1984-10-02",
+          "document_type": "ID",
+          "document_issuing_country": "US",
+          "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+        }
+      ],
+      "face": {
+        "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
+      },
+      "phone_number": {
+        "country_code": "+1",
+        "number": "5555550102"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr8hg"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ## Declined verification
+    
+    ### Step 1: Configure webhooks
+    
+    Set up webhooks to test real-time notifications for each event in this scenario.
+    
+    For first attempt:
+    
+      - identity_verification_created
+      - identity_verification_opened
+      - identity_verification_started
+      - identity_verification_capture_completed
+      - identity_verification_checks_completed
+    
+    ### Step 2: Create an applicant
+    
+    Set the `external_applicant_id` value to `eaplt_62XXX000000000000000000000`. 
+    Replace `62XXX` with any of the response codes starting with 62, that you would like to test for.
+  
+    For example, if you would like to test with `62201`, then set the value to `eaplt_62201000000000000000000000`
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/applicants</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "external_applicant_id": "eaplt_62201000000000000000000000",
+      "email": "hannah.bret@example.com"
+    }
+    ```
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "aplt_tkoi5db4hryu5cei5vwoabr9fr",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "external_applicant_id": "eaplt_62201000000000000000000000",
+      "email": "hannah.bret@example.com",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr9fr"
+        }
+      }
+    }
+    ```
+    
+    ### Step 3: Create an identity verification
+    
+    Set the `id` you received in the step 1 response as the `applicant_id` value. For example, in this case the response returned `aplt_tkoi5db4hryu5cei5vwoabr9fr` as the `id`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr9fr",
+      "declared_data": {
+        "name": "Hannah Bret",
+        "birth_date": "1999-12-02"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/"
+    }
+    ```   
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr9fr",
+      "created_on": "2017-07-21T17:32:28Z",
+      "modified_on": "2017-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr9fr",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr9fr",
+      "status": "pending",
+      "response_codes": [],
+      "declared_data": {
+        "name": "Hannah Bret",
+        "birth_date": "1999-12-02"
+      },
+      "documents": [],
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr9fr"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ### Step 4: Create an attempt
+    
+    Pass the `id` from step 2 response as the path parameter.
+    
+    For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr1ab` as the `id`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    ```json
+    {
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello"
+    }
+    ```   
+    #### Response example
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2017-07-21T17:32:28Z",
+      "modified_on": "2017-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "capture_in_progress",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    At this stage, the webhooks for the first attempt are triggered. The `identity_verification_checks_completed` webhook will return the response code starting with 62, that you passed as part of the `external_applicant_id`.
+    
+    ### (Optional) Step 5: Retrieve an identity verification
+    
+    Pass the `id` value from step 2 response to the `identity_verification_id` path parameter.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}</span>
+    </div>
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr9fr",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr9fr",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr9fr",
+      "status": "declined",
+      "response_codes": [
+        {
+          "code": 62201,
+          "summary": "document_photocopy"
+        }
+      ],
+      "verified_identity": {
+        "full_name": "Hannah Bret",
+        "birth_date": "1999-12-02"
+      },
+      "declared_data": {
+        "name": "Hannah Bret",
+        "birth_date": "1999-12-02"
+      },
+      "documents": [
+        {
+          "full_name": "Hannah Bret",
+          "birth_date": "1999-12-02",
+          "document_type": "ID",
+          "document_issuing_country": "US",
+          "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+        }
+      ],
+      "face": {
+        "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
+      },
+      "phone_number": {
+        "country_code": "+1",
+        "number": "5555550102"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr9fr"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ## Declined verification on retry after capture aborted
+    
+    ### Step 1: Configure webhooks
+    
+    Set up webhooks to test real-time notifications for each event in this scenario. 
+    
+    Webhooks for first attempt:
+    
+      - identity_verification_created
+      - identity_verification_opened
+      - identity_verification_started
+      - identity_verification_capture_aborted
+    
+    Webhooks for final verdict:
+    
+      - identity_verification_retry_requested
+      - identity_verification_started
+      - identity_verification_capture_completed
+      - identity_verification_checks_completed
+    
+    ### Step 2: Create an applicant
+    
+    Set the value of `external_applicant_id` as `eaplt_61XXXA62XXX00000000000000`. Replace: 
+    - `61XXX` with any of the response codes starting with 61 for the end of the first attempt
+    - `62XXX` with any of the response codes starting with 62 for the final verdict
+    
+    For example, if you would like to test with `61203` and `62103`, then set the value to `eaplt_61203A6210300000000000000`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/applicants</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "external_applicant_id": "eaplt_61203A6210300000000000000",
+      "email": "toby.arden@example.com"
+    }
+    ```   
+    #### Response example
+    
+    ```json
+    {
+      "id": "aplt_tkoi5db4hryu5cei5vwoabr1ab",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "external_applicant_id": "eaplt_61203A6210300000000000000",
+      "email": "toby.arden@example.com",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr1ab"
+        }
+      }
+    }
+    ```
+    
+    ### Step 3: Create an identity verification
+    
+    Set the `id` you received in the step 1 response as the `applicant_id` value. For example, in this case the response returned `aplt_tkoi5db4hryu5cei5vwoabr1ab` as the `id`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr1ab",
+      "declared_data": {
+        "name": "Ali Farid",
+        "birth_date": "1990-12-20"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/"
+    }
+    ```   
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr1ab",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr1ab",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr1ab",
+      "status": "pending",
+      "response_codes": [],
+      "declared_data": {
+        "name": "Ali Farid",
+        "birth_date": "1990-12-20"
+      },
+      "documents": [],
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr1ab"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ### Step 4: Create an attempt
+    
+    Pass the `id` from step 2 response as the path parameter.
+    
+    For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr1ab` as the `id`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello"
+    }
+    ```   
+    
+    At this stage, the webhooks for the first attempt are triggered. The `identity_verification_capture_aborted` webhook will return the response code starting with 61, that you passed as part of the `external_applicant_id`.
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2017-07-21T17:32:28Z",
+      "modified_on": "2017-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "pending_redirection",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ### Step 5: Create another attempt
+    
+    When the `identity_verification_capture_aborted` webhook returns the `retry_required` status, create another attempt.
+    
+    To do this, pass the `id` from step 2 response as the path parameter.
+    
+    For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr1ab` as the `id`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello"
+    }
+    ```   
+    #### Response example
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2017-07-21T17:32:28Z",
+      "modified_on": "2017-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "capture_in_progress",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    At this stage, webhooks for the final verdict are triggered. The `identity_verification_checks_completed` webhook will return the response code starting with 62 that you passed as part of the `external_applicant_id`.
+
+    ### (Optional) Step 6: Retrieve an identity verification
+    
+    Pass the `id` value from step 2 response to the `identity_verification_id` path parameter.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}</span>
+    </div>
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr1ab",
+      "created_on": "2017-07-21T17:32:28Z",
+      "modified_on": "2017-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr1ab",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr1ab",
+      "status": "declined",
+      "response_codes": [
+        {
+          "code": 62103,
+          "summary": "document_damaged"
+        }
+      ],
+      "verified_identity": {
+        "full_name": "Ali Farid",
+        "birth_date": "1990-12-20"
+      },
+      "declared_data": {
+        "name": "Ali Farid",
+        "birth_date": "1990-12-20"
+      },
+      "documents": [
+        {
+          "full_name": "Ali Farid",
+          "birth_date": "1990-12-20",
+          "document_type": "ID",
+          "document_issuing_country": "US",
+          "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+        }
+      ],
+      "face": {
+        "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
+      },
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ## Declined verification on retry after checks inconclusive
+    
+    ### Step 1: Configure webhooks
+    
+    Have your webhook server ready to test real-time notifications for each event in this scenario. 
+    
+    Webhooks for first attempt:
+    
+      - identity_verification_created
+      - identity_verification_opened
+      - identity_verification_started
+      - identity_verification_capture_completed
+      - identity_verification_checks_inconclusive
+    
+    Webhooks for final verdict:
+    
+      - identity_verification_retry_requested
+      - identity_verification_started
+      - identity_verification_capture_completed
+      - identity_verification_checks_completed
+    
+    ### Step 2: Create an applicant
+    
+    Set the value of `external_applicant_id` as `eaplt_61XXXI62XXX0000000000000`. Replace: 
+    - `61XXX` with any of the response codes starting with 61 for the end of the first attempt
+    - `62XXX` with any of the response codes starting with 62 for the final verdict
+  
+    For example, if you would like to test with `61203` and `62403`, then set the value to `eaplt_61203A6240300000000000000`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/applicants</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "external_applicant_id": "eaplt_61203A6240300000000000000",
+      "email": "toby.arden@example.com"
+    }
+    ```   
+    #### Response example
+    
+    ```json
+    {
+      "id": "aplt_tkoi5db4hryu5cei5vwoabr6ft",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "email": "toby.arden@example.com",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr6ft"
+        }
+      }
+    }
+    ```
+    
+    ### Step 3: Create an identity verification
+    
+    Set the `id` you received in the step 1 response as the `applicant_id` value. For example, in this case the response returned `aplt_tkoi5db4hryu5cei5vwoabr6ft` as the `id`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr6ft",
+      "declared_data": {
+        "name": "Toby Arden",
+        "birth_date": "1994-09-26"
+      },
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/"
+    }
+    ```   
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr6ft",
+      "created_on": "2023-07-21T17:32:28Z",
+      "modified_on": "2023-07-21T17:40:32Z",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr6ft",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr6ft",
+      "status": "pending",
+      "response_codes": [],
+      "declared_data": {
+        "name": "Toby Arden",
+        "birth_date": "1994-09-26"
+      },
+      "documents": [],
+      "redirect_url": "https://example.com?query-param=hello",
+      "webhook_url": "https://my.api/events/",
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr6ft"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    ### Step 4: Create an attempt
+    
+    Pass the `id` from step 2 response as the path parameter.
+  
+    For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr6ft` as the `id`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello"
+    }
+    ```   
+    #### Response example
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2017-07-21T17:32:28Z",
+      "modified_on": "2017-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "capture_in_progress",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    At this stage, the webhooks for the first attempt are triggered. The `identity_verification_checks_inconclusive` webhook will return the response code starting with 61, that you passed as part of the `external_applicant_id`.
+    
+    
+    ### Step 5: Create another attempt
+    
+    When the `identity_verification_checks_inconclusive` webhook returns the `retry_required` status, create another attempt.
+    
+    To do this, pass the `id` from step 2 response as the path parameter.
+  
+    For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr6ft` as the `id`.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}/attempts</span>
+    </div>
+    
+    #### Request example
+    
+    ```json
+    {
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello"
+    }
+    ```   
+    #### Response example
+    
+    ```json
+    {
+      "id": "iatp_tkoi5db4hryu5cei5vwoabrPoQ",
+      "created_on": "2017-07-21T17:32:28Z",
+      "modified_on": "2017-07-21T17:40:32Z",
+      "phone_number": {
+        "country_code": "+1",
+        "number": "2068133616"
+      },
+      "redirect_url": "https://myweb.site?query-param=hello",
+      "status": "capture_in_progress",
+      "response_codes": [],
+      "_links": {
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
+    At this stage, webhooks for the final verdict are triggered. The `identity_verification_checks_completed` webhook will return the response code starting with 62 that you passed as part of the `external_applicant_id`.
+
+    ### (Optional) Step 6: Retrieve an identity verification
+    
+    Pass the `id` value from step 2 response to the `identity_verification_id` path parameter.
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/identity-verifications/{identity_verification_id}</span>
+    </div>
+    
+    #### Response example
+    
+    ```json
+    {
+      "id": "idv_tkoi5db4hryu5cei5vwoabr6ft",
+      "created_on": "2023-10-06T17:32:28Z",
+      "modified_on": "2023-10-06T17:40:32Z",
+      "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr6ft",
+      "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr6ft",
+      "status": "declined",
+      "response_codes": [
+        {
+          "code": 62403,
+          "summary": "consent_unclear"
+        }
+      ],
+      "verified_identity": {
+        "full_name": "Toby Arden",
+        "birth_date": "1994-09-26"
+      },
+      "declared_data": {
+        "name": "Toby Arden",
+        "birth_date": "1994-09-26"
+      },
+      "documents": [
+        {
+          "full_name": "Toby Arden",
+          "birth_date": "1994-09-26",
+          "document_type": "ID",
+          "document_issuing_country": "US",
+          "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+        }
+      ],
+      "face": {
+        "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20231006T174223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
+      },
+      "_links": {
+        "self": {
+          "href": "https://identity-verifications.sandbox.checkout.com/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr6ft"
+        },
+        "verification_url": {
+          "href": "https://id.ubble.ai/4hryu5cei5/"
+        }
+      }
+    }
+    ```
+    
     # API standards
 
     This section describes the standards we use to ensure the consistency of our API. 
