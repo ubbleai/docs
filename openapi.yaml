@@ -4105,6 +4105,18 @@ components:
               $ref: "#/components/schemas/DocumentTypes"
             document_issuing_country:
               $ref: "#/components/schemas/CountryCode"
+            permit_obtaining_date:
+              type: string
+              format: date
+            permit_expiry_date:
+              type: string
+              format: date
+            permit_type_detailed:
+              type: string
+              maxLength: 255
+            permit_type_remarks:
+              type: string
+              maxLength: 255
             document_number:
               type: string
               maxLength: 255
