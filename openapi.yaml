@@ -530,35 +530,6 @@ info:
 
     When the user completes or terminates their verification, use the `destroy()` method for handling user redirection.
 
-    # Signature 
-
-    For enhanced security, all webhook notifications are signed by default. 
-    If you would like to enable signature verification for API responses as well, 
-    please reach out to your account manager to have this feature activated for your organization.
-
-      The `Cko-Signature` header contains:
-      - the timestamp of the request, for example, `1635236316.377888`
-      - the signing key identifier and version, for example, `3456-live-v1`
-      - the signature itself, for example, `5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd`
-
-    Format of signature:
-    ```
-      <timestamp>:<organization_id>-<test or live verification>-<key version>:<signature>
-    ```
-
-    Signature example:
-    ```
-      1635236316.377888:3456-production-v1:5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd
-    ```
-
-    We use an asymmetric key signing algorithm of type ECDSA with a sha2-512 hashing algorithm to create the signatures. 
-
-    On your side, you can verify the signature against the received body by using the public key associated with the signature key. 
-    There are two public keys, for test verifications and live verifications respectively. You can download them from the client dashboard. 
-
-    For coding examples on how to verify the signature, please refer to our examples [repository](https://github.com/ubbleai/code-samples).
-    
-
     # Handle verification results
 
     When you request an identity verification, you'll be notified about events throughout the verification's lifecycle via webhooks.
@@ -720,7 +691,7 @@ info:
 
     You should then build you business rules based on the status and use response codes as additional information, rather than use response codes as required information.
 
-     ### List of response codes
+    ### List of response codes
 
     <style type="text/css">
     .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0}
@@ -1337,8 +1308,8 @@ info:
     You can configure data retention together with your account manager, in accordance with your purpose for using the data. At the end of this time, the identity verifications are anonymized, which means all personal or sensitive data are deleted. The default storage time is 90 days.
     
     If needed, you can also request the anonymization of an identity verification through the [anonymization endpoint](#tag/Identity-verifications/operation/anonymize_identity_verification). 
-    
-    # AML Verification (Coming soon)
+
+    # AML Verification (BETA)
     
     In partnership with ComplyAdvantage, we propose an Identity verification and AML screening bundle. After having verified the applicant's identity you will be able to:  
     
@@ -3099,7 +3070,40 @@ info:
       }
     }
     ```
-    
+
+    # Signature
+
+    ## What is signed ?
+    **Webhook notifications** are signed by default.
+
+    To enable signature verification for **API responses**, contact your account manager.
+
+    ## Cko-Signature Header
+    The `Cko-Signature` header contains:
+    - **Timestamp**: The time of the request (e.g., `1635236316.377888`).
+    - **Signing Key ID and Version**: Unique key identifier and version (e.g., `3456-live-v1`).
+    - **Signature**: The digital signature (e.g., `5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd`).
+
+    ### Signature Format
+    ```
+      <timestamp>:<organization_id>-<test or live verification>-<key version>:<signature>
+    ```
+
+    ### Signature example
+    ```
+      1635236316.377888:3456-production-v1:5257a869a7ecebeda35affa62cdcb3fa51cad7e77a0e56ff546d0ae8e108d8bd
+    ```
+
+    ### Signing Algorithm
+    We use **ECDSA** with **SHA-512** to create signatures.
+
+    ## Verifying the Signature
+    1. **Download the Public Key**: Separate keys for test and live environments are available in the dashboard.
+    2. **Recreate the Signed Data**: Combine the request body and the `Cko-Signature` timestamp.
+    3. **Verify the Signature**: Use ECDSA with the downloaded public key to verify the signature.
+
+    For code samples, visit our [repository](https://github.com/ubbleai/code-samples).
+
     # API standards
 
     This section describes the standards we use to ensure the consistency of our API. 
