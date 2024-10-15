@@ -1593,7 +1593,7 @@ info:
 
     For security purposes, if you need to whitelist our incoming api calls, see our [public ip addresses](https://docs.outscale.com/en/userguide/OUTSCALE-Public-IPs.html).
 
-    # Testing (Coming soon)
+    # Testing
     
     Use the following examples to test different Identity Verification scenarios.
     
@@ -3586,10 +3586,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Applicant"
+              $ref: "#/components/schemas/PatchApplicantRequest"
+
             examples:
               All possible data:
-                $ref: "#/components/examples/applicant_creation_request_body"
+                $ref: "#/components/examples/applicant_patch_request_body"
       responses:
         "200":
           description: applicant updated succesfully
@@ -3911,6 +3912,10 @@ components:
     applicant_creation_request_body:
       value:
         external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
+        email: david.vincent@courriel.ml
+
+    applicant_patch_request_body:
+      value:
         email: david.vincent@courriel.ml
 
     applicant_response_body:
@@ -4345,6 +4350,14 @@ components:
         - $ref: "#/components/schemas/BaseApplicant"
         - $ref: "#/components/schemas/ApplicantsLinks"
 
+    PatchApplicantRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: david.vincent@courriel.ml
+
     BaseApplicant:
       type: object
       properties:
@@ -4379,7 +4392,7 @@ components:
       type: string
       description: Type of document.
       enum:
-        - Driving license
+        - Driving licence
         - ID
         - Passport
         - Residence Permit
