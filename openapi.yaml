@@ -1082,7 +1082,7 @@ info:
         <tr>
         <td class="tg-0pky">62311</td>
         <td class="tg-0pky">face_face_mismatch</td>
-        <td class="tg-0pky">Applicant of the Face authentication is not the one who performed the identity verification</td>
+        <td class="tg-0pky">Applicant of the face authentication is not the one who performed the identity verification</td>
         <td class="tg-center">&#9989;</td>
         <td class="tg-center">&#10060;</td>
       </tr>
@@ -1504,7 +1504,7 @@ info:
     
     You may want to verify that a person is the same person who performed the identity verification. 
 
-    To make this additional verification easy we propose a Biometric authentication product: users will have to present 
+    To make this additional verification easy we propose a face authentication product: users will have to present 
   
     their face and we will compare it with the one we captured during the verification process.
     
@@ -1520,30 +1520,30 @@ info:
     <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center; border-radius: 0.5rem;">
     <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; color: #f8c92e; vertical-align: center;">⚠</div>
     <div style="display: table-cell; vertical-align: center;">
-      <p>Please note that for the request to be accepted the applicant should associated with a verified face video and this one should not have been anonymised. A verified face video can be obtained through an approved identity verification or a previous biometric authentication. Contact your account manager to adapt your data retention time. </p>
+      <p>Please note that for the request to be accepted the applicant should be associated with a verified face video and this one should not have been anonymised. A verified face video can be obtained through an approved identity verification or a previous face authentication. Contact your account manager to adapt your data retention time. </p>
     </div>
     </div>
     
-    You can also include a user_journey_id to customize the authentication. Please note this user journey should be dedicated to biometric authentication. 
+    You can also include a `user_journey_id` to customize the authentication. Please note this user journey should be dedicated to face authentication. 
     
     ## Create an attempt
     
-    Once you get the `face_authentication_id` you can use it to create an attempt and get a verification_url. 
+    Once you get the `face_authentication_id` you can use it to create an attempt and get a `verification_url`. 
 
     To request an identity verification, you must include the following fields:
   
-    - `face_authentication_id` - the identifier of the Face authentication
+    - `face_authentication_id` - the identifier of the face authentication
   
-    - `redirect_url` - the URL to redirect the user to once Face authentication is completed
+    - `redirect_url` - the URL to redirect the user to once face authentication is completed
     
     ## Verify webhook notification
     
-    You will be notified of events that occur during the Face authentication process via webhooks. Among other information, webhooks will contain:    
+    You will be notified of events that occur during the face authentication process via webhooks. Among other information, webhooks will contain:    
     - the event `type` - for example, `face_authentication_started`,
     
-    - the Face authentication `status` - for example, `capture_in_progress` or `approved`.
+    - the face authentication `status` - for example, `capture_in_progress` or `approved`.
     
-    - the Face authentication response_codes.
+    - the face authentication `response_codes`.
     
     Example
     
@@ -1551,12 +1551,12 @@ info:
     {
       "specversion": "2.0",
       "type": "face_authentication_created",
-      "subject": "face_01hr7269mkxva7msc443jz4jbf",
+      "subject": "fav_01hr7269mkxva7msc443jz4jbf",
       "id": "evnt_01hr7269ry3g8skc630q4ec75g",
       "time": "2024-03-05T10:22:48Z",
       "datacontenttype": "application/json",
       "data": {
-        "face_authentication_id": "face_01hr7269mkxva7msc443jz4jbf",
+        "face_authentication_id": "fav_01hr7269mkxva7msc443jz4jbf",
         "status": "created",
         "applicant_id": "aplt_01hr7269ksxqjgqxbh4vaqmry8"
       }
@@ -1565,13 +1565,47 @@ info:
     
     ## Retrieve detailed authentication results
     
-    To retrieve detailed results about a Face authentication, call the following endpoint with the 
+    To retrieve detailed results about a face authentication, call the following endpoint with the 
     
-    unique id returned in the POST Request a Face authentication response:
+    unique id returned in the POST Request a face authentication response:
     
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/face-authentications/{face_authentication_id}</span>
+    </div>
+    
+    Example:
+       ```json
+      {
+        "id": "fav_tkoi5db4hryu5cei5vwoabr7we",
+        "created_on": "2023-10-06T17:32:28Z",
+        "modified_on": "2023-10-06T17:40:32Z",
+        "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr7we",
+        "status": "declined",
+        "response_codes": [
+              {"code": 62301, "summary": "document_counterfeit"},
+              {"code": 62304, "summary": "face_mismatch"}
+
+          ],
+        "face": {
+          "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20231006T174223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
+        },
+        "phone_number": {
+          "country_code": "+1",
+          "number": "2068133616"
+        },
+        "webhook_url": "https://my.api/events/",
+        "redirect_url": "https://myweb.site?query-param=hello",
+        "_links": {
+          "self": {
+            "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+          }
+        }
+      }
+    ```
     
     ## Create a new attempt
-    When the Face authentication status is `retry_required`, you should create a new attempt. See the dedicated section. 
+    When the face authentication status is `retry_required`, you should create a new attempt. See the dedicated section. 
   
     We recommend that you use the response codes to guide the user. 
     
@@ -1664,7 +1698,7 @@ info:
     | `aml_verification_monitoring_alert`                       | A monitoring alert has been detected                                                                                              |
     | `aml_verification_monitoring_reviewed`                    | Manual review has been completed, customer status was updated                                                                     |
     | `aml_verification_status_changed`                         | Manual review has been reopened, customer status was updated                                                                      |
-    | `face_authentication_created`                             | You created an identity verification                                                                                              |
+    | `face_authentication_created`                             | You created an face authentication                                                                                              |
     | `face_authentication_opened`                              | You created a first attempt and the verification URL is available                                                                 |
     | `face_authentication_started`                             | The applicant has been redirected to the web application                                                                          |
     | `face_authentication_reset`                               | You created a new attempt while the status was `pending` or `capture_in_progress`                                                 |
@@ -3414,16 +3448,16 @@ paths:
             type: string
       responses:
         "200":
-          description: Face authentication anonymized
+          description: Identity verification anonymized
           content:
             application/json:
               examples:
                 identity_verification_creation_response_body:
-                  $ref: "#/components/examples/face_authentication_anonymization_response_body"
+                  $ref: "#/components/examples/identity_verification_anonymization_response_body"
               schema:
                 required: [ applicant_id, user_journey_id ]
                 allOf:
-                  - $ref: "#/components/schemas/FaceAuthenticationBase"
+                  - $ref: "#/components/schemas/IdentityVerificationOutput"
         "404":
           description: Identity verification not found
         "400":
@@ -3551,11 +3585,11 @@ paths:
           content:
             application/json:
               examples:
-                face_authentication_creation_response_body:
-                  $ref: "#/components/examples/face_authentication_attempt_creation_response_body"
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/identity_verification_attempt_creation_response_body"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/FaceAuthenticationAttemptResponse"
+                  - $ref: "#/components/schemas/IdentityVerificationAttemptResponse"
         "404":
           description: The provided verification ID is not valid
         "409":
@@ -3983,8 +4017,8 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_attempt_creation_response_body:
-                  $ref: "#/components/examples/identity_verification_attempt_creation_response_body"
+                face_authentication_attempt_creation_response_body:
+                  $ref: "#/components/examples/face_authentication_attempt_creation_response_body"
               schema:
                 allOf:
                   - $ref: "#/components/schemas/FaceAuthenticationAttemptResponse"
@@ -4168,6 +4202,25 @@ components:
             _links:
               verification_url:
                 href: "https://id.ubble.ai/4hryu5cei5/"
+          - id: "fatp_tkoi5db4hryu5cei5vwoabriom"
+            created_on: 2017-07-21T16:30:28Z
+            modified_on: 2017-07-21T16:32:32Z
+            status: "checks_inconclusive"
+            response_codes: [{
+              "code": 61402,
+              "summary": "face_video_lighting_issue"
+            } ]
+            phone_number:
+              country_code: "+1"
+              number: "2068133616"
+            redirect_url: "https://myweb.site?query-param=hello"
+            client_information:
+              pre_selected_residence_country: "FR"
+            applicant_session_information:
+              ip_address: "123.123.123.01"
+            _links:
+              verification_url:
+                href: "https://id.ubble.ai/4hryu5clik/"
         _links:
           self:
             href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts"
@@ -4268,6 +4321,26 @@ components:
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
+    identity_verification_anonymization_response_body:
+      value:
+        id: idv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        status: pending
+        response_codes: []
+        documents: []
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
+
     identity_verification_pdf_response_body:
       value:
         pdf_report: www.pdf.com
@@ -4311,7 +4384,7 @@ components:
     # Face Authentication
     face_authentication_creation_response_body:
       value:
-        id: face_tkoi5db4hryu5cei5vwoabr7we
+        id: fav_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
@@ -4329,13 +4402,13 @@ components:
         redirect_url: https://myweb.site?query-param=hello
         _links:
           self:
-            href: "https://api.ubble.ai/v2/face-authentications/face_tkoi5db4hryu5cei5vwoabr7we"
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we"
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
 
     face_authentication_anonymization_response_body:
       value:
-        id: face_tkoi5db4hryu5cei5vwoabr7we
+        id: fav_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
@@ -5021,8 +5094,8 @@ components:
     FaceAuthenticationId:
       type: string
       description: Face authentication unique identifier.
-      pattern: ^face_\w+$
-      example: face_tkoi5db4hryu5cei5vwoabr7we
+      pattern: ^fav_\w+$
+      example: fav_tkoi5db4hryu5cei5vwoabr7we
       readOnly: true
 
     UserJourneyId:
