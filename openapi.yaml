@@ -1079,6 +1079,13 @@ info:
         <td class="tg-center">&#9989;</td>
         <td class="tg-center">&#10060;</td>
       </tr>
+        <tr>
+        <td class="tg-0pky">62311</td>
+        <td class="tg-0pky">face_face_mismatch</td>
+        <td class="tg-0pky">Applicant of the face authentication is not the one who performed the identity verification</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
+      </tr>
       <tr>
         <td class="tg-0pky">62399</td>
         <td class="tg-0pky">generic_fraud</td>
@@ -1493,6 +1500,116 @@ info:
     
     When the review is completed, you will get a notification with the `event_type` field set to `aml_monitoring_review_completed` and the body will include the new `status, depending of you decision to accept or not the risk related to the monitoring case.
     
+    # Face Authentication (Coming soon)
+    
+    You may want to verify that a person is the same person who performed the identity verification. 
+
+    To make this additional verification easy we propose a face authentication product: users will have to present 
+  
+    their face and we will compare it with the one we captured during the verification process.
+    
+    
+    ## Create a face authentication
+    
+    To request an identity verification, you must include the following fields
+    
+    - `applicant_id` - the unique identifier of the applicant.
+    
+    - `webhook_url` - the URL to get notifications.
+    
+    <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center; border-radius: 0.5rem;">
+    <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; color: #f8c92e; vertical-align: center;">⚠</div>
+    <div style="display: table-cell; vertical-align: center;">
+      <p>Please note that for the request to be accepted the applicant should be associated with a verified face video and this one should not have been anonymised. A verified face video can be obtained through an approved identity verification or a previous face authentication. Contact your account manager to adapt your data retention time. </p>
+    </div>
+    </div>
+    
+    You can also include a `user_journey_id` to customize the authentication. Please note this user journey should be dedicated to face authentication. 
+    
+    ## Create an attempt
+    
+    Once you get the `face_authentication_id` you can use it to create an attempt and get a `verification_url`. 
+
+    To request an identity verification, you must include the following fields:
+  
+    - `face_authentication_id` - the identifier of the face authentication
+  
+    - `redirect_url` - the URL to redirect the user to once face authentication is completed
+    
+    ## Verify webhook notification
+    
+    You will be notified of events that occur during the face authentication process via webhooks. Among other information, webhooks will contain:    
+    - the event `type` - for example, `face_authentication_started`,
+    
+    - the face authentication `status` - for example, `capture_in_progress` or `approved`.
+    
+    - the face authentication `response_codes`.
+    
+    Example
+    
+    ```json
+    {
+      "specversion": "2.0",
+      "type": "face_authentication_created",
+      "subject": "fav_01hr7269mkxva7msc443jz4jbf",
+      "id": "evnt_01hr7269ry3g8skc630q4ec75g",
+      "time": "2024-03-05T10:22:48Z",
+      "datacontenttype": "application/json",
+      "data": {
+        "face_authentication_id": "fav_01hr7269mkxva7msc443jz4jbf",
+        "status": "created",
+        "applicant_id": "aplt_01hr7269ksxqjgqxbh4vaqmry8"
+      }
+    }
+    ```
+    
+    ## Retrieve detailed authentication results
+    
+    To retrieve detailed results about a face authentication, call the following endpoint with the 
+    
+    unique id returned in the POST Request a face authentication response:
+    
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/face-authentications/{face_authentication_id}</span>
+    </div>
+    
+    Example:
+    ```json
+      {
+        "id": "fav_tkoi5db4hryu5cei5vwoabr7we",
+        "created_on": "2023-10-06T17:32:28Z",
+        "modified_on": "2023-10-06T17:40:32Z",
+        "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr7we",
+        "status": "declined",
+        "response_codes": [
+              {"code": 62304, "summary": "face_mismatch"}
+          ],
+        "face": {
+          "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20231006T174223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
+        },
+        "phone_number": {
+          "country_code": "+1",
+          "number": "2068133616"
+        },
+        "webhook_url": "https://my.api/events/",
+        "redirect_url": "https://myweb.site?query-param=hello",
+        "_links": {
+          "self": {
+            "href": "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+          }
+        }
+      }
+    ```
+    
+    ## Create a new attempt
+    When the face authentication status is `retry_required`, you should create a new attempt. See the dedicated section. 
+  
+    We recommend that you use the response codes to guide the user. 
+    
+    For example, if the response codes indicate that the connection of the user is not sufficient, you should give this information to the user.
+    
+    
     # Applicants
 
     ## Creation
@@ -1579,7 +1696,22 @@ info:
     | `aml_verification_monitoring_alert`                       | A monitoring alert has been detected                                                                                              |
     | `aml_verification_monitoring_reviewed`                    | Manual review has been completed, customer status was updated                                                                     |
     | `aml_verification_status_changed`                         | Manual review has been reopened, customer status was updated                                                                      |
-
+    | `face_authentication_created`                             | You created an face authentication                                                                                              |
+    | `face_authentication_opened`                              | You created a first attempt and the verification URL is available                                                                 |
+    | `face_authentication_started`                             | The applicant has been redirected to the web application                                                                          |
+    | `face_authentication_reset`                               | You created a new attempt while the status was `pending` or `capture_in_progress`                                                 |
+    | `face_authentication_capture_completed`                   | The applicant completed the capture                                                                                               |
+    | `face_authentication_checks_completed`                    | We completed the checks                                                                                                           |
+    | `face_authentication_link_expired`                        | The link expired without applicant being redirected to the web application, please note the default expiration time is 15 minutes |
+    | `face_authentication_capture_refused`                     | The applicant explicitly refused to perform the face authentication                                                               |
+    | `face_authentication_capture_aborted`                     | The applicant terminated the capture without completing it                                                                        |
+    | `face_authentication_checks_inconclusive`                 | The applicant did not provide the assets required to perform the checks                                                           |
+    | `face_authentication_retry_requested`                     | You requested a retry for this face authentication                                                                                |
+    | `face_authentication_closed`                              | The face authentication has been forcibly closed                                                                                  |
+    | `face_authentication_anonymized`                          | The face authentication has been anonymized                                                                                       |
+    | `face_authentication_audit_completed`                     | The face authentication has been audited and the status may have been updated                                                     |
+    
+  
     ## Retry
 
     We expect that you will return us a 200 or 201 status code within 10 seconds before we retry, up to 2 retries will be performed. If needed, you can trigger webhook notifications manually using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
@@ -3178,9 +3310,10 @@ tags:
 x-tagGroups:
   - name: Endpoints documentation
     tags:
-      - Identity verifications
-      - AML verifications
       - Applicants
+      - Identity verifications
+      - Face authentications
+      - AML verifications
       - Service status
 paths:
   /health:
@@ -3193,6 +3326,7 @@ paths:
       responses:
         "200":
           description: API is OK
+  # Identity Verifications
 
   /v2/create-and-start-idv:
     post:
@@ -3312,16 +3446,14 @@ paths:
             type: string
       responses:
         "200":
-          description: Identity verification anonymization requested
+          description: Identity verification anonymized
           content:
             application/json:
-              example:
-                id: idv_tkoi5db4hryu5cei5vwoabr7we
-                _links:
-                  self:
-                    href: https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/identity_verification_anonymization_response_body"
               schema:
-                required: [applicant_id, user_journey_id]
+                required: [ applicant_id, user_journey_id ]
                 allOf:
                   - $ref: "#/components/schemas/IdentityVerificationOutput"
         "404":
@@ -3390,7 +3522,7 @@ paths:
                   format: uri
       responses:
         "204":
-          description: Notification succesfully requested
+          description: Notification successfully requested
 
   /v2/identity-verifications/{identity_verification_id}/attempts:
     get:
@@ -3413,10 +3545,10 @@ paths:
             application/json:
               examples:
                 identity_verification_creation_response_body:
-                  $ref: "#/components/examples/attempt_list_response_body"
+                  $ref: "#/components/examples/identity_verification_attempt_list_response_body"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/AttemptResponseList"
+                  - $ref: "#/components/schemas/IdentityVerificationAttemptResponseList"
         "404":
           description: The provided verification ID is not valid
         "500":
@@ -3431,7 +3563,7 @@ paths:
       parameters:
         - name: identity_verification_id
           in: path
-          description: ID of the identity verification to notify
+          description: ID of the identity verification
           required: true
           schema:
             type: string
@@ -3452,10 +3584,10 @@ paths:
             application/json:
               examples:
                 identity_verification_creation_response_body:
-                  $ref: "#/components/examples/attempt_creation_response_body"
+                  $ref: "#/components/examples/identity_verification_attempt_creation_response_body"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/AttemptResponse"
+                  - $ref: "#/components/schemas/IdentityVerificationAttemptResponse"
         "404":
           description: The provided verification ID is not valid
         "409":
@@ -3467,8 +3599,8 @@ paths:
     get:
       tags:
         - Identity verifications
-      summary: Retrieve attempts
-      description: This endpoint allows you to list all attempts of a verification
+      summary: Retrieve an attempt
+      description: This endpoint allows you to retrieve the details for a given attempt
       operationId: fetch_attempts
       parameters:
         - name: identity_verification_id
@@ -3490,15 +3622,16 @@ paths:
             application/json:
               examples:
                 identity_verification_creation_response_body:
-                  $ref: "#/components/examples/attempt_get_response_body"
+                  $ref: "#/components/examples/identity_verification_attempt_get_response_body"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/AttemptResponse"
+                  - $ref: "#/components/schemas/IdentityVerificationAttemptResponse"
         "404":
           description: The provided verification ID or attempt ID is not valid
         "500":
           description: An error occurred while fetching the attempt
 
+# Applicants
   /v2/applicants:
     post:
       tags:
@@ -3558,7 +3691,7 @@ paths:
             $ref: "#/components/schemas/ApplicantId"
       responses:
         "200":
-          description: applicant retrieved succesfully
+          description: applicant retrieved successfully
           content:
             application/json:
               schema:
@@ -3593,7 +3726,7 @@ paths:
                 $ref: "#/components/examples/applicant_patch_request_body"
       responses:
         "200":
-          description: applicant updated succesfully
+          description: applicant updated successfully
           content:
             application/json:
               schema:
@@ -3624,7 +3757,7 @@ paths:
             type: string
       responses:
         "200":
-          description: applicant anonymized succesfully
+          description: applicant anonymized successfully
           content:
             application/json:
               schema:
@@ -3639,6 +3772,7 @@ paths:
         "500":
           description: Internal server error
 
+# AML Verifications
   /v2/aml-verifications:
     post:
       tags:
@@ -3697,6 +3831,238 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/AMLVerificationOutput"
 
+# Face Authentications
+
+  /v2/face-authentications:
+    post:
+      tags:
+        - Face authentications
+      summary: Create a face authentication
+      description: This endpoint allows you to create a face authentication.
+      operationId: create_face_authentication
+      parameters:
+        - name: face_authentication_id
+          required: true
+          in: path
+          description: ID of the face authentication
+          schema:
+            $ref: "#/components/schemas/FaceAuthenticationId"
+      responses:
+        "201":
+          description: Face authentication created
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/face_authentication_creation_response_body"
+              schema:
+                required: [applicant_id, user_journey_id]
+                allOf:
+                  - $ref: "#/components/schemas/FaceAuthenticationBase"
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+
+  /v2/face-authentications/{face_authentication_id}:
+    get:
+      tags:
+        - Face authentications
+      summary: Retrieve a face authentication
+      description: This endpoint allows you to get the detailed results of a face authentication.
+      operationId: retrieve_identity_verification
+      parameters:
+        - name: face_authentication_id
+          required: true
+          in: path
+          description: ID of the face authentication
+          schema:
+            $ref: "#/components/schemas/FaceAuthenticationId"
+      responses:
+        "200":
+          description: Face authentication retrieved
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/face_authentication_creation_response_body"
+              schema:
+                required: [applicant_id, user_journey_id]
+                allOf:
+                  - $ref: "#/components/schemas/FaceAuthenticationBase"
+        "404":
+          description: Face authentication not found
+        "500":
+          description: Internal server error
+
+  /v2/face-authentications/{face_authentication_id}/anonymize:
+    post:
+      tags:
+        - Face authentications
+      summary: Anonymize a face authentication
+      description: Anonymize the personal data of a face authentication with the specified ID.
+      operationId: anonymize_face_authentication
+      parameters:
+        - name: face_authentication_id
+          in: path
+          description: ID of the face authentication to anonymize
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Face authentication anonymization requested
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/face_authentication_anonymization_response_body"
+              schema:
+                required: [applicant_id, user_journey_id]
+                allOf:
+                  - $ref: "#/components/schemas/FaceAuthenticationAnonymized"
+        "404":
+          description: Face authentication not found
+        "400":
+          description: Bad request. The face authentication cannot be anonymized.
+        "500":
+          description: Internal server error
+
+  /v2/face-authentications/{face_authentication_id}/notify:
+    post:
+      tags:
+        - Face authentications
+      summary: Request webhook notification
+      operationId: notify_face_authentication
+      description: This endpoint can be used to initiate a webhook call containing the latest event of a face authentication.
+      parameters:
+        - name: face_authentication_id
+          in: path
+          description: ID of the face authentication to notify
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhook_url:
+                  type: string
+                  format: uri
+      responses:
+        "204":
+          description: Notification successfully requested
+
+  /v2/face-authentications/{face_authentication_id}/attempts:
+    get:
+      tags:
+        - Face authentications
+      summary: List attempts
+      description: This endpoint allows you to list all attempts of a face authentication
+      operationId: list_attempts
+      parameters:
+        - name: face_authentication_id
+          in: path
+          description: ID of the face authentication
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List attempts
+          content:
+            application/json:
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/face_authentication_attempt_list_response_body"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FaceAuthenticationAttemptResponseList"
+        "404":
+          description: The provided face authentication ID is not valid
+        "500":
+          description: An error occurred while fetching the attempts
+    post:
+      tags:
+        - Face authentications
+      summary: Create an Attempt
+      description: This endpoint allows you to create a new Attempt. It is possible when the face-authentication is in one of
+        the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
+      operationId: create_attempt
+      parameters:
+        - name: face_authentication_id
+          in: path
+          description: ID of the face authentication
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Minimal body:
+                $ref: "#/components/examples/attempt_creation_request_body_min"
+              All possible data:
+                $ref: "#/components/examples/attempt_creation_request_body_max"
+            schema:
+              $ref: "#/components/schemas/AttemptRequest"
+      responses:
+        "201":
+          description: Attempt created
+          content:
+            application/json:
+              examples:
+                face_authentication_attempt_creation_response_body:
+                  $ref: "#/components/examples/face_authentication_attempt_creation_response_body"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FaceAuthenticationAttemptResponse"
+        "404":
+          description: The provided face authentication ID is not valid
+        "409":
+          description: The current face authentication status does not allow the creation of a new attempt.
+            The face authentication status must be either `created`, `pending`, `capture_in_progress`, or `retry_required`
+        "500":
+          description: An error occurred while creating the attempt
+
+  /v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}:
+    get:
+      tags:
+        - Face authentications
+      summary: Retrieve an attempt
+      description: This endpoint allows you to retrieve the details for a given attempt
+      operationId: fetch_attempts
+      parameters:
+        - name: face_authentication_id
+          in: path
+          description: ID of the face authentication
+          required: true
+          schema:
+            type: string
+        - name: attempt_id
+          in: path
+          description: ID of the attempt
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Attempt fetched
+          content:
+            application/json:
+              examples:
+                face_authentication_detail_response_body:
+                  $ref: "#/components/examples/face_authentication_attempt_get_response_body"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FaceAuthenticationAttemptResponse"
+        "404":
+          description: The provided face authentication ID or attempt ID is not valid
+        "500":
+          description: An error occurred while fetching the attempt
 components:
   examples:
     identity_verification_creation_request_body_min:
@@ -3740,7 +4106,26 @@ components:
           pre_selected_residence_country: "FR"
         redirect_url: https://myweb.site?query-param=hello
 
-    attempt_get_response_body:
+    face_authentication_attempt_get_response_body:
+      value:
+        id: "fatp_tkoi5db4hryu5cei5vwoabrPoQ"
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        phone_number:
+          country_code: "+1"
+          number: "2068133616"
+        redirect_url: "https://myweb.site?query-param=hello"
+        status: "checks_in_progress"
+        response_codes: [ ]
+        client_information:
+          pre_selected_residence_country: FR
+        applicant_session_information:
+          ip_address: "123.123.123.01"
+        _links:
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
+
+    identity_verification_attempt_get_response_body:
       value:
         id: "iatp_tkoi5db4hryu5cei5vwoabrPoQ"
         created_on: 2017-07-21T17:32:28Z
@@ -3763,7 +4148,22 @@ components:
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
-    attempt_creation_response_body:
+    face_authentication_attempt_creation_response_body:
+      value:
+        id: "fatp_tkoi5db4hryu5cei5vwoabrPoQ"
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        phone_number:
+          country_code: "+1"
+          number: "2068133616"
+        client_information:
+          pre_selected_residence_country: "FR"
+        redirect_url: https://myweb.site?query-param=hello
+        _links:
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
+
+    identity_verification_attempt_creation_response_body:
       value:
         id: "iatp_tkoi5db4hryu5cei5vwoabrPoQ"
         created_on: 2017-07-21T17:32:28Z
@@ -3778,7 +4178,57 @@ components:
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
-    attempt_list_response_body:
+    face_authentication_attempt_list_response_body:
+      value:
+        total_count: 2
+        skip: 10
+        limit: 10
+        data:
+          - id: "fatp_tkoi5db4hryu5cei5vwoabrPoQ"
+            created_on: 2017-07-21T17:32:28Z
+            modified_on: 2017-07-21T17:40:32Z
+            status: "checks_in_progress"
+            response_codes: []
+            phone_number:
+              country_code: "+1"
+              number: "2068133616"
+            redirect_url: "https://myweb.site?query-param=hello"
+            client_information:
+              pre_selected_residence_country: "FR"
+            applicant_session_information:
+              ip_address: "123.123.123.01"
+            _links:
+              verification_url:
+                href: "https://id.ubble.ai/4hryu5cei5/"
+          - id: "fatp_tkoi5db4hryu5cei5vwoabriom"
+            created_on: 2017-07-21T16:30:28Z
+            modified_on: 2017-07-21T16:32:32Z
+            status: "checks_inconclusive"
+            response_codes: [{
+              "code": 61402,
+              "summary": "face_video_lighting_issue"
+            } ]
+            phone_number:
+              country_code: "+1"
+              number: "2068133616"
+            redirect_url: "https://myweb.site?query-param=hello"
+            client_information:
+              pre_selected_residence_country: "FR"
+            applicant_session_information:
+              ip_address: "123.123.123.01"
+            _links:
+              verification_url:
+                href: "https://id.ubble.ai/4hryu5clik/"
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts"
+          next:
+            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
+          previous:
+            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
+
+
+    identity_verification_attempt_list_response_body:
       value:
         total_count: 2
         skip: 10
@@ -3802,11 +4252,11 @@ components:
                 href: "https://id.ubble.ai/4hryu5cei5/"
         _links:
           self:
-            href: "https://api.staging.env.ubble.ai/v2/identity-verifications/{verification_id}/attempts"
+            href: "https://api.ubble.ai/v2/identity-verifications/{verification_id}/attempts"
           next:
-            href: "https://api.staging.env.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
           previous:
-            href: "https://api.staging.env.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
 
     identity_verification_response_body:
       value:
@@ -3869,6 +4319,26 @@ components:
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
+    identity_verification_anonymization_response_body:
+      value:
+        id: idv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        status: pending
+        response_codes: []
+        documents: []
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
+
     identity_verification_pdf_response_body:
       value:
         pdf_report: www.pdf.com
@@ -3906,6 +4376,50 @@ components:
         _links:
           self:
             href: "https://api.ubble.ai/v2/aml-verifications/amlv_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+
+    # Face Authentication
+    face_authentication_creation_response_body:
+      value:
+        id: fav_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        status: declined
+        response_codes:
+          - { "code": 62403, "summary": "consent_unclear" }
+          - { "code": 61402, "summary": "face_video_lighting_issue" }
+        face:
+          image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4
+        phone_number:
+          country_code: "+1"
+          number: "2068133616"
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+
+    face_authentication_anonymization_response_body:
+      value:
+        id: fav_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        status: declined
+        response_codes:
+          - { "code": 62403, "summary": "consent_unclear" }
+          - { "code": 61402, "summary": "face_video_lighting_issue" }
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/face-authentications/face_tkoi5db4hryu5cei5vwoabr7we"
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
 
@@ -4086,6 +4600,122 @@ components:
           type: string
           format: uri
 
+  # Face Authentication
+
+    FaceAuthenticationBase:
+      type: object
+      required:
+        [ id, status, webhook_url, redirect_url, _links ]
+      properties:
+        id:
+          $ref: "#/components/schemas/FaceAuthenticationId"
+        user_journey_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        status:
+          $ref: "#/components/schemas/VerificationStatuses"
+        face:
+          allOf:
+            - $ref: '#/components/schemas/VerificationFace'
+          readOnly: true
+        response_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseCodes'
+          readOnly: true
+        phone_number:
+          $ref: "#/components/schemas/PhoneNumber"
+        webhook_url:
+          type: string
+          format: uri
+        redirect_url:
+          type: string
+          format: uri
+        _links:
+          $ref: "#/components/schemas/FaceAuthenticationLinks"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+
+    FaceAuthenticationAnonymized:
+      type: object
+      required:
+        [ id, status, webhook_url, redirect_url, _links ]
+      properties:
+        id:
+          $ref: "#/components/schemas/FaceAuthenticationId"
+        user_journey_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        status:
+          $ref: "#/components/schemas/VerificationStatuses"
+        response_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseCodes'
+          readOnly: true
+        webhook_url:
+          type: string
+          format: uri
+        redirect_url:
+          type: string
+          format: uri
+        _links:
+          $ref: "#/components/schemas/FaceAuthenticationLinks"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+
+    FaceAuthenticationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+        - $ref: "#/components/schemas/ApplicantLink"
+
+    BaseAttemptResponse:
+      type: object
+      required: [redirect_url, id, _links, status, created_on, modified_on, response_codes, applicant_session_information]
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        redirect_url:
+          type: string
+        response_codes:
+          type: array
+          readOnly: true
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        phone_number:
+          $ref: "#/components/schemas/PhoneNumber"
+        client_information:
+          $ref: "#/components/schemas/ClientInformation"
+        _links:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/AttemptLinks"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+
+    FaceAuthenticationAttemptResponse:
+      type: object
+      required: [redirect_url, id, _links, status, created_on, modified_on, response_codes, applicant_session_information]
+      properties:
+        applicant_session_information:
+          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
+      allOf:
+        - $ref: "#/components/schemas/BaseAttemptResponse"
+
     DeclaredData:
       type: object
       required: [name]
@@ -4209,7 +4839,7 @@ components:
         - $ref: "#/components/schemas/ActiveLink"
         - $ref: "#/components/schemas/SelfLink"
 
-    AttemptResponseList:
+    BaseAttemptResponseList:
       type: object
       required: [total_count, skip, limit, _links, data]
       properties:
@@ -4219,11 +4849,7 @@ components:
           type: integer
         limit:
           type: integer
-        data:
-          type: array
-          minItems: 0
-          items:
-            $ref: "#/components/schemas/AttemptResponse"
+
         _links:
           readOnly: true
           allOf:
@@ -4231,34 +4857,38 @@ components:
             - $ref: "#/components/schemas/NextLink"
             - $ref: "#/components/schemas/PreviousLink"
 
-    AttemptResponse:
+    IdentityVerificationAttemptResponseList:
       type: object
-      required: [redirect_url, id, _links, status, created_on, modified_on, response_codes, applicant_session_information]
+      required: [total_count, skip, limit, _links, data]
       properties:
-        id:
-          type: string
-        status:
-          type: string
-        redirect_url:
-          type: string
-        response_codes:
+        data:
           type: array
-          readOnly: true
           minItems: 0
           items:
-            $ref: "#/components/schemas/ResponseCodes"
-        phone_number:
-          $ref: "#/components/schemas/PhoneNumber"
-        applicant_session_information:
-          $ref: "#/components/schemas/ApplicantSessionInformation"
-        client_information:
-          $ref: "#/components/schemas/ClientInformation"
-        _links:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/AttemptLinks"
+            $ref: "#/components/schemas/IdentityVerificationAttemptResponse"
       allOf:
-        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/BaseAttemptResponseList"
+
+    FaceAuthenticationAttemptResponseList:
+      type: object
+      required: [total_count, skip, limit, _links, data]
+      properties:
+        data:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/FaceAuthenticationAttemptResponse"
+      allOf:
+        - $ref: "#/components/schemas/BaseAttemptResponseList"
+
+    IdentityVerificationAttemptResponse:
+      type: object
+      required: [applicant_session_information]
+      properties:
+        applicant_session_information:
+          $ref: "#/components/schemas/IdentityVerificationApplicantSessionInformation"
+      allOf:
+        - $ref: "#/components/schemas/BaseAttemptResponse"
 
     AttemptRequest:
       type: object
@@ -4428,9 +5058,9 @@ components:
       description: The code giving more details about the result.
       readOnly: true
       properties:
-        response_code:
+        code:
           $ref: "#/components/schemas/ResponseCode"
-        response_summary:
+        summary:
           $ref: "#/components/schemas/ResponseSummary"
 
     ResponseSummary:
@@ -4457,6 +5087,13 @@ components:
       description: Identity verification unique identifier.
       pattern: ^idv_\w+$
       example: idv_tkoi5db4hryu5cei5vwoabr7we
+      readOnly: true
+
+    FaceAuthenticationId:
+      type: string
+      description: Face authentication unique identifier.
+      pattern: ^fav_\w+$
+      example: fav_tkoi5db4hryu5cei5vwoabr7we
       readOnly: true
 
     UserJourneyId:
@@ -4517,13 +5154,17 @@ components:
         number:
           $ref: "#/components/schemas/DomesticPhoneNumber"
 
-    ApplicantSessionInformation:
+    BaseApplicantSessionInformation:
       type: object
       properties:
         ip_address:
           type: string
           description: Ip address of the applicant during the session
           example: "123:456:789:00"
+
+    IdentityVerificationApplicantSessionInformation:
+      type: object
+      properties:
         selected_documents:
           description: Documents selected by the applicant in selection order
           type: array
@@ -4531,6 +5172,13 @@ components:
           minItems: 0
           items:
             $ref: "#/components/schemas/SelectedDocument"
+      allOf:
+        - $ref: "#/components/schemas/BaseApplicantSessionInformation"
+
+    FaceAuthenticationApplicantSessionInformation:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseApplicantSessionInformation"
 
     SelectedDocument:
       type: object
