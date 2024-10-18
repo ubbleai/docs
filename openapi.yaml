@@ -1575,7 +1575,7 @@ info:
     </div>
     
     Example:
-       ```json
+    ```json
       {
         "id": "fav_tkoi5db4hryu5cei5vwoabr7we",
         "created_on": "2023-10-06T17:32:28Z",
@@ -1583,9 +1583,7 @@ info:
         "user_journey_id": "usj_tkoi5db4hryu5cei5vwoabr7we",
         "status": "declined",
         "response_codes": [
-              {"code": 62301, "summary": "document_counterfeit"},
               {"code": 62304, "summary": "face_mismatch"}
-
           ],
         "face": {
           "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20231006T174223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
