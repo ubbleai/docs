@@ -1742,7 +1742,7 @@ info:
     
     ### Step 2: Create an applicant
     
-    Set the `external_applicant_id` value to `eaplt_1000000000000000000000000`.
+    Set the `external_applicant_id` value to `eaplt_10000000000000000000000000`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
       <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
@@ -1753,7 +1753,7 @@ info:
     
     ```json
     {
-      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "external_applicant_id": "eaplt_10000000000000000000000000",
       "email": "toby.arden@example.com"
     }
     ```
@@ -1765,7 +1765,7 @@ info:
       "id": "aplt_tkoi5db4hryu5cei5vwoabr7we",
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
-      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "external_applicant_id": "eaplt_10000000000000000000000000",
       "email": "toby.arden@example.com",
       "_links": {
         "self": {
@@ -1983,7 +1983,7 @@ info:
       "id": "aplt_tkoi5db4hryu5cei5vwoabr8hg",
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
-      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "external_applicant_id": "eaplt_10000000000000000000000000",
       "email": "jia.tsang@example.com",
       "_links": {
         "self": {
@@ -2250,7 +2250,7 @@ info:
       "id": "aplt_tkoi5db4hryu5cei5vwoabr7wf",
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
-      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "external_applicant_id": "eaplt_10000000000000000000000000",
       "email": "jia.tsang@example.com",
       "_links": {
         "self": {
@@ -2991,7 +2991,7 @@ info:
       "id": "aplt_tkoi5db4hryu5cei5vwoabr6ft",
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
-      "external_applicant_id": "eaplt_1000000000000000000000000",
+      "external_applicant_id": "eaplt_10000000000000000000000000",
       "email": "toby.arden@example.com",
       "_links": {
         "self": {
