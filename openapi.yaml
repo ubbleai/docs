@@ -3341,9 +3341,9 @@ paths:
           application/json:
             examples:
               Only required data:
-                $ref: "#/components/examples/identity_verification_creation_request_body_min"
+                $ref: "#/components/examples/identity_verification_creation_request_body_helper_min"
               All possible data:
-                $ref: "#/components/examples/identity_verification_creation_request_body_max"
+                $ref: "#/components/examples/identity_verification_creation_request_body_helper_max"
               Use an existing applicant:
                 $ref: "#/components/examples/identity_verification_creation_request_body_min_plus_aplt"
             schema:
@@ -3355,11 +3355,11 @@ paths:
             application/json:
               examples:
                 identity_verification_creation_response_body:
-                  $ref: "#/components/examples/identity_verification_creation_response_body"
+                  $ref: "#/components/examples/identity_verification_creation_response_body_helper"
               schema:
                 required: [applicant_id, user_journey_id]
                 allOf:
-                  - $ref: "#/components/schemas/IdentityVerificationOutput"
+                  - $ref: "#/components/schemas/IdentityVerificationOutputHelper"
       callbacks:
         statusChanged:
           "{$request.body#/webhook_url}":
@@ -3402,6 +3402,64 @@ paths:
                   description: Your server returns this code if it accepts the callback.
                 "201":
                   description: Your server returns this code if it accepts the callback.
+
+  /v2/identity-verifications:
+    post:
+      tags:
+        - Identity verifications
+      summary: Create an identity verification
+      description: |
+        Creates an identity verification.
+    
+        When this request is successful, you'll get a 201 response with the identity verification resource.
+      operationId: create_identity_verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Only required data:
+                $ref: '#/components/examples/identity_verification_creation_request_body_min'
+              All possible data:
+                $ref: '#/components/examples/identity_verification_creation_request_body_max'
+            schema:
+              $ref: '#/components/schemas/IdentityVerificationRestInput'
+      responses:
+        '201':
+          description: Identity verification created successfully
+          content:
+            application/json:
+              example:
+                $ref: '#/components/examples/identity_verification_creation_response_body'
+              schema:
+                required:
+                  - user_journey_id
+                allOf:
+                  - $ref: '#/components/schemas/IdentityVerificationOutputPost'
+        '400':
+          description: Bad request.
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_creation_request_invalid_body'
+#              schema:
+#                $ref: '#/components/schemas/IdvIdentityVerificationError'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Unprocessable entity
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_unprocessable_entity_body'
+#              schema:
+#                $ref: '#/components/schemas/IdvIdentityVerificationError'
+        '500':
+          description: Internal server error.
+        '503':
+          description: Service unavailable
 
   /v2/identity-verifications/{identity_verification_id}:
     get:
@@ -4065,12 +4123,31 @@ paths:
           description: An error occurred while fetching the attempt
 components:
   examples:
-    identity_verification_creation_request_body_min:
+    identity_verification_creation_request_body_helper_min:
       value:
         declared_data:
           name: David Vincent
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
+
+    identity_verification_creation_request_body_min:
+      value:
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        declared_data:
+          name: John Smith
+        webhook_url: "https://my.api/events/"
+
+    identity_verification_creation_request_body_helper_max:
+      value:
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        declared_data:
+          name: John Smith
+          birth_date: '1934-10-02'
+        phone_number:
+          country_code: '+1'
+          number: '5555550102'
+        redirect_url: https://example.com?query-param=hello
 
     identity_verification_creation_request_body_min_plus_aplt:
       value:
@@ -4087,15 +4164,25 @@ components:
         declared_data:
           name: David Vincent
           birth_date: 1934-10-02
-        phone_number:
-          country_code: "+1"
-          number: "2068133616"
         webhook_url: https://my.api/events/
-        redirect_url: https://myweb.site?query-param=hello
 
     attempt_creation_request_body_min:
       value:
         redirect_url: https://myweb.site?query-param=hello
+
+    idv_identity_verification_creation_request_invalid_body:
+      value:
+        error_type: request_invalid
+        error_codes:
+          - declared_data__birth_date__invalid_format
+          - declared_data__name__required
+          - phone_number__country_code__invalid
+
+    idv_identity_verification_unprocessable_entity_body:
+      value:
+        error_type: unprocessable_entity
+        error_codes:
+          - organization__no_configuration
 
     attempt_creation_request_body_max:
       value:
@@ -4303,6 +4390,27 @@ components:
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        status: created
+        response_codes: []
+        declared_data:
+          name: David Vincent
+          birth_date: 1934-10-02
+        documents: []
+        webhook_url: https://my.api/events/
+        redirect_url: https://myweb.site?query-param=hello
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+
+    identity_verification_creation_response_body_helper:
+      value:
+        id: idv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         status: pending
         response_codes: []
         declared_data:
@@ -4474,7 +4582,37 @@ components:
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/IdentityVerificationBase"
 
-    IdentityVerificationOutput:
+    IdentityVerificationRestInput:
+      type: object
+      required: [id]
+      properties:
+        id:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/IdentityVerificationId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/IdentityVerificationRestInputBase"
+
+    IdvIdentityVerificationError:
+      type: object
+      required:
+        - error_type
+        - error_codes
+      properties:
+        error_type:
+          type: string
+          description: Type of error.
+          enum:
+            - unprocessable_entity
+            - request_invalid
+        error_codes:
+          type: array
+          description: List of codes.
+          items:
+            type: string
+
+    IdentityVerificationOutputPost:
       type: object
       required: [id]
       properties:
@@ -4483,6 +4621,78 @@ components:
       allOf:
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/IdentityVerificationCreateBase"
+
+    IdentityVerificationOutput:
+      type: object
+      required: [id]
+      properties:
+        id:
+          $ref: "#/components/schemas/IdentityVerificationId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/IdentityVerificationGetBase"
+
+    IdentityVerificationOutputHelper:
+      type: object
+      required: [id]
+      properties:
+        id:
+          $ref: "#/components/schemas/IdentityVerificationId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/IdentityVerificationCreateHelperBase"
+
+    IdentityVerificationRestInputBase:
+      type: object
+      required:
+        [declared_data, status, webhook_url, redirect_url, _links, applicant_id]
+      properties:
+        user_journey_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        status:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/VerificationStatuses"
+        response_codes:
+          type: array
+          readOnly: true
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        verified_identity:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/Identity"
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
+        documents:
+          type: array
+          readOnly: true
+          minItems: 0
+          maxItems: 2
+          items:
+            $ref: "#/components/schemas/Document"
+        face:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/Face"
+        webhook_url:
+          type: string
+          format: uri
+        redirect_url:
+          readOnly: true
+          type: string
+          format: uri
+        _links:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/IdentityVerificationLinks"
 
     IdentityVerificationBase:
       type: object
@@ -4540,6 +4750,99 @@ components:
     IdentityVerificationCreateBase:
       type: object
       required:
+        [declared_data, status, webhook_url, applicant_id, _links, verification_policy_version]
+      properties:
+        user_journey_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        status:
+          $ref: "#/components/schemas/VerificationStatuses"
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
+        documents:
+          type: array
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/Document"
+        face:
+          allOf:
+            - $ref: '#/components/schemas/VerificationFace'
+          readOnly: true
+        response_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseCodes'
+          readOnly: true
+        verified_identity:
+          allOf:
+            - $ref: '#/components/schemas/VerificationIdentity'
+          readOnly: true
+        webhook_url:
+          type: string
+          format: uri
+        verification_policy_version:
+          type: string
+          description: returned ONLY for certified verifications
+        _links:
+          $ref: "#/components/schemas/IdentityVerificationLinks"
+
+    IdentityVerificationGetBase:
+      type: object
+      required:
+        [declared_data, status, redirect_url, webhook_url, applicant_id, _links, verification_policy_version]
+      properties:
+        user_journey_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          readOnly: false
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        status:
+          $ref: "#/components/schemas/VerificationStatuses"
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
+        documents:
+          type: array
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/Document"
+        face:
+          allOf:
+            - $ref: '#/components/schemas/VerificationFace'
+          readOnly: true
+        response_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseCodes'
+          readOnly: true
+        phone_number:
+          $ref: "#/components/schemas/PhoneNumber"
+        verified_identity:
+          allOf:
+            - $ref: '#/components/schemas/VerificationIdentity'
+          readOnly: true
+        webhook_url:
+          type: string
+          format: uri
+        redirect_url:
+          type: string
+          format: uri
+        verification_policy_version:
+          type: string
+          description: returned ONLY for certified verifications
+        _links:
+          $ref: "#/components/schemas/IdentityVerificationLinks"
+
+    IdentityVerificationCreateHelperBase:
+      type: object
+      required:
         [declared_data, status, webhook_url, redirect_url, _links, verification_policy_version]
       properties:
         user_journey_id:
@@ -4584,14 +4887,20 @@ components:
           type: string
           description: returned ONLY for certified verifications
         _links:
-          $ref: "#/components/schemas/IdentityVerificationLinks"
+          $ref: "#/components/schemas/IdentityVerificationHelperLinks"
+
+    IdentityVerificationHelperLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+        - $ref: "#/components/schemas/ApplicantLink"
+        - $ref: "#/components/schemas/ActiveLink"
 
     IdentityVerificationLinks:
       type: object
       allOf:
         - $ref: "#/components/schemas/SelfLink"
         - $ref: "#/components/schemas/ApplicantLink"
-        - $ref: "#/components/schemas/ActiveLink"
 
     IdentityVerificationPdf:
       type: object
