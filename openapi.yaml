@@ -13,7 +13,7 @@ info:
 
     The following represents a typical identity verification flow:
 
-     <img src="https://raw.githubusercontent.com/ubbleai/docs/main/intro_diagram.png" alt="intro_diagram" width="800" height="auto">
+     <img src="https://raw.githubusercontent.com/ubbleai/docs/staging/intro_diagram.png" alt="intro_diagram" width="800" height="auto">
 
     1. **You create an applicant, an identity verification and an attempt.** You can use the RESTful endpoints or the helper. You'll receive a unique URL that you need to redirect the user to.
     2. **You redirect the user.** You have full control over how to [manage the verification redirection](#section/Manage-verification-redirection) to ensure a smooth user experience.
@@ -539,7 +539,7 @@ info:
     
     ## Lifecycle
     
-    ![](https://raw.githubusercontent.com/ubbleai/docs/main/life_cycle_diagram.png)
+    ![](https://raw.githubusercontent.com/ubbleai/docs/staging/life_cycle_diagram.png)
 
     When you request an identity verification, you'll be notified about events throughout the verification's lifecycle via webhooks.
     
