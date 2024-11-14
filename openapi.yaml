@@ -1203,7 +1203,7 @@ info:
         <td class="tg-center">&#9989;</td>
       </tr>
         <tr>
-        <td class="tg-0pky">62311</td>
+        <td class="tg-0pky">62321</td>
         <td class="tg-0pky">face_face_mismatch</td>
         <td class="tg-0pky">Applicant of the face authentication is not the one who performed the identity verification</td>
         <td class="tg-center">&#10060;</td>
@@ -1708,9 +1708,6 @@ info:
     We recommend that you use the response codes to guide the user. 
     
     For example, if the response codes indicate that the connection of the user is not sufficient, you should give this information to the user.
-    
-    
-    # Applicants
     
     # Webhooks
 
