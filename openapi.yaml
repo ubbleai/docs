@@ -4941,7 +4941,7 @@ components:
         - expired
         - capture_aborted
         - capture_refused
-        - checks_aborted
+        - checks_inconclusive
 
     AttemptLinks:
       type: object
