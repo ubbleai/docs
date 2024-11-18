@@ -739,14 +739,12 @@ info:
       </tbody>
     </table>
     
-    If the status of the attempt is `completed`, `expired`, `capture_aborted` and `checks_inconclusive`, you will also get additional information with the `response_codes` attribute. 
-    Response codes associated with the last attempt are also available in the identity_verification endpoints and in the webhook body. 
-    
     ## Response codes
     
-    When the status is `retry_required`, `declined`, `refused` or `approved`, you will also get
-    additional information in the webhook body with the `response_codes` attribute. It will
-    include both a numeric code and a string, as detailed in the example below:
+    If the status of the attempt is `completed`, `expired`, `capture_aborted` and `checks_inconclusive`, 
+    you will also get additional information with the `response_codes` attribute. Response codes associated with 
+    the last attempt are also available in the `identity_verification` endpoints and in the webhook body. 
+    It will include both a numeric code and a string, as detailed in the example below:
 
     ```json
     "response-codes": [
@@ -4943,7 +4941,7 @@ components:
         - expired
         - capture_aborted
         - capture_refused
-        - checks_aborted
+        - checks_inconclusive
 
     AttemptLinks:
       type: object
