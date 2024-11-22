@@ -455,7 +455,8 @@ info:
 
     ```json
     {
-      "event": "capture_completion",
+      "type": "COMPLETE",
+      "event": "identity_verification_capture_completion",
       "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_completed"
     }
     ```
@@ -464,7 +465,8 @@ info:
 
     ```json
     {
-      "event": "capture_refusal",
+      "type": "REFUSED",
+      "event": "identity_verification_capture_refusal",
       "responseCode": 63001,
       "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_refused"
     }
@@ -474,7 +476,8 @@ info:
 
     ```json
     {
-      "event": "capture_abortion",
+      "type": "ABORT",
+      "event": "identity_verification_capture_abortion",
       "responseCode": 61111,
       "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_aborted&response_code=63001"
     }
@@ -484,7 +487,8 @@ info:
 
     ```json
     {
-      "event": "expiration",
+      "type": "EXPIRED",
+      "event": "identity_verification_expiration",
       "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_link_expired&response_code=63001"
     }
     ```
@@ -1629,9 +1633,9 @@ info:
     Once you get the `face_authentication_id` you can use it to create an attempt and get a `verification_url`. 
 
     To request an identity verification, you must include the following fields:
-    
+  
     - `face_authentication_id` - the identifier of the face authentication
-    
+  
     - `redirect_url` - the URL to redirect the user to once face authentication is completed
     
     ## Verify webhook notification
@@ -1702,7 +1706,7 @@ info:
     
     ## Create a new attempt
     When the face authentication status is `retry_required`, you should create a new attempt. See the dedicated section. 
-    
+  
     We recommend that you use the response codes to guide the user. 
     
     For example, if the response codes indicate that the connection of the user is not sufficient, you should give this information to the user.
@@ -1794,7 +1798,7 @@ info:
     | `face_authentication_anonymized`                          | The face authentication has been anonymized                                                                                       |
     | `face_authentication_audit_completed`                     | The face authentication has been audited and the status may have been updated                                                     |
     
-    
+  
     ## Retry
 
     We expect that you will return us a 200 or 201 status code within 10 seconds before we retry, up to 2 retries will be performed. If needed, you can trigger webhook notifications manually using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
@@ -2292,7 +2296,7 @@ info:
     Have your webhook server ready to test real-time notifications for each event in this scenario. 
     
     Webhooks for first attempt:
-    
+  
       - identity_verification_created
       - identity_verification_opened
       - identity_verification_started
@@ -2300,7 +2304,7 @@ info:
       - identity_verification_checks_inconclusive
     
     Webhooks for final verdict:
-    
+      
       - identity_verification_retry_requested
       - identity_verification_started
       - identity_verification_capture_completed
@@ -2309,7 +2313,7 @@ info:
     ### Step 2: Create an applicant
     
     Set the value of `external_applicant_id` as `eaplt_61XXXA10000000000000000000`. Replace `61XXX` with any of the response codes starting with 61, that you would like to test for.
-    
+  
     For example, if you would like to test with response code `61310`, set the `external_application_id` to `eaplt_61310A10000000000000000000`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -2569,7 +2573,7 @@ info:
     
     Set the `external_applicant_id` value to `eaplt_62XXX000000000000000000000`. 
     Replace `62XXX` with any of the response codes starting with 62, that you would like to test for.
-    
+  
     For example, if you would like to test with `62201`, then set the value to `eaplt_62201000000000000000000000`
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3051,7 +3055,7 @@ info:
     Set the value of `external_applicant_id` as `eaplt_61XXXI62XXX000000000000000`. Replace: 
     - `61XXX` with any of the response codes starting with 61 for the end of the first attempt
     - `62XXX` with any of the response codes starting with 62 for the final verdict
-    
+  
     For example, if you would like to test with `61203` and `62403`, then set the value to `eaplt_61203A62403000000000000000`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3138,7 +3142,7 @@ info:
     ### Step 4: Create an attempt
     
     Pass the `id` from step 2 response as the path parameter.
-    
+  
     For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr6ft` as the `id`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3187,7 +3191,7 @@ info:
     When the `identity_verification_checks_inconclusive` webhook returns the `retry_required` status, create another attempt.
     
     To do this, pass the `id` from step 2 response as the path parameter.
-    
+  
     For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr6ft` as the `id`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3492,7 +3496,7 @@ paths:
       summary: Create an identity verification
       description: |
         Creates an identity verification.
-        
+    
         When this request is successful, you'll get a 201 response with the identity verification resource.
       operationId: create_identity_verification
       requestBody:
@@ -3518,24 +3522,24 @@ paths:
                   - $ref: '#/components/schemas/IdentityVerificationOutputPost'
         '400':
           description: Bad request.
-        # Not taken into account in interface testing
-        #          content:
-        #            application/json:
-        #              example:
-        #                $ref: '#/components/examples/idv_identity_verification_creation_request_invalid_body'
-        #              schema:
-        #                $ref: '#/components/schemas/ResponseError'
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_creation_request_invalid_body'
+#              schema:
+#                $ref: '#/components/schemas/ResponseError'
         '401':
           description: Unauthorized
         '422':
           description: Unprocessable entity
-        # Not taken into account in interface testing
-        #          content:
-        #            application/json:
-        #              example:
-        #                $ref: '#/components/examples/idv_identity_verification_unprocessable_entity_body'
-        #              schema:
-        #                $ref: '#/components/schemas/ResponseError'
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_unprocessable_entity_body'
+#              schema:
+#                $ref: '#/components/schemas/ResponseError'
         '500':
           description: Internal server error.
         '503':
@@ -3768,7 +3772,7 @@ paths:
         "500":
           description: An error occurred while fetching the attempt
 
-  # Applicants
+# Applicants
   /v2/applicants:
     post:
       tags:
@@ -3908,7 +3912,7 @@ paths:
         "500":
           description: Internal server error
 
-  # AML Verifications
+# AML Verifications
   /v2/aml-verifications:
     post:
       tags:
@@ -3967,7 +3971,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/AMLVerificationOutputGet"
 
-  # Face Authentications
+# Face Authentications
   /v2/face-authentications:
     post:
       tags:
@@ -4714,7 +4718,7 @@ components:
     IdentityVerificationInputBase:
       type: object
       allOf:
-        - $ref: "#/components/schemas/IdentityVerificationBase"
+          - $ref: "#/components/schemas/IdentityVerificationBase"
 
     IdentityVerificationOutputBase:
       type: object
@@ -4833,6 +4837,7 @@ components:
       type: string
       description: Status of the verification.
       enum:
+        - created
         - pending
         - capture_in_progress
         - checks_in_progress
@@ -4840,6 +4845,7 @@ components:
         - declined
         - retry_required
         - refused
+        - inconclusive
 
     IdentityVerificationHelperLinks:
       type: object
@@ -4859,7 +4865,7 @@ components:
       description: Identity verification unique identifier.
       pattern: ^idv_\w+$
       example: idv_tkoi5db4hryu5cei5vwoabr7we
-      #######################################################################
+        #######################################################################
     #######################################################################
 
     ######################## Identity Attempt schemas #####################
@@ -4942,6 +4948,7 @@ components:
         - capture_aborted
         - capture_refused
         - checks_inconclusive
+        - terminated
 
     AttemptLinks:
       type: object
@@ -4989,7 +4996,7 @@ components:
         - $ref: "#/components/schemas/BaseApplicantSessionInformation"
         ############################################################################
     #######################################################################
-
+    
     ######################### Face Attempt schemas ########################
     FaceAttemptBase:
       type: object
@@ -5057,7 +5064,7 @@ components:
       required: [id, applicant_session_information, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationAttemptOutputBase"
-
+          
           ###################### Face Attempt Utils schemas ####################
     FaceAuthenticationApplicantSessionInformation:
       type: object
@@ -5088,7 +5095,7 @@ components:
       type: object
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationBase"
-
+          
     FaceAuthenticationOutputBase:
       type: object
       properties:
@@ -5105,7 +5112,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationBase"
         - $ref: "#/components/schemas/DatedObject"
-
+    
     FaceAuthenticationInputPost:
       type: object
       required: [webhook_url, applicant_id, user_journey_id]
@@ -5120,7 +5127,7 @@ components:
           $ref: '#/components/schemas/VerificationFace'
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationOutputBase"
-
+    
     FaceAuthenticationOutputGet:
       type: object
       required: [id, status, webhook_url, applicant_id, user_journey_id, _links]
@@ -5556,19 +5563,19 @@ components:
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
 
-    #    idv_identity_verification_creation_request_invalid_body:
-    #      value:
-    #        error_type: request_invalid
-    #        error_codes:
-    #          - declared_data__birth_date__invalid_format
-    #          - declared_data__name__required
-    #          - phone_number__country_code__invalid
+#    idv_identity_verification_creation_request_invalid_body:
+#      value:
+#        error_type: request_invalid
+#        error_codes:
+#          - declared_data__birth_date__invalid_format
+#          - declared_data__name__required
+#          - phone_number__country_code__invalid
 
-    #    idv_identity_verification_unprocessable_entity_body:
-    #      value:
-    #        error_type: unprocessable_entity
-    #        error_codes:
-    #          - organization__no_configuration
+#    idv_identity_verification_unprocessable_entity_body:
+#      value:
+#        error_type: unprocessable_entity
+#        error_codes:
+#          - organization__no_configuration
 
     # Face Authentication
     face_authentication_creation_response_body:
