@@ -13,7 +13,7 @@ info:
 
     The following represents a typical identity verification flow:
 
-     <img src="https://raw.githubusercontent.com/ubbleai/docs/staging/intro_diagram.png" alt="intro_diagram" width="800" height="auto">
+     <img src="https://raw.githubusercontent.com/ubbleai/docs/main/intro_diagram.png" alt="intro_diagram" width="800" height="auto">
 
     1. **You create an applicant, an identity verification and an attempt.** You can use the RESTful endpoints or the helper. You'll receive a unique URL that you need to redirect the user to.
     2. **You redirect the user.** You have full control over how to [manage the verification redirection](#section/Manage-verification-redirection) to ensure a smooth user experience.
@@ -455,7 +455,8 @@ info:
 
     ```json
     {
-      "event": "capture_completion",
+      "type": "COMPLETE",
+      "event": "identity_verification_capture_completion",
       "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_completed"
     }
     ```
@@ -464,7 +465,8 @@ info:
 
     ```json
     {
-      "event": "capture_refusal",
+      "type": "REFUSED",
+      "event": "identity_verification_capture_refusal",
       "responseCode": 63001,
       "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_refused"
     }
@@ -474,7 +476,8 @@ info:
 
     ```json
     {
-      "event": "capture_abortion",
+      "type": "ABORT",
+      "event": "identity_verification_capture_abortion",
       "responseCode": 61111,
       "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_capture_aborted&response_code=63001"
     }
@@ -484,7 +487,8 @@ info:
 
     ```json
     {
-      "event": "expiration",
+      "type": "EXPIRED",
+      "event": "identity_verification_expiration",
       "redirectUrl": "https://your-redirect-url.com?id=<identity verification id>&event=identity_verification_link_expired&response_code=63001"
     }
     ```
@@ -539,7 +543,7 @@ info:
     
     ## Lifecycle
     
-    ![](https://raw.githubusercontent.com/ubbleai/docs/staging/life_cycle_diagram.png)
+    ![](https://raw.githubusercontent.com/ubbleai/docs/main/life_cycle_diagram.png)
 
     When you request an identity verification, you'll be notified about events throughout the verification's lifecycle via webhooks.
     
@@ -739,14 +743,12 @@ info:
       </tbody>
     </table>
     
-    If the status of the attempt is `completed`, `expired`, `capture_aborted` and `checks_inconclusive`, you will also get additional information with the `response_codes` attribute. 
-    Response codes associated with the last attempt are also available in the identity_verification endpoints and in the webhook body. 
-    
     ## Response codes
     
-    When the status is `retry_required`, `declined`, `refused` or `approved`, you will also get
-    additional information in the webhook body with the `response_codes` attribute. It will
-    include both a numeric code and a string, as detailed in the example below:
+    If the status of the attempt is `completed`, `expired`, `capture_aborted` and `checks_inconclusive`, 
+    you will also get additional information with the `response_codes` attribute. Response codes associated with 
+    the last attempt are also available in the `identity_verification` endpoints and in the webhook body. 
+    It will include both a numeric code and a string, as detailed in the example below:
 
     ```json
     "response-codes": [
@@ -1203,7 +1205,7 @@ info:
         <td class="tg-center">&#9989;</td>
       </tr>
         <tr>
-        <td class="tg-0pky">62311</td>
+        <td class="tg-0pky">62321</td>
         <td class="tg-0pky">face_face_mismatch</td>
         <td class="tg-0pky">Applicant of the face authentication is not the one who performed the identity verification</td>
         <td class="tg-center">&#10060;</td>
@@ -1631,9 +1633,9 @@ info:
     Once you get the `face_authentication_id` you can use it to create an attempt and get a `verification_url`. 
 
     To request an identity verification, you must include the following fields:
-    
+  
     - `face_authentication_id` - the identifier of the face authentication
-    
+  
     - `redirect_url` - the URL to redirect the user to once face authentication is completed
     
     ## Verify webhook notification
@@ -1650,15 +1652,18 @@ info:
     ```json
     {
       "specversion": "2.0",
-      "type": "face_authentication_created",
+      "type": "face_authentication_checks_completed",
       "subject": "fav_01hr7269mkxva7msc443jz4jbf",
       "id": "evnt_01hr7269ry3g8skc630q4ec75g",
       "time": "2024-03-05T10:22:48Z",
       "datacontenttype": "application/json",
       "data": {
-        "face_authentication_id": "fav_01hr7269mkxva7msc443jz4jbf",
-        "status": "created",
-        "applicant_id": "aplt_01hr7269ksxqjgqxbh4vaqmry8"
+        "external_applicant_id": "87ydky4g6eq144zkcvpoi54mtj"
+        "applicant_id": "aplt_01jdky4g6eq144zkcv16vtymx7",
+        "status": "declined",
+        "face_authentication_id": "fav_01je8cdhrk5fwa5j5nb701sah7",
+        "response_codes": [{"code": "62321", "summary": "face_face_mismatch"],
+        "user_journey_id": "usj_01hyzdts3zxqjm8bvvne2a2qb3"
       }
     }
     ```
@@ -1704,13 +1709,10 @@ info:
     
     ## Create a new attempt
     When the face authentication status is `retry_required`, you should create a new attempt. See the dedicated section. 
-    
+  
     We recommend that you use the response codes to guide the user. 
     
     For example, if the response codes indicate that the connection of the user is not sufficient, you should give this information to the user.
-    
-    
-    # Applicants
     
     # Webhooks
 
@@ -1745,6 +1747,7 @@ info:
           "time": "2023-03-22T17:31:00Z",
           "datacontenttype": "application/json",
           "data": {
+              "external_applicant_id": "9fj3lz918bujpth3wdolmc74s"
               "applicant_id": "aplt_5hxpdwegjcbujpth3wdo55d3vm",
               "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
               "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
@@ -1799,7 +1802,7 @@ info:
     | `face_authentication_anonymized`                          | The face authentication has been anonymized                                                                                       |
     | `face_authentication_audit_completed`                     | The face authentication has been audited and the status may have been updated                                                     |
     
-    
+  
     ## Retry
 
     We expect that you will return us a 200 or 201 status code within 10 seconds before we retry, up to 2 retries will be performed. If needed, you can trigger webhook notifications manually using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
@@ -2297,7 +2300,7 @@ info:
     Have your webhook server ready to test real-time notifications for each event in this scenario. 
     
     Webhooks for first attempt:
-    
+  
       - identity_verification_created
       - identity_verification_opened
       - identity_verification_started
@@ -2305,7 +2308,7 @@ info:
       - identity_verification_checks_inconclusive
     
     Webhooks for final verdict:
-    
+      
       - identity_verification_retry_requested
       - identity_verification_started
       - identity_verification_capture_completed
@@ -2314,7 +2317,7 @@ info:
     ### Step 2: Create an applicant
     
     Set the value of `external_applicant_id` as `eaplt_61XXXA10000000000000000000`. Replace `61XXX` with any of the response codes starting with 61, that you would like to test for.
-    
+  
     For example, if you would like to test with response code `61310`, set the `external_application_id` to `eaplt_61310A10000000000000000000`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -2574,7 +2577,7 @@ info:
     
     Set the `external_applicant_id` value to `eaplt_62XXX000000000000000000000`. 
     Replace `62XXX` with any of the response codes starting with 62, that you would like to test for.
-    
+  
     For example, if you would like to test with `62201`, then set the value to `eaplt_62201000000000000000000000`
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3056,7 +3059,7 @@ info:
     Set the value of `external_applicant_id` as `eaplt_61XXXI62XXX000000000000000`. Replace: 
     - `61XXX` with any of the response codes starting with 61 for the end of the first attempt
     - `62XXX` with any of the response codes starting with 62 for the final verdict
-    
+  
     For example, if you would like to test with `61203` and `62403`, then set the value to `eaplt_61203A62403000000000000000`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3143,7 +3146,7 @@ info:
     ### Step 4: Create an attempt
     
     Pass the `id` from step 2 response as the path parameter.
-    
+  
     For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr6ft` as the `id`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3192,7 +3195,7 @@ info:
     When the `identity_verification_checks_inconclusive` webhook returns the `retry_required` status, create another attempt.
     
     To do this, pass the `id` from step 2 response as the path parameter.
-    
+  
     For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr6ft` as the `id`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3383,7 +3386,7 @@ info:
   version: 2.0.0
 
 servers:
-  - url: https://api.ubble.ai/
+  - url: https://api.ubble.ai
 
 tags:
   - name: identity verifications
@@ -3451,6 +3454,7 @@ paths:
         statusChanged:
           "{$request.body#/webhook_url}":
             post:
+              summary: Status update notification
               requestBody:
                 required: true
                 content:
@@ -3497,7 +3501,7 @@ paths:
       summary: Create an identity verification
       description: |
         Creates an identity verification.
-        
+    
         When this request is successful, you'll get a 201 response with the identity verification resource.
       operationId: create_identity_verification
       requestBody:
@@ -3523,24 +3527,24 @@ paths:
                   - $ref: '#/components/schemas/IdentityVerificationOutputPost'
         '400':
           description: Bad request.
-        # Not taken into account in interface testing
-        #          content:
-        #            application/json:
-        #              example:
-        #                $ref: '#/components/examples/idv_identity_verification_creation_request_invalid_body'
-        #              schema:
-        #                $ref: '#/components/schemas/ResponseError'
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_creation_request_invalid_body'
+#              schema:
+#                $ref: '#/components/schemas/ResponseError'
         '401':
           description: Unauthorized
         '422':
           description: Unprocessable entity
-        # Not taken into account in interface testing
-        #          content:
-        #            application/json:
-        #              example:
-        #                $ref: '#/components/examples/idv_identity_verification_unprocessable_entity_body'
-        #              schema:
-        #                $ref: '#/components/schemas/ResponseError'
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_unprocessable_entity_body'
+#              schema:
+#                $ref: '#/components/schemas/ResponseError'
         '500':
           description: Internal server error.
         '503':
@@ -3773,7 +3777,7 @@ paths:
         "500":
           description: An error occurred while fetching the attempt
 
-  # Applicants
+# Applicants
   /v2/applicants:
     post:
       tags:
@@ -3913,7 +3917,7 @@ paths:
         "500":
           description: Internal server error
 
-  # AML Verifications
+# AML Verifications
   /v2/aml-verifications:
     post:
       tags:
@@ -3972,7 +3976,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/AMLVerificationOutputGet"
 
-  # Face Authentications
+# Face Authentications
   /v2/face-authentications:
     post:
       tags:
@@ -4268,33 +4272,6 @@ components:
       format: domestic phone number
       pattern: ^\d{1,14}$
       example: "2068133616"
-    Address:
-      type: object
-      description: Postal address.
-      required: [address_line1, city, zip, country]
-      properties:
-        address_line1:
-          type: string
-          minLength: 1
-          maxLength: 100
-          example: 4022 Laguna St
-        address_line2:
-          type: string
-          minLength: 1
-          maxLength: 100
-          example: Flat 456
-        city:
-          type: string
-          minLength: 1
-          maxLength: 100
-          example: Santa Barbara
-        zip:
-          type: string
-          minLength: 2
-          maxLength: 20
-          example: 93101
-        country:
-          $ref: "#/components/schemas/CountryCodeIso2"
 
     PhoneNumber:
       type: object
@@ -4397,13 +4374,6 @@ components:
         - Passport
         - Residence Permit
 
-    Face:
-      type: object
-      required: [image_signed_url]
-      properties:
-        image_signed_url:
-          $ref: "#/components/schemas/PreSignedUrl"
-
     Event:
       type: object
       required: [specversion, type, subject, id, time, datacontenttype, data]
@@ -4448,24 +4418,6 @@ components:
                   { "code": 62102, "summary": "document_not_accepted" },
                 ],
             }
-
-    ResponseError:
-      type: object
-      required:
-        - error_type
-        - error_codes
-      properties:
-        error_type:
-          type: string
-          description: Type of error.
-          enum:
-            - unprocessable_entity
-            - request_invalid
-        error_codes:
-          type: array
-          description: List of codes.
-          items:
-            type: string
 
     Identity:
       type: object
@@ -4578,6 +4530,7 @@ components:
         nationality:
           type: string
         gender:
+          type: string
           nullable: true
           oneOf:
             - $ref: '#/components/schemas/GenderA47Enum'
@@ -4719,7 +4672,7 @@ components:
     IdentityVerificationInputBase:
       type: object
       allOf:
-        - $ref: "#/components/schemas/IdentityVerificationBase"
+          - $ref: "#/components/schemas/IdentityVerificationBase"
 
     IdentityVerificationOutputBase:
       type: object
@@ -4754,7 +4707,7 @@ components:
 
     IdentityVerificationOutputPost:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, verification_policy_version, applicant_id, user_journey_id]
+      required: [id, declared_data, status, webhook_url, _links, response_codes, applicant_id, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4778,7 +4731,7 @@ components:
 
     IdentityVerificationOutputHelper:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, verification_policy_version, redirect_url, applicant_id, user_journey_id]
+      required: [id, declared_data, status, webhook_url, _links, verification_policy_version, redirect_url, response_codes, applicant_id, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4795,7 +4748,7 @@ components:
 
     IdentityVerificationOutputGet:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, verification_policy_version, applicant_id, redirect_url, user_journey_id]
+      required: [id, declared_data, status, webhook_url, _links, verification_policy_version, applicant_id, redirect_url, response_codes, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4812,7 +4765,7 @@ components:
 
     IdentityVerificationOutputAnonymize:
       type: object
-      required: [id, status, webhook_url, _links, verification_policy_version, applicant_id, redirect_url, user_journey_id]
+      required: [id, status, webhook_url, _links, applicant_id, redirect_url, response_codes, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4838,6 +4791,7 @@ components:
       type: string
       description: Status of the verification.
       enum:
+        - created
         - pending
         - capture_in_progress
         - checks_in_progress
@@ -4845,6 +4799,7 @@ components:
         - declined
         - retry_required
         - refused
+        - inconclusive
 
     IdentityVerificationHelperLinks:
       type: object
@@ -4864,7 +4819,7 @@ components:
       description: Identity verification unique identifier.
       pattern: ^idv_\w+$
       example: idv_tkoi5db4hryu5cei5vwoabr7we
-      #######################################################################
+        #######################################################################
     #######################################################################
 
     ######################## Identity Attempt schemas #####################
@@ -4925,13 +4880,13 @@ components:
 
     IdentityVerificationAttemptOutputPost:
       type: object
-      required: [id, applicant_session_information, status, redirect_url, response_codes, _links]
+      required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdentityVerificationAttemptOutputBase"
 
     IdentityVerificationAttemptOutputGet:
       type: object
-      required: [id, applicant_session_information, status, redirect_url, response_codes, _links]
+      required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdentityVerificationAttemptOutputBase"
         ###################### Identity Attempt Utils schemas ####################
@@ -4946,7 +4901,8 @@ components:
         - expired
         - capture_aborted
         - capture_refused
-        - checks_aborted
+        - checks_inconclusive
+        - terminated
 
     AttemptLinks:
       type: object
@@ -4994,7 +4950,7 @@ components:
         - $ref: "#/components/schemas/BaseApplicantSessionInformation"
         ############################################################################
     #######################################################################
-
+    
     ######################### Face Attempt schemas ########################
     FaceAttemptBase:
       type: object
@@ -5024,8 +4980,6 @@ components:
           minItems: 0
           items:
             $ref: "#/components/schemas/ResponseCodes"
-        applicant_session_information:
-          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
         _links:
           allOf:
             - $ref: "#/components/schemas/AttemptLinks"
@@ -5053,17 +5007,20 @@ components:
 
     FaceAuthenticationAttemptOutputPost:
       type: object
-      required: [id, applicant_session_information, status, redirect_url, response_codes, _links]
+      required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationAttemptOutputBase"
 
     FaceAuthenticationAttemptOutputGet:
       type: object
-      required: [id, applicant_session_information, status, redirect_url, response_codes, _links]
+      required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationAttemptOutputBase"
-
-          ###################### Face Attempt Utils schemas ####################
+      properties:
+        applicant_session_information:
+          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
+          
+    ###################### Face Attempt Utils schemas ####################
     FaceAuthenticationApplicantSessionInformation:
       type: object
       allOf:
@@ -5093,7 +5050,7 @@ components:
       type: object
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationBase"
-
+          
     FaceAuthenticationOutputBase:
       type: object
       properties:
@@ -5110,7 +5067,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationBase"
         - $ref: "#/components/schemas/DatedObject"
-
+    
     FaceAuthenticationInputPost:
       type: object
       required: [webhook_url, applicant_id, user_journey_id]
@@ -5119,16 +5076,16 @@ components:
 
     FaceAuthenticationOutputPost:
       type: object
-      required: [id, status, webhook_url, applicant_id, user_journey_id, _links]
+      required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id, _links]
       properties:
         face:
           $ref: '#/components/schemas/VerificationFace'
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationOutputBase"
-
+    
     FaceAuthenticationOutputGet:
       type: object
-      required: [id, status, webhook_url, applicant_id, user_journey_id, _links]
+      required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationOutputBase"
 
@@ -5318,26 +5275,6 @@ components:
           birth_date: 1934-10-02
         webhook_url: https://my.api/events/
 
-    identity_verification_creation_response_body:
-      value:
-        id: idv_tkoi5db4hryu5cei5vwoabr7we
-        created_on: 2017-07-21T17:32:28Z
-        modified_on: 2017-07-21T17:40:32Z
-        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
-        status: created
-        response_codes: []
-        declared_data:
-          name: David Vincent
-          birth_date: 1934-10-02
-        documents: []
-        webhook_url: https://my.api/events/
-        _links:
-          self:
-            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
-          applicant:
-            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
-
     identity_verification_response_body:
       value:
         id: idv_tkoi5db4hryu5cei5vwoabr7we
@@ -5359,7 +5296,7 @@ components:
           - full_name: David Vincent
             birth_date: 1934-10-02
             document_type: ID
-            document_issuing_country: US
+            document_issuing_country: USA
             front_image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555
         face:
           image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4
@@ -5561,19 +5498,19 @@ components:
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
 
-    #    idv_identity_verification_creation_request_invalid_body:
-    #      value:
-    #        error_type: request_invalid
-    #        error_codes:
-    #          - declared_data__birth_date__invalid_format
-    #          - declared_data__name__required
-    #          - phone_number__country_code__invalid
+#    idv_identity_verification_creation_request_invalid_body:
+#      value:
+#        error_type: request_invalid
+#        error_codes:
+#          - declared_data__birth_date__invalid_format
+#          - declared_data__name__required
+#          - phone_number__country_code__invalid
 
-    #    idv_identity_verification_unprocessable_entity_body:
-    #      value:
-    #        error_type: unprocessable_entity
-    #        error_codes:
-    #          - organization__no_configuration
+#    idv_identity_verification_unprocessable_entity_body:
+#      value:
+#        error_type: unprocessable_entity
+#        error_codes:
+#          - organization__no_configuration
 
     # Face Authentication
     face_authentication_creation_response_body:
@@ -5640,6 +5577,8 @@ components:
         id: "fatp_tkoi5db4hryu5cei5vwoabrPoQ"
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
+        status: "pending_redirection"
+        response_codes: []
         phone_number:
           country_code: "+1"
           number: "2068133616"
@@ -5659,8 +5598,6 @@ components:
           number: "2068133616"
         client_information:
           pre_selected_residence_country: "FR"
-          pre_selected_document_issuing_country: FR
-          pre_selected_document_type: ID
         redirect_url: https://myweb.site?query-param=hello
 
     face_authentication_attempt_list_response_body:
@@ -5685,6 +5622,8 @@ components:
             _links:
               verification_url:
                 href: "https://id.ubble.ai/4hryu5cei5/"
+              self:
+                href: "https://api.ubble.ai/face-authentications/4hryu5cei5/fatp_tkoi5db4hryu5cei5vwoabrPoQ"
           - id: "fatp_tkoi5db4hryu5cei5vwoabriom"
             created_on: 2017-07-21T16:30:28Z
             modified_on: 2017-07-21T16:32:32Z
