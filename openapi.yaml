@@ -1652,15 +1652,18 @@ info:
     ```json
     {
       "specversion": "2.0",
-      "type": "face_authentication_created",
+      "type": "face_authentication_checks_completed",
       "subject": "fav_01hr7269mkxva7msc443jz4jbf",
       "id": "evnt_01hr7269ry3g8skc630q4ec75g",
       "time": "2024-03-05T10:22:48Z",
       "datacontenttype": "application/json",
       "data": {
-        "face_authentication_id": "fav_01hr7269mkxva7msc443jz4jbf",
-        "status": "created",
-        "applicant_id": "aplt_01hr7269ksxqjgqxbh4vaqmry8"
+        "external_applicant_id": "87ydky4g6eq144zkcvpoi54mtj"
+        "applicant_id": "aplt_01jdky4g6eq144zkcv16vtymx7",
+        "status": "declined",
+        "face_authentication_id": "fav_01je8cdhrk5fwa5j5nb701sah7",
+        "response_codes": [{"code": "62321", "summary": "face_face_mismatch"],
+        "user_journey_id": "usj_01hyzdts3zxqjm8bvvne2a2qb3"
       }
     }
     ```
@@ -1744,6 +1747,7 @@ info:
           "time": "2023-03-22T17:31:00Z",
           "datacontenttype": "application/json",
           "data": {
+              "external_applicant_id": "9fj3lz918bujpth3wdolmc74s"
               "applicant_id": "aplt_5hxpdwegjcbujpth3wdo55d3vm",
               "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
               "identity_verification_id": "idv_5hxpdwegjcbujpth3wdo55d3vm",
@@ -3382,7 +3386,7 @@ info:
   version: 2.0.0
 
 servers:
-  - url: https://api.ubble.ai/
+  - url: https://api.ubble.ai
 
 tags:
   - name: identity verifications
@@ -3441,7 +3445,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                identity_verification_creation_response_body_helper:
                   $ref: "#/components/examples/identity_verification_creation_response_body_helper"
               schema:
                 allOf:
@@ -3450,6 +3454,7 @@ paths:
         statusChanged:
           "{$request.body#/webhook_url}":
             post:
+              summary: Status update notification
               requestBody:
                 required: true
                 content:
@@ -3515,8 +3520,9 @@ paths:
           description: Identity verification created successfully
           content:
             application/json:
-              example:
-                $ref: '#/components/examples/identity_verification_creation_response_body'
+              examples:
+                identity_verification_creation_response_body:
+                  $ref: "#/components/examples/identity_verification_creation_response_body"
               schema:
                 allOf:
                   - $ref: '#/components/schemas/IdentityVerificationOutputPost'
@@ -3565,7 +3571,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                identity_verification_response_body:
                   $ref: "#/components/examples/identity_verification_response_body"
               schema:
                 allOf:
@@ -3591,7 +3597,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                identity_verification_anonymization_response_body:
                   $ref: "#/components/examples/identity_verification_anonymization_response_body"
               schema:
                 allOf:
@@ -3628,7 +3634,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                identity_verification_pdf_response_body:
                   $ref: "#/components/examples/identity_verification_pdf_response_body"
               schema:
                 required: [pdf_report]
@@ -3684,7 +3690,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                identity_verification_list_response_body:
                   $ref: "#/components/examples/identity_verification_attempt_list_response_body"
               schema:
                 allOf:
@@ -3714,8 +3720,7 @@ paths:
               Minimal body:
                 $ref: "#/components/examples/attempt_creation_request_body_min"
               All possible data:
-                $ref: "#/components/examples/identity_attempt_creation_request_body_\
-                      max"
+                $ref: "#/components/examples/identity_attempt_creation_request_body_max"
             schema:
               $ref: "#/components/schemas/IdentityVerificationAttemptInputPost"
       responses:
@@ -3724,7 +3729,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                identity_verification_attempt_creation_response_body:
                   $ref: "#/components/examples/identity_verification_attempt_creation_response_body"
               schema:
                 allOf:
@@ -3762,7 +3767,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                identity_verification_attempt_get_response_body:
                   $ref: "#/components/examples/identity_verification_attempt_get_response_body"
               schema:
                 allOf:
@@ -3937,7 +3942,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                aml_verification_response_body:
                   $ref: "#/components/examples/aml_verification_response_body"
               schema:
                 required: [applicant_id]
@@ -3964,7 +3969,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                aml_verification_response_body:
                   $ref: "#/components/examples/aml_verification_response_body"
               schema:
                 required: [applicant_id]
@@ -4021,7 +4026,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                face_authentication_creation_response_body:
                   $ref: "#/components/examples/face_authentication_creation_response_body"
               schema:
                 allOf:
@@ -4052,7 +4057,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                face_authentication_anonymization_response_body:
                   $ref: "#/components/examples/face_authentication_anonymization_response_body"
               schema:
                 required: [applicant_id, user_journey_id]
@@ -4112,7 +4117,7 @@ paths:
           content:
             application/json:
               examples:
-                identity_verification_creation_response_body:
+                face_authentication_attempt_list_response_body:
                   $ref: "#/components/examples/face_authentication_attempt_list_response_body"
               schema:
                 allOf:
@@ -4267,33 +4272,6 @@ components:
       format: domestic phone number
       pattern: ^\d{1,14}$
       example: "2068133616"
-    Address:
-      type: object
-      description: Postal address.
-      required: [address_line1, city, zip, country]
-      properties:
-        address_line1:
-          type: string
-          minLength: 1
-          maxLength: 100
-          example: 4022 Laguna St
-        address_line2:
-          type: string
-          minLength: 1
-          maxLength: 100
-          example: Flat 456
-        city:
-          type: string
-          minLength: 1
-          maxLength: 100
-          example: Santa Barbara
-        zip:
-          type: string
-          minLength: 2
-          maxLength: 20
-          example: 93101
-        country:
-          $ref: "#/components/schemas/CountryCodeIso2"
 
     PhoneNumber:
       type: object
@@ -4396,13 +4374,6 @@ components:
         - Passport
         - Residence Permit
 
-    Face:
-      type: object
-      required: [image_signed_url]
-      properties:
-        image_signed_url:
-          $ref: "#/components/schemas/PreSignedUrl"
-
     Event:
       type: object
       required: [specversion, type, subject, id, time, datacontenttype, data]
@@ -4447,24 +4418,6 @@ components:
                   { "code": 62102, "summary": "document_not_accepted" },
                 ],
             }
-
-    ResponseError:
-      type: object
-      required:
-        - error_type
-        - error_codes
-      properties:
-        error_type:
-          type: string
-          description: Type of error.
-          enum:
-            - unprocessable_entity
-            - request_invalid
-        error_codes:
-          type: array
-          description: List of codes.
-          items:
-            type: string
 
     Identity:
       type: object
@@ -4577,6 +4530,7 @@ components:
         nationality:
           type: string
         gender:
+          type: string
           nullable: true
           oneOf:
             - $ref: '#/components/schemas/GenderA47Enum'
@@ -4753,7 +4707,7 @@ components:
 
     IdentityVerificationOutputPost:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, verification_policy_version, applicant_id, user_journey_id]
+      required: [id, declared_data, status, webhook_url, _links, response_codes, applicant_id, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4777,7 +4731,7 @@ components:
 
     IdentityVerificationOutputHelper:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, verification_policy_version, redirect_url, applicant_id, user_journey_id]
+      required: [id, declared_data, status, webhook_url, _links, redirect_url, response_codes, applicant_id, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4794,7 +4748,7 @@ components:
 
     IdentityVerificationOutputGet:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, verification_policy_version, applicant_id, redirect_url, user_journey_id]
+      required: [id, declared_data, status, webhook_url, _links, applicant_id, redirect_url, response_codes, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4811,7 +4765,7 @@ components:
 
     IdentityVerificationOutputAnonymize:
       type: object
-      required: [id, status, webhook_url, _links, verification_policy_version, applicant_id, redirect_url, user_journey_id]
+      required: [id, status, webhook_url, _links, applicant_id, redirect_url, response_codes, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4926,15 +4880,16 @@ components:
 
     IdentityVerificationAttemptOutputPost:
       type: object
-      required: [id, applicant_session_information, status, redirect_url, response_codes, _links]
+      required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdentityVerificationAttemptOutputBase"
 
     IdentityVerificationAttemptOutputGet:
       type: object
-      required: [id, applicant_session_information, status, redirect_url, response_codes, _links]
+      required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdentityVerificationAttemptOutputBase"
+
         ###################### Identity Attempt Utils schemas ####################
     AttemptStates:
       type: string
@@ -5026,8 +4981,6 @@ components:
           minItems: 0
           items:
             $ref: "#/components/schemas/ResponseCodes"
-        applicant_session_information:
-          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
         _links:
           allOf:
             - $ref: "#/components/schemas/AttemptLinks"
@@ -5055,17 +5008,23 @@ components:
 
     FaceAuthenticationAttemptOutputPost:
       type: object
-      required: [id, applicant_session_information, status, redirect_url, response_codes, _links]
+      required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationAttemptOutputBase"
+      properties:
+        applicant_session_information:
+          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
 
     FaceAuthenticationAttemptOutputGet:
       type: object
-      required: [id, applicant_session_information, status, redirect_url, response_codes, _links]
+      required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationAttemptOutputBase"
+      properties:
+        applicant_session_information:
+          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
           
-          ###################### Face Attempt Utils schemas ####################
+    ###################### Face Attempt Utils schemas ####################
     FaceAuthenticationApplicantSessionInformation:
       type: object
       allOf:
@@ -5121,7 +5080,7 @@ components:
 
     FaceAuthenticationOutputPost:
       type: object
-      required: [id, status, webhook_url, applicant_id, user_journey_id, _links]
+      required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id, _links]
       properties:
         face:
           $ref: '#/components/schemas/VerificationFace'
@@ -5130,7 +5089,7 @@ components:
     
     FaceAuthenticationOutputGet:
       type: object
-      required: [id, status, webhook_url, applicant_id, user_journey_id, _links]
+      required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationOutputBase"
 
@@ -5322,23 +5281,24 @@ components:
 
     identity_verification_creation_response_body:
       value:
-        id: idv_tkoi5db4hryu5cei5vwoabr7we
-        created_on: 2017-07-21T17:32:28Z
-        modified_on: 2017-07-21T17:40:32Z
-        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
-        status: created
+        id: "idv_tkoi5db4hryu5cei5vwoabr7we"
+        created_on: "2017-07-21T17:32:28Z"
+        modified_on: "2017-07-21T17:40:32Z"
+        user_journey_id: "usj_tkoi5db4hryu5cei5vwoabr7we"
+        applicant_id: "aplt_tkoi5db4hryu5cei5vwoabr7we"
+        status: "created"
         response_codes: []
         declared_data:
-          name: David Vincent
-          birth_date: 1934-10-02
+          name: "David Vincent"
+          birth_date: "1934-10-02"
         documents: []
-        webhook_url: https://my.api/events/
+        webhook_url: "https://my.api/events/"
         _links:
           self:
             href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+
 
     identity_verification_response_body:
       value:
@@ -5361,7 +5321,7 @@ components:
           - full_name: David Vincent
             birth_date: 1934-10-02
             document_type: ID
-            document_issuing_country: US
+            document_issuing_country: USA
             front_image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555
         face:
           image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4
@@ -5642,6 +5602,8 @@ components:
         id: "fatp_tkoi5db4hryu5cei5vwoabrPoQ"
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
+        status: "pending_redirection"
+        response_codes: []
         phone_number:
           country_code: "+1"
           number: "2068133616"
@@ -5661,8 +5623,6 @@ components:
           number: "2068133616"
         client_information:
           pre_selected_residence_country: "FR"
-          pre_selected_document_issuing_country: FR
-          pre_selected_document_type: ID
         redirect_url: https://myweb.site?query-param=hello
 
     face_authentication_attempt_list_response_body:
@@ -5687,6 +5647,8 @@ components:
             _links:
               verification_url:
                 href: "https://id.ubble.ai/4hryu5cei5/"
+              self:
+                href: "https://api.ubble.ai/face-authentications/4hryu5cei5/fatp_tkoi5db4hryu5cei5vwoabrPoQ"
           - id: "fatp_tkoi5db4hryu5cei5vwoabriom"
             created_on: 2017-07-21T16:30:28Z
             modified_on: 2017-07-21T16:32:32Z
