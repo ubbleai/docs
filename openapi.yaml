@@ -73,8 +73,7 @@ info:
       "status": "pending",
       "response_codes": [],
       "declared_data": {
-        "name": "David Vincent",
-        "birth_date": "1934-10-02"
+        "name": "David Vincent"
       },
       "documents": [],
       "webhook_url": "https://my.api/events/",
@@ -171,8 +170,7 @@ info:
         "birth_date": "1934-10-02"
       },
       "declared_data": {
-        "name": "David Vincent",
-        "birth_date": "1934-10-02"
+        "name": "David Vincent"
       },
       "documents": [
         {
@@ -350,6 +348,15 @@ info:
       <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; vertical-align: center;">ⓘ</div>
       <div style="display: table-cell; vertical-align: center;">
         <p>You can view <a href="https://github.com/ubbleai/integration_examples/tree/master" target="_blank">example webview integrations</a> for each platform on our Identity Verification GitHub repository.</p>
+        </div>
+    </div>
+    <div/>
+
+    <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center; border-radius: 0.5rem; margin-top: 20px;">
+      <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; color: #f8c92e; vertical-align: center;">⚠</div>
+      <div style="display: table-cell; vertical-align: center;">
+        <p> On iOS, you need to set the iOS-specific option <code>allowsInlineMediaPlayback</code> to <code>true</code>. See <a href="https://github.com/ubbleai/integration_examples/blob/master/UbbleReactNative/UbbleWebView.js#L14" target="_blank">this example</a> in react-native. </p>
+
       </div>
     </div>
 
@@ -360,6 +367,7 @@ info:
     When the user completes or terminates their verification, they’ll be redirected to the `redirect_url` you specified when you requested an identity verification.
 
     The event associated with the user’s verification is returned in the webhook notification, and as a URL parameter in the `redirect_url`. If verification was unsuccessful, the URL will also contain a `response_code` URL parameter. For example:
+
 
     ```
     https://your-redirect-url.com?id=idv_01h2623ysfkhpn7czed0bw8fd6&event=identity_verification_capture_aborted&response_code=61101
@@ -414,6 +422,7 @@ info:
         </tr>
       </tbody>
     </table>
+
 
 
 
@@ -665,7 +674,7 @@ info:
             <p><code>refused</code></p>
           </td>
           <td style="width: 35%">
-            <p>The user refused to perform the identity verification</p>
+            <p>The applicant refused to perform the identity verification</p>
           </td>
           <td style="width: 40%">
             <p>
@@ -686,7 +695,7 @@ info:
         </tr>
         <tr>
           <td style="width: 25%">
-            <p><code>`pending_redirection`</code></p>
+            <p><code>pending_redirection</code></p>
           </td>
           <td style="width: 35%">
             <p>The attempt has been created and applicant can be redirected.</p>
@@ -694,7 +703,7 @@ info:
         </tr>
         <tr>
           <td style="width: 25%">
-            <p><code>`capture_in_progress`</code></p>
+            <p><code>capture_in_progress</code></p>
           </td>
           <td style="width: 35%">
             <p>The attempt has been started by the applicant.</p>
@@ -702,23 +711,23 @@ info:
         </tr>
         <tr>
           <td style="width: 25%">
-            <p><code>`checks_in_progress`</code></p>
+            <p><code>checks_in_progress</code></p>
           </td>
           <td style="width: 35%">
-            <p>The applicant completed the capture, we are performing checks. </p>
+            <p>The applicant completed the capture, we are performing checks.</p>
           </td>
         </tr>
         <tr>
           <td style="width: 25%">
-            <p><code>`completed`</code></p>
+            <p><code>completed</code></p>
           </td>
           <td style="width: 35%">
-            <p>We completed the checks. Identity verification is closed.  </p>
+            <p>We completed the checks. Identity verification is closed.</p>
           </td>
         </tr>
         <tr>
           <td style="width: 25%">
-            <p><code>`expired`</code></p>
+            <p><code>expired</code></p>
           </td>
           <td style="width: 35%">
             <p>The link expired without applicant being redirected to the web application, please note the default expiration time is 15 minutes.</p>
@@ -726,7 +735,7 @@ info:
         </tr>
         <tr>
           <td style="width: 25%">
-            <p><code>`capture_aborted`</code></p>
+            <p><code>capture_aborted</code></p>
           </td>
           <td style="width: 35%">
             <p>The applicant terminated the capture without completing it.</p>
@@ -734,10 +743,18 @@ info:
         </tr>
         <tr>
           <td style="width: 25%">
-            <p><code>`checks_inconclusive`</code></p>
+            <p><code>checks_inconclusive</code></p>
           </td>
           <td style="width: 35%">
             <p>The applicant terminated the capture but did not provide the assets required to perform the checks.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 25%">
+            <p><code>capture_refused</code></p>
+          </td>
+          <td style="width: 35%">
+            <p>The applicant refused to perform the identity verification.</p>
           </td>
         </tr>
       </tbody>
@@ -1126,6 +1143,14 @@ info:
         <td class="tg-center">&#10060;</td>
       </tr>
       <tr>
+        <td class="tg-0pky">62104</td>
+        <td class="tg-0pky">unsupported_alphabet</td>
+        <td class="tg-0pky">Applicant has submitted a document containing an unsupported alphabet</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
+      </tr>
+      <tr>
         <td class="tg-dvid" colspan="6">Copy issue</td>
       </tr>
       <tr>
@@ -1317,8 +1342,7 @@ info:
         "birth_date": "1990-12-20"
       },
       "declared_data": {
-        "name": "David Vincent",
-        "birth_date": "1990-12-20"
+        "name": "David Vincent"
       },
       "documents": [{}],
       "face": {
@@ -1881,8 +1905,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7we",
       "declared_data": {
-        "name": "Toby Arden",
-        "birth_date": "1984-10-02"
+        "name": "Toby Arden"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -1901,8 +1924,7 @@ info:
       "status": "pending",
       "response_codes": [],
       "declared_data": {
-        "name": "Toby Arden",
-        "birth_date": "1984-10-02"
+        "name": "Toby Arden"
       },
       "documents": [],
       "redirect_url": "https://example.com?query-param=hello",
@@ -1996,8 +2018,7 @@ info:
         "birth_date": "1984-10-02"
       },
       "declared_data": {
-        "name": "Toby Arden",
-        "birth_date": "1984-10-02"
+        "name": "Toby Arden"
       },
       "documents": [
         {
@@ -2074,7 +2095,7 @@ info:
       "id": "aplt_tkoi5db4hryu5cei5vwoabr8hg",
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
-      "external_applicant_id": "eaplt_10000000000000000000000000",
+      "external_applicant_id": "eaplt_61401A10000000000000000000",
       "email": "jia.tsang@example.com",
       "_links": {
         "self": {
@@ -2099,8 +2120,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr8hg",
       "declared_data": {
-        "name": "Jia Tsang",
-        "birth_date": "1984-10-02"
+        "name": "Jia Tsang"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -2119,8 +2139,7 @@ info:
       "status": "pending",
       "response_codes": [],
       "declared_data": {
-        "name": "Jia Tsang",
-        "birth_date": "1984-10-02"
+        "name": "Jia Tsang"
       },
       "documents": [],
       "redirect_url": "https://example.com?query-param=hello",
@@ -2262,8 +2281,7 @@ info:
         "birth_date": "1984-10-02"
       },
       "declared_data": {
-        "name": "Jia Tsang",
-        "birth_date": "1984-10-02"
+        "name": "Jia Tsang"
       },
       "documents": [
         {
@@ -2316,9 +2334,9 @@ info:
     
     ### Step 2: Create an applicant
     
-    Set the value of `external_applicant_id` as `eaplt_61XXXA10000000000000000000`. Replace `61XXX` with any of the response codes starting with 61, that you would like to test for.
+    Set the value of `external_applicant_id` as `eaplt_61XXXI10000000000000000000`. Replace `61XXX` with any of the response codes starting with 61, that you would like to test for.
   
-    For example, if you would like to test with response code `61310`, set the `external_application_id` to `eaplt_61310A10000000000000000000`.
+    For example, if you would like to test with response code `61310`, set the `external_application_id` to `eaplt_61411I10000000000000000000`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
       <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
@@ -2329,7 +2347,7 @@ info:
     
     ```json
     {
-      "external_applicant_id": "eaplt_61310A10000000000000000000",
+      "external_applicant_id": "eaplt_61411I10000000000000000000",
       "email": "jia.tsang@example.com"
     }
     ```
@@ -2341,7 +2359,7 @@ info:
       "id": "aplt_tkoi5db4hryu5cei5vwoabr7wf",
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
-      "external_applicant_id": "eaplt_10000000000000000000000000",
+      "external_applicant_id": "eaplt_61411I10000000000000000000",
       "email": "jia.tsang@example.com",
       "_links": {
         "self": {
@@ -2365,8 +2383,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7wf",
       "declared_data": {
-        "name": "Jia Tsang",
-        "birth_date": "1995-10-02"
+        "name": "Jia Tsang"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -2385,8 +2402,7 @@ info:
       "status": "pending",
       "response_codes": [ ],
       "declared_data": {
-        "name": "Jia Tsang",
-        "birth_date": "1995-10-02"
+        "name": "Jia Tsang"
       },
       "documents": [ ],
       "redirect_url": "https://example.com?query-param=hello",
@@ -2528,8 +2544,7 @@ info:
         "birth_date": "1984-10-02"
       },
       "declared_data": {
-        "name": "Jia Tsang",
-        "birth_date": "1984-10-02"
+        "name": "Jia Tsang"
       },
       "documents": [
         {
@@ -2626,8 +2641,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr9fr",
       "declared_data": {
-        "name": "Hannah Bret",
-        "birth_date": "1999-12-02"
+        "name": "Hannah Bret"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -2645,8 +2659,7 @@ info:
       "status": "pending",
       "response_codes": [],
       "declared_data": {
-        "name": "Hannah Bret",
-        "birth_date": "1999-12-02"
+        "name": "Hannah Bret"
       },
       "documents": [],
       "redirect_url": "https://example.com?query-param=hello",
@@ -2737,8 +2750,7 @@ info:
         "birth_date": "1999-12-02"
       },
       "declared_data": {
-        "name": "Hannah Bret",
-        "birth_date": "1999-12-02"
+        "name": "Hannah Bret"
       },
       "documents": [
         {
@@ -2841,8 +2853,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr1ab",
       "declared_data": {
-        "name": "Ali Farid",
-        "birth_date": "1990-12-20"
+        "name": "Ali Farid"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -2860,8 +2871,7 @@ info:
       "status": "pending",
       "response_codes": [],
       "declared_data": {
-        "name": "Ali Farid",
-        "birth_date": "1990-12-20"
+        "name": "Ali Farid"
       },
       "documents": [],
       "redirect_url": "https://example.com?query-param=hello",
@@ -3002,8 +3012,7 @@ info:
         "birth_date": "1990-12-20"
       },
       "declared_data": {
-        "name": "Ali Farid",
-        "birth_date": "1990-12-20"
+        "name": "Ali Farid"
       },
       "documents": [
         {
@@ -3059,8 +3068,8 @@ info:
     Set the value of `external_applicant_id` as `eaplt_61XXXI62XXX000000000000000`. Replace: 
     - `61XXX` with any of the response codes starting with 61 for the end of the first attempt
     - `62XXX` with any of the response codes starting with 62 for the final verdict
-  
-    For example, if you would like to test with `61203` and `62403`, then set the value to `eaplt_61203A62403000000000000000`.
+
+    For example, if you would like to test with `61203` and `62403`, then set the value to `eaplt_61411I62403000000000000000`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
       <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
@@ -3071,7 +3080,7 @@ info:
     
     ```json
     {
-      "external_applicant_id": "eaplt_61203A62403000000000000000",
+      "external_applicant_id": "eaplt_61411I62403000000000000000",
       "email": "toby.arden@example.com"
     }
     ```   
@@ -3082,7 +3091,7 @@ info:
       "id": "aplt_tkoi5db4hryu5cei5vwoabr6ft",
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
-      "external_applicant_id": "eaplt_10000000000000000000000000",
+      "external_applicant_id": "eaplt_61411I62403000000000000000",
       "email": "toby.arden@example.com",
       "_links": {
         "self": {
@@ -3107,8 +3116,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr6ft",
       "declared_data": {
-        "name": "Toby Arden",
-        "birth_date": "1994-09-26"
+        "name": "Toby Arden"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -3126,8 +3134,7 @@ info:
       "status": "pending",
       "response_codes": [],
       "declared_data": {
-        "name": "Toby Arden",
-        "birth_date": "1994-09-26"
+        "name": "Toby Arden"
       },
       "documents": [],
       "redirect_url": "https://example.com?query-param=hello",
@@ -3268,8 +3275,7 @@ info:
         "birth_date": "1994-09-26"
       },
       "declared_data": {
-        "name": "Toby Arden",
-        "birth_date": "1994-09-26"
+        "name": "Toby Arden"
       },
       "documents": [
         {
@@ -4311,9 +4317,6 @@ components:
         name:
           type: string
           maxLength: 255
-        birth_date:
-          type: string
-          format: date
 
     Document:
       type: object
@@ -4960,6 +4963,8 @@ components:
           $ref: "#/components/schemas/PhoneNumber"
         client_information:
           $ref: "#/components/schemas/FaceAttemptClientInformation"
+        applicant_session_information:
+          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
         redirect_url:
           type: string
           format: uri
@@ -5011,18 +5016,12 @@ components:
       required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationAttemptOutputBase"
-      properties:
-        applicant_session_information:
-          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
 
     FaceAuthenticationAttemptOutputGet:
       type: object
       required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationAttemptOutputBase"
-      properties:
-        applicant_session_information:
-          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
           
     ###################### Face Attempt Utils schemas ####################
     FaceAuthenticationApplicantSessionInformation:
@@ -5066,6 +5065,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResponseCodes'
+        face:
+          allOf:
+            - $ref: '#/components/schemas/VerificationFace'
         _links:
           $ref: "#/components/schemas/FaceAuthenticationLinks"
       allOf:
@@ -5225,7 +5227,6 @@ components:
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: John Smith
-          birth_date: '1934-10-02'
         phone_number:
           country_code: '+1'
           number: '5555550102'
@@ -5251,7 +5252,6 @@ components:
         response_codes: []
         declared_data:
           name: David Vincent
-          birth_date: 1934-10-02
         documents: []
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
@@ -5276,7 +5276,6 @@ components:
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: David Vincent
-          birth_date: 1934-10-02
         webhook_url: https://my.api/events/
 
     identity_verification_creation_response_body:
@@ -5290,7 +5289,6 @@ components:
         response_codes: []
         declared_data:
           name: "David Vincent"
-          birth_date: "1934-10-02"
         documents: []
         webhook_url: "https://my.api/events/"
         _links:
@@ -5316,7 +5314,6 @@ components:
           birth_date: 1934-10-02
         declared_data:
           name: David Vincent
-          birth_date: 1934-10-02
         documents:
           - full_name: David Vincent
             birth_date: 1934-10-02
