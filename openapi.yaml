@@ -4234,12 +4234,6 @@ components:
       pattern: ^[A-Za-z]{2}$
       example: US
 
-    CountryCodeIso3:
-      type: string
-      format: ISO 3166-1 alpha-3
-      pattern: ^[A-Za-z]{3}$
-      example: USA
-
     Gender:
       type: string
       description: Person gender.
@@ -4333,7 +4327,7 @@ components:
             document_type:
               $ref: "#/components/schemas/DocumentTypes"
             document_issuing_country:
-              $ref: "#/components/schemas/CountryCodeIso3"
+              $ref: "#/components/schemas/CountryCodeIso2"
             permit_obtaining_date:
               type: string
               format: date
@@ -4940,6 +4934,19 @@ components:
           type: string
           description: Ip address of the applicant during the session
           example: "123:456:789:00"
+        number_of_sessions:
+          type: int
+          description: Number of sessions opened by user
+          example: 3
+        user_agent:
+          type: string
+          description: User session user agent
+          example: "Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36"
+        initial_device:
+          type: string
+          description: Initial device which started the session
+          example: "mobile"
+
 
     IdentityVerificationApplicantSessionInformation:
       type: object
@@ -4963,8 +4970,6 @@ components:
           $ref: "#/components/schemas/PhoneNumber"
         client_information:
           $ref: "#/components/schemas/FaceAttemptClientInformation"
-        applicant_session_information:
-          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
         redirect_url:
           type: string
           format: uri
@@ -4986,6 +4991,8 @@ components:
           minItems: 0
           items:
             $ref: "#/components/schemas/ResponseCodes"
+        applicant_session_information:
+          $ref: "#/components/schemas/FaceAuthenticationApplicantSessionInformation"
         _links:
           allOf:
             - $ref: "#/components/schemas/AttemptLinks"
@@ -5318,7 +5325,7 @@ components:
           - full_name: David Vincent
             birth_date: 1934-10-02
             document_type: ID
-            document_issuing_country: USA
+            document_issuing_country: US
             front_image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555
         face:
           image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4
