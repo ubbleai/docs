@@ -1837,7 +1837,6 @@ info:
     ## Security
 
     ### Webhook IP whitelisting
-    
     For security purposes, if you need to whitelist our incoming API calls, please note that we are hosted in the cloudgouv-eu-west-1 region of our cloud provider. [You can find the public IP addresses here](https://docs.outscale.com/en/userguide/OUTSCALE-Public-IPs.html).
 
     # Testing
@@ -3423,8 +3422,8 @@ paths:
       responses:
         "200":
           description: API is OK
-  # Identity Verifications
 
+  # Identity Verifications
   /v2/create-and-start-idv:
     post:
       tags:
@@ -3507,7 +3506,7 @@ paths:
       summary: Create an identity verification
       description: |
         Creates an identity verification.
-    
+
         When this request is successful, you'll get a 201 response with the identity verification resource.
       operationId: create_identity_verification
       requestBody:
@@ -3624,7 +3623,7 @@ paths:
         This endpoint allows you to retrieve a PDF report containing all the information of the identity verification.
 
         Please note that this report is only available for verifications in statuses `declined` and `approved` once you receive the `identity_verification_report_created` event.
-      
+
 
       operationId: pdf_identity_verification
       parameters:
@@ -4681,15 +4680,13 @@ components:
           items:
             $ref: '#/components/schemas/ResponseCodes'
         verified_identity:
-          allOf:
-            - $ref: '#/components/schemas/VerificationIdentity'
+          $ref: '#/components/schemas/VerificationIdentity'
         documents:
           type: array
           items:
             $ref: "#/components/schemas/Document"
         face:
-          allOf:
-            - $ref: '#/components/schemas/VerificationFace'
+          $ref: '#/components/schemas/VerificationFace'
         verification_policy_version:
           type: string
           description: returned ONLY for certified verifications
@@ -5079,8 +5076,7 @@ components:
           items:
             $ref: '#/components/schemas/ResponseCodes'
         face:
-          allOf:
-            - $ref: '#/components/schemas/VerificationFace'
+          $ref: '#/components/schemas/VerificationFace'
         _links:
           $ref: "#/components/schemas/FaceAuthenticationLinks"
       allOf:
