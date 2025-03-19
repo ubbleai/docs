@@ -1273,6 +1273,14 @@ info:
         <td class="tg-center">&#9989;</td>
         <td class="tg-center">&#9989;</td>
       </tr>
+      <tr>
+        <td class="tg-0pky">62404</td>
+        <td class="tg-0pky">multiple_documents</td>
+        <td class="tg-0pky">Applicant show multiple documents</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#10060;</td>
+      </tr>
     </tbody>
     </table>
 
@@ -3425,8 +3433,8 @@ paths:
       responses:
         "200":
           description: API is OK
-  # Identity Verifications
 
+  # Identity Verifications
   /v2/create-and-start-idv:
     post:
       tags:
@@ -3509,7 +3517,7 @@ paths:
       summary: Create an identity verification
       description: |
         Creates an identity verification.
-    
+
         When this request is successful, you'll get a 201 response with the identity verification resource.
       operationId: create_identity_verification
       requestBody:
@@ -3626,7 +3634,7 @@ paths:
         This endpoint allows you to retrieve a PDF report containing all the information of the identity verification.
 
         Please note that this report is only available for verifications in statuses `declined` and `approved` once you receive the `identity_verification_report_created` event.
-      
+
 
       operationId: pdf_identity_verification
       parameters:
@@ -4683,15 +4691,13 @@ components:
           items:
             $ref: '#/components/schemas/ResponseCodes'
         verified_identity:
-          allOf:
-            - $ref: '#/components/schemas/VerificationIdentity'
+          $ref: '#/components/schemas/VerificationIdentity'
         documents:
           type: array
           items:
             $ref: "#/components/schemas/Document"
         face:
-          allOf:
-            - $ref: '#/components/schemas/VerificationFace'
+          $ref: '#/components/schemas/VerificationFace'
         verification_policy_version:
           type: string
           description: returned ONLY for certified verifications
@@ -5081,8 +5087,7 @@ components:
           items:
             $ref: '#/components/schemas/ResponseCodes'
         face:
-          allOf:
-            - $ref: '#/components/schemas/VerificationFace'
+          $ref: '#/components/schemas/VerificationFace'
         _links:
           $ref: "#/components/schemas/FaceAuthenticationLinks"
       allOf:
