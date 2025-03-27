@@ -4260,6 +4260,9 @@ components:
           $ref: "#/components/schemas/ResponseCode"
         summary:
           $ref: "#/components/schemas/ResponseSummary"
+      required:
+        - code
+        - summary
 
     ResponseSummary:
       type: string
@@ -4324,53 +4327,77 @@ components:
 
     Document:
       type: object
-      required: [document_type, document_issuing_country, front_image_signed_url]
-      allOf:
-        - $ref: "#/components/schemas/Identity"
-        - properties:
-            personal_number:
-              type: string
-              maxLength: 255
-            tax_identification_number:
-              type: string
-              maxLength: 255
-            document_type:
-              $ref: "#/components/schemas/DocumentTypes"
-            document_issuing_country:
-              $ref: "#/components/schemas/CountryCodeIso2"
-            permit_obtaining_date:
-              type: string
-              format: date
-            permit_expiry_date:
-              type: string
-              format: date
-            permit_type_detailed:
-              type: string
-              maxLength: 255
-            permit_type_remarks:
-              type: string
-              maxLength: 255
-            document_number:
-              type: string
-              maxLength: 255
-            document_expiry_date:
-              type: string
-              format: date
-            document_issue_date:
-              type: string
-              format: date
-            document_issue_place:
-              type: string
-              maxLength: 255
-            document_mrz:
-              type: string
-              pattern: ^([A-Z0-9<]{2}[A-Z0-9<]{1,38}[\n\r])+([A-Z0-9<]{2}[A-Z0-9<]{1,44}[\n\r])?([A-Z0-9<]{2}[A-Z0-9<]{1,44}[\n\r])?$
-            front_image_signed_url:
-              $ref: "#/components/schemas/PreSignedUrl"
-            back_image_signed_url:
-              $ref: "#/components/schemas/PreSignedUrl"
-            signature_image_signed_url:
-              $ref: "#/components/schemas/PreSignedUrl"
+      properties:
+        personal_number:
+          type: string
+          maxLength: 255
+        tax_identification_number:
+          type: string
+          maxLength: 255
+        document_type:
+          $ref: "#/components/schemas/DocumentTypes"
+        document_issuing_country:
+          $ref: "#/components/schemas/CountryCodeIso2"
+        permit_obtaining_date:
+          type: string
+          format: date
+        permit_expiry_date:
+          type: string
+          format: date
+        permit_type_detailed:
+          type: string
+          maxLength: 255
+        permit_type_remarks:
+          type: string
+          maxLength: 255
+        document_number:
+          type: string
+          maxLength: 255
+        document_expiry_date:
+          type: string
+          format: date
+        document_issue_date:
+          type: string
+          format: date
+        document_issue_place:
+          type: string
+          maxLength: 255
+        document_mrz:
+          type: string
+          pattern: ^([A-Z0-9<]{2}[A-Z0-9<]{1,38}[\n\r])+([A-Z0-9<]{2}[A-Z0-9<]{1,44}[\n\r])?([A-Z0-9<]{2}[A-Z0-9<]{1,44}[\n\r])?$
+        front_image_signed_url:
+          $ref: "#/components/schemas/PreSignedUrl"
+        back_image_signed_url:
+          $ref: "#/components/schemas/PreSignedUrl"
+        signature_image_signed_url:
+          $ref: "#/components/schemas/PreSignedUrl"
+        full_name:
+          type: string
+          minLength: 2
+          maxLength: 510
+        first_names:
+          type: string
+          minLength: 1
+          maxLength: 255
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        last_name_at_birth:
+          type: string
+          minLength: 1
+          maxLength: 255
+        birth_date:
+          type: string
+          format: date
+        birth_place:
+          type: string
+          minLength: 1
+          maxLength: 255
+        nationality:
+          $ref: "#/components/schemas/CountryCodeIso2"
+        gender:
+          $ref: "#/components/schemas/Gender"
 
     DocumentTypes:
       type: string
@@ -4507,8 +4534,6 @@ components:
         image_signed_url:
           type: string
           nullable: true
-      required:
-        - image_signed_url
 
     VerificationIdentity:
       type: object
@@ -4543,8 +4568,6 @@ components:
             - $ref: '#/components/schemas/GenderA47Enum'
             - $ref: '#/components/schemas/BlankEnum'
             - $ref: '#/components/schemas/NullEnum'
-      required:
-        - full_name
 
     GenderA47Enum:
       enum:
@@ -4736,7 +4759,7 @@ components:
 
     IdentityVerificationOutputHelper:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, redirect_url, response_codes, applicant_id, user_journey_id]
+      required: [id, declared_data, status, webhook_url, _links, response_codes, redirect_url, applicant_id, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4941,6 +4964,9 @@ components:
           $ref: "#/components/schemas/CountryCodeIso2"
         document_type:
           $ref: "#/components/schemas/DocumentTypes"
+      required:
+        - country
+        - document_type
 
     BaseApplicantSessionInformation:
       type: object
