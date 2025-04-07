@@ -118,7 +118,7 @@ info:
 
     The following represents a typical identity verification flow:
 
-    [PLACEHOLDER Diagramme sans numéro]
+    ![](https://raw.githubusercontent.com/ubbleai/docs/refs/heads/staging/idv_flow.png)
 
     - **You create an identity verification**, using the applicant id you received when [creating an applicant](#tag/Applicants/operation/create_applicant). 
     - **You create an attempt.** You'll receive a unique verification URL. 
@@ -1170,10 +1170,8 @@ info:
     # Reference info
     
     ## Status transitions
-
-    [PLACEHOLDER NEW DIAGRAM]
     
-    ![](https://raw.githubusercontent.com/ubbleai/docs/main/life_cycle_diagram.png)
+    ![](https://raw.githubusercontent.com/ubbleai/docs/refs/heads/staging/life_cycle_diagram.png)
     
     
     ## Verification statuses
@@ -1242,6 +1240,15 @@ info:
             <p>
               We could not perform all of the required checks for the applicant's
               verification
+            </p>
+        </tr>
+        <tr>
+          <td style="width: 25%">
+            <p><code>review_required</code></p>
+          </td>
+          <td style="width: 35%">
+            <p>
+            Specific to AML verification - A case has been opened and you should manually investigate it. 
             </p>
         </tr>
         <tr>
@@ -1351,7 +1358,7 @@ info:
       </tbody>
     </table>
 
-    ## Identity verification response codes
+    ## Response codes
 
     <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center; border-radius: 0.5rem;">
       <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; color: #f8c92e; vertical-align: center;">⚠</div>
@@ -1361,7 +1368,6 @@ info:
         </p>
       </div>
     </div>
-
 
 
     <style type="text/css">
@@ -1377,7 +1383,7 @@ info:
     .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:center}
     .one {width: 10%}
     .two {width: 30%}
-    .three {width: 50%}
+    .three {width: 60%}
     </style>
 
     #### Verification status: `approved`
@@ -1493,7 +1499,58 @@ info:
         <td class="tg-0pky">generic_fraud</td>
         <td class="tg-0pky">For certified identity verifications, all the Identity fraud codes are replaced by this generic code.</td>
       </tr>
-              <td class="tg-dvid" colspan="6">Suspicious behavior</td>
+      <td class="tg-dvid" colspan="6">Specific to face authentication</td>
+      <tr>
+        <td class="tg-0pky">62321</td>
+        <td class="tg-0pky">face_face_mismatch</td>
+        <td class="tg-0pky">Applicant of the face authentication is not the one who performed the identity verification</td>
+      </tr>
+      <td class="tg-dvid" colspan="6">Specific to complementary document verification</td>
+      <tr>
+        <td class="tg-0pky">62121</td>
+        <td class="tg-0pky">complementary_document_expired</td>
+        <td class="tg-0pky">Applicant presented an expired complementary document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62122</td>
+        <td class="tg-0pky">complementary_document_not_accepted</td>
+        <td class="tg-0pky">Applicant presented an complementary document which is not accepted</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62123</td>
+        <td class="tg-0pky">complementary_document_damaged</td>
+        <td class="tg-0pky">Applicant has submitted a damaged complementary document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62221</td>
+        <td class="tg-0pky">complementary_document_photocopy</td>
+        <td class="tg-0pky">Applicant presented a photocopy of the complementary document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62222</td>
+        <td class="tg-0pky">complementary_document_screenshot</td>
+        <td class="tg-0pky">Applicant presented the complementary document on a screen</td>
+      <tr>
+        <td class="tg-0pky">62331</td>
+        <td class="tg-0pky">complementary_document_counterfeit</td>
+        <td class="tg-0pky">Applicant has submitted a counterfeit or falsification as an complementary document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62332</td>
+        <td class="tg-0pky">complementary_document_stolen</td>
+        <td class="tg-0pky">Applicant presented an complementary document declared as stolen or lost</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62333</td>
+        <td class="tg-0pky">complementary_document_swap</td>
+        <td class="tg-0pky">Applicant presented the front and back of two different documents</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62334</td>
+        <td class="tg-0pky">complementary_document_mismatch</td>
+        <td class="tg-0pky">Applicant is not the owner of the complementary documentl</td>
+      </tr>
+     <td class="tg-dvid" colspan="6">Suspicious behavior</td>
       </tr>
       <tr>
         <td class="tg-0pky">62401</td>
@@ -1542,7 +1599,8 @@ info:
     </table>
 
     #### Verification status: `retry_required`
-
+    
+    ##### Attempt status: `expired`
     <table class="tg">
     <colgroup>
       <col class="one" />
@@ -1557,15 +1615,29 @@ info:
       </tr>
     </thead>
     <tbody>
-      <td class="tg-dvid" colspan="6"> Attempt status: expired</td>
       <tr>
         <td class="tg-0pky">61101</td>
         <td class="tg-0pky">applicant_never_started</td>
         <td class="tg-0pky">Applicant was not redirected to the application and never started the flow</td>
       </tr>
-      </tbody>
+    </tbody>
+    </table>
+
+    ##### Attempt status: `capture_aborted`
+
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
+        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr">Description</th>
+    </thead>
     <tbody>
-      <td class="tg-dvid" colspan="6"> Attempt status: capture_aborted</td>
       <tr>
         <td class="tg-0pky">61111</td>
         <td class="tg-0pky">applicant_not_ready</td>
@@ -1606,6 +1678,7 @@ info:
         <td class="tg-0pky">sms_not_received</td>
         <td class="tg-0pky">Applicant did not receive the SMS</td>
       </tr>
+      <td class="tg-dvid" colspan="6"> Specific to certified identity verification</td>
       <tr>
         <td class="tg-0pky">61314</td>
         <td class="tg-0pky">document_challenge_timeout</td>
@@ -1616,10 +1689,24 @@ info:
         <td class="tg-0pky">face_challenge_timeout</td>
         <td class="tg-0pky">Applicant failed to meet the face challenge and the verification expired (only for certified identity verification)</td>
       </tr>
-     <tr>
+    </tbody>
+    </table>
+
+      ##### Attempt status: `checks_inconclusive`
+      <table class="tg">
+     <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+      </colgroup>
+     <thead>
       <tr>
-        <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Attempt status: checks_inconclusive</span></td>
-      </tr>
+        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
+        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr">Description</th>
+      </thead>
+     <tbody>
+     <tr>
        <tr>
         <td class="tg-0pky">61201</td>
         <td class="tg-0pky">connexion_insufficient</td>
@@ -1700,351 +1787,8 @@ info:
         <td class="tg-0pky">corrupted_videos</td>
         <td class="tg-0pky">The received videos cannot be played</td>
       </tr>
-       <tr>
-        <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Attempt status: terminated</span></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">64001</td>
-        <td class="tg-0pky">forcibly_closed</td>
-        <td class="tg-0pky">You have created a new attempt or the verification has been anonymised while the URL was still valid</td>
-      </tr>
-    </tbody>
-    </table>
-
-    ## Face authentication response codes
-
-    <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center; border-radius: 0.5rem;">
-      <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; color: #f8c92e; vertical-align: center;">⚠</div>
-      <div style="display: table-cell; vertical-align: center;">
-        <p>
-          Please note that we consider adding new response codes as backward compatible. You should then build you business rules based on the status and use response codes as additional information, rather than use response codes as required information.
-        </p>
-      </div>
-    </div>
-
-    #### Verification status: `approved`
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="tg-0pky">10000</td>
-        <td class="tg-0pky">approved</td>
-        <td class="tg-0pky">The verification has been approved</td>
-      </tr>
-    </tbody>
-    </table>
-
-    #### Verification status: `declined`
-
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <td class="tg-dvid" colspan="6"> Identity fraud</td>
-      <tr>
-        <td class="tg-0pky">62305</td>
-        <td class="tg-0pky">face_not_live</td>
-        <td class="tg-0pky">Applicant has presented a photography or a video of someone else's face on a screen or on a physical medium</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62306</td>
-        <td class="tg-0pky">face_alteration</td>
-        <td class="tg-0pky">Applicant has altered their appearance</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62307</td>
-        <td class="tg-0pky">videos_digital_alteration</td>
-        <td class="tg-0pky">Applicant has digitally altered the videos</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62321</td>
-        <td class="tg-0pky">face_face_mismatch</td>
-        <td class="tg-0pky">Applicant of the face authentication is not the one who performed the identity verification</td>
-      </tr>
-       <td class="tg-dvid" colspan="6">Suspicious behavior</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62402</td>
-        <td class="tg-0pky">suspicious_device</td>
-        <td class="tg-0pky">Applicant used a device that has been technically altered</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62403</td>
-        <td class="tg-0pky">consent_unclear</td>
-        <td class="tg-0pky">Applicant seems to have performed the capture against their will</td>
-      </tr>
-    </tbody>
-    </table>
-
-    #### Verification status: `refused`
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="tg-0pky">63001</td>
-        <td class="tg-0pky">applicant_refusal</td>
-        <td class="tg-0pky">Applicant explicitly refused to do the verification process by clicking on the dedicated button.</td>
-      </tr>
-    </tbody>
-    </table>
-
-    #### Verification status: `retry_required`
-
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <td class="tg-dvid" colspan="6"> Attempt status: expired</td>
-      <tr>
-        <td class="tg-0pky">61101</td>
-        <td class="tg-0pky">applicant_never_started</td>
-        <td class="tg-0pky">Applicant was not redirected to the application and never started the flow</td>
-      </tr>
-      </tbody>
-    <tbody>
-      <td class="tg-dvid" colspan="6"> Attempt status: capture_aborted</td>
-      <tr>
-        <td class="tg-0pky">61111</td>
-        <td class="tg-0pky">applicant_not_ready</td>
-        <td class="tg-0pky">Applicant explicitly stated that they wanted to perform the identity verification later by clicking on the dedicated button</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61112</td>
-        <td class="tg-0pky">applicant_no_document</td>
-        <td class="tg-0pky">Applicant explicitly stated that they did not have their document with them by clicking on the dedicated button</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61113</td>
-        <td class="tg-0pky">camera_access_refused</td>
-        <td class="tg-0pky">Applicant did not give access to the camera despite the dedicated instructions</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61121</td>
-        <td class="tg-0pky">applicant_drop</td>
-        <td class="tg-0pky">Applicant left the process before the capture phase and the verification URL expired (by default the expiration time is 15 minutes)</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61201</td>
-        <td class="tg-0pky">connexion_insufficient</td>
-        <td class="tg-0pky">Applicant did not have a sufficient connexion to perform the capture</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61202</td>
-        <td class="tg-0pky">browser_not_supported</td>
-        <td class="tg-0pky">Applicant’s browser was not suitable for video streaming</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61203</td>
-        <td class="tg-0pky">camera_not_found</td>
-        <td class="tg-0pky">Applicant’s device did not have any camera</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61205</td>
-        <td class="tg-0pky">sms_not_received</td>
-        <td class="tg-0pky">Applicant did not receive the SMS</td>
-      </tr>
-     <tr>
-      <tr>
-        <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Attempt status: checks_inconclusive</span></td>
-      </tr>
-       <tr>
-        <td class="tg-0pky">61201</td>
-        <td class="tg-0pky">connexion_insufficient</td>
-        <td class="tg-0pky">Applicant did not have a sufficient connexion to perform the capture</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61401</td>
-        <td class="tg-0pky">face_video_blurry</td>
-        <td class="tg-0pky">Applicant’s video of their face is too blurry <br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61402</td>
-        <td class="tg-0pky">face_video_lighting_issue</td>
-        <td class="tg-0pky">Applicant performed their identity verification under poor lighting conditions</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61410</td>
-        <td class="tg-0pky">face_not_captured</td>
-        <td class="tg-0pky">Applicant has not presented a face</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61411</td>
-        <td class="tg-0pky">face_partially_hidden</td>
-        <td class="tg-0pky">Applicant did not show the full front view of their face</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61412</td>
-        <td class="tg-0pky">face_not_turned</td>
-        <td class="tg-0pky">Applicant did not move to prove the liveness</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61414</td>
-        <td class="tg-0pky">various_faces_detected</td>
-        <td class="tg-0pky">Applicant also captured another person face</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61901</td>
-        <td class="tg-0pky">internal_error</td>
-        <td class="tg-0pky">An internal error prevents us from completing the verification, we do our best to reduce the occurrence of this case</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61911</td>
-        <td class="tg-0pky">corrupted_videos</td>
-        <td class="tg-0pky">The received videos cannot be played</td>
-      </tr>
-       <tr>
-        <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Attempt status: terminated</span></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">64001</td>
-        <td class="tg-0pky">forcibly_closed</td>
-        <td class="tg-0pky">You have created a new attempt or the verification has been anonymised while the URL was still valid</td>
-      </tr>
-    </tbody>
-    </table>
-
-    ## Complementary document response codes
-
-    <div style="padding: 0px 0px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center; border-radius: 0.5rem;">
-      <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; color: #f8c92e; vertical-align: center;">⚠</div>
-      <div style="display: table-cell; vertical-align: center;">
-        <p>
-          Please note that we consider adding new response codes as backward compatible. You should then build you business rules based on the status and use response codes as additional information, rather than use response codes as required information.
-        </p>
-      </div>
-    </div>
-    
-    If you ask applicants to present a complementary document during the identity verification flow, you could additionnaly receive the following codes. 
-
-    #### Verification status: `declined`
-
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <td class="tg-dvid" colspan="6"> Document non compliant</td>
-      <tr>
-        <td class="tg-0pky">62121</td>
-        <td class="tg-0pky">complementary_document_expired</td>
-        <td class="tg-0pky">Applicant presented an expired complementary document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62122</td>
-        <td class="tg-0pky">complementary_document_not_accepted</td>
-        <td class="tg-0pky">Applicant presented an complementary document which is not accepted</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62123</td>
-        <td class="tg-0pky">complementary_document_damaged</td>
-        <td class="tg-0pky">Applicant has submitted a damaged complementary document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62221</td>
-        <td class="tg-0pky">complementary_document_photocopy</td>
-        <td class="tg-0pky">Applicant presented a photocopy of the complementary document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62222</td>
-        <td class="tg-0pky">complementary_document_screenshot</td>
-        <td class="tg-0pky">Applicant presented the complementary document on a screen</td>
-      </tr>
-       <td class="tg-dvid" colspan="6">Identity Fraud</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62331</td>
-        <td class="tg-0pky">complementary_document_counterfeit</td>
-        <td class="tg-0pky">Applicant has submitted a counterfeit or falsification as an complementary document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62332</td>
-        <td class="tg-0pky">complementary_document_stolen</td>
-        <td class="tg-0pky">Applicant presented an complementary document declared as stolen or lost</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62333</td>
-        <td class="tg-0pky">complementary_document_swap</td>
-        <td class="tg-0pky">Applicant presented the front and back of two different documents</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62334</td>
-        <td class="tg-0pky">complementary_document_mismatch</td>
-        <td class="tg-0pky">Applicant is not the owner of the complementary documentl</td>
-      </tr>
-    </tbody>
-    </table>
-
-    #### Verification status: `retry_required`
-
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Attempt status: checks_inconclusive</span></td>
-      </tr>
-       <tr>
+      <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Specific to complementary document</span></td>
+             <tr>
         <td class="tg-0pky">61321</td>
         <td class="tg-0pky">complementary_document_video_blurry</td>
         <td class="tg-0pky">Applicant’s complementary document video is too blurry (mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
@@ -2077,13 +1821,33 @@ info:
     </tbody>
     </table>
 
-    # Security
+    ##### Attempt status: `terminated`
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
+        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+       <tr>
+        <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Attempt status: terminated</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">64001</td>
+        <td class="tg-0pky">forcibly_closed</td>
+        <td class="tg-0pky">You have created a new attempt or the verification has been anonymised while the URL was still valid</td>
+      </tr>
+    </tbody>
+    </table>
 
-    ## Data storage
-
-    You can configure data retention together with your account manager, in accordance with your purpose for using the data. At the end of this time, the identity verifications are anonymized, which means all personal or sensitive data are deleted. The default storage time is 90 days.
-    
-    If needed, you can also request the anonymization of an identity verification through the [anonymization endpoint](#tag/Identity-verifications/operation/anonymize_identity_verification). 
+    # API Standard
 
     ## Signature
     
@@ -2118,10 +1882,6 @@ info:
 
     For code samples, visit our [repository](https://github.com/ubbleai/code-samples).
 
-    # API standards
-
-    This section describes the standards we use to ensure the consistency of our API. 
-    
     ## Required tag
     ### required
     Attributes tagged as `required` **MUST** be present in requests and responses.
