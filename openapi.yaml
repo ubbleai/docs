@@ -1380,9 +1380,9 @@ info:
     .tg .tg-center{border-color:inherit;text-align:center;vertical-align:center}
     .tg .tg-y698{background-color:#c4c4c4;border-color:inherit;text-align:left;vertical-align:center}
     .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:center}
-    .one {width: 10%}
-    .two {width: 30%}
-    .three {width: 60%}
+    .one {width: 1%}
+    .two {width: 39%}
+    .three {width: 70%}
     </style>
 
     ### Verification status: `approved`
