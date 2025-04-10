@@ -17,10 +17,6 @@ info:
     
     For user-facing implementations, you can either redirect users to our hosted [web application](#tag/web-integration) or integrate our [SDK](#tag/sdk-integration) to create a custom mobile experience.
 
-    # Get started
-
-    Use the Identity Verification API and sandbox environment to test our product.
-    
     ## Before you begin
 
     - Reach out to your Account Manager or support.idv@checkout.com to get a test account. 
@@ -28,10 +24,12 @@ info:
     - Open the [dashboard](https://dashboard.ubble.ai/) and navigate to the "API credentials" tab to create your certificate. We use mutual Transport Layer Security. 
     You must then authenticate your calls by including your mTLS certificate in API calls.
 
+    [PLACEHOLDER mTLS]
+
     - To receive notifications for the various identity verification events triggered throughout the steps, you will need to define a
     webhook url. You will find all details about webhook implementation in the [webhook section](#section/Webhooks).
 
-    ## Create a test verification
+    <!-- # Create a test verification
 
     <div style="padding: 0px 0px 14px 14px ; background-color: #cfe5ff; border-color: #f8c92e; display: flex; align-items: center; border-radius: 0.5rem;">
       <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; vertical-align: center;">ⓘ</div>
@@ -92,11 +90,12 @@ info:
     The identity verification response contains a `_links.verification_url.href` field. 
     To test the identity verification process, open the URL on your browser and follow the instructions displayed.
 
+    -->
     
-    ## Applicant profiles
+    # Applicant profiles
 
     To perform verifications of an individual you will first need to create an applicant resource.   
-    An applicant is a physical person to be verified and should correspond to one of your user.
+    An applicant is a physical person to be verified and should correspond to one of your users.
 
     To create an applicant call the [Create an applicant](#tag/Applicants/operation/create_applicant) endpoint. 
     
@@ -139,12 +138,12 @@ info:
 
     Make a note of the identity verification `id` value in the response. You'll need it to create an attempt and retrieve the detailed results.
 
-    When you request to enable Identity Verification, your Account Manager provides you a user journey ID. For example, usj_tkoi5db4hryu5cei5vwoabr7we.
+    When you request to enable Identity Verification, your Account Manager provides you a user journey ID. For example, `usj_tkoi5db4hryu5cei5vwoabr7we`.
     You can configure the following elements of the flow:
     - The identity verification offer: highly automated, with manual reviews, or certified identity verification. 
-    - The documents you want to accept, if supported by checkout.com. 
+    - The documents you want to accept, if supported by Checkout.com. 
     - The data you want to extract from documents. 
-    - The guaranteed response time from checkout.com. 
+    - The guaranteed response time from Checkout.com. 
 
     You can also ask applicants to submit an additional document in addition to the main document. 
     For example you ask applicants to present a driving license in addition to their Identity document.
@@ -156,14 +155,14 @@ info:
     To create an attempt call the [Create an attempt](#tag/Identity-verifications/operation/create_attempt) endpoint using the `identity_verification_id` and provide the following fields:
     - `redirect_url` – The url the applicant will be redirected to once the capture is completed. 
     - Optionally:
-      - `phone_number` object – The user's mobile phone number for receiving the verification_url. 
+      - `phone_number` object – The user's mobile phone number for receiving the `verification_url`. 
       - `client_information` obejct – Used to pre-select fields in the web flow. This shortens the web flow and improves the experience.
 
     ## Redirect the user
 
     The create an attempt response contains a `_links.verification_url.href` field. 
-    To test the web flow, open the verification_url on your browser and follow the instructions.
-    To complete your integration, you will have to redirect applicants to our web application (see [Web integration](#tag/Web-integration)) or to use our SDK integration. 
+    To test the web flow, open the `verification_url` on your browser and follow the instructions.
+    To complete your integration, you will have to redirect applicants to our web application (see [Web integration](#section/Web-integration)) or to use our SDK integration. 
     
     ## Verify webhook notifications
 
@@ -207,7 +206,7 @@ info:
             <p>
           </td>
           <td style="width: 45%">
-            <p>Declined the applicant request.<p>
+            <p>Decline the applicant request.<p>
           </td>
         </tr>
         <tr>
@@ -259,7 +258,7 @@ info:
     </table>
 
     You can also use the `response_codes` to implement your own business rules. 
-    For more details and to decide on follow-up actions, see the [Reference info](#tag/Reference-info) section. 
+    For more details and to decide on follow-up actions, see the [Reference info](#section/Reference-info) section. 
 
     ## Retrieve detailed results
 
@@ -294,10 +293,10 @@ info:
 
     Make a note of the face authentication `id` value in the response. You'll need it to create an attempt and retrieve the detailed results.
 
-    When you request to enable Face authentication, your Account Manager provides you a user journey ID. For example, usj_tkoi5db4hryu5cei5vwoabr7we.
+    When you request to enable Face authentication, your Account Manager provides you a user journey ID. For example, `usj_tkoi5db4hryu5cei5vwoabr7we`.
     You can configure the following elements of the flow:
     - The offer: highly automated or with manual reviews. 
-    - The guaranteed response time from checkout.com. 
+    - The guaranteed response time from Checkout.com. 
 
     <div style="padding: 0px 10px 14px 14px ; background-color: #fff6d9; border-color: #f8c92e; color: #666; display: flex; align-items: center; border-radius: 0.5rem;">
     <div style="margin-right: 20px; margin-top: 14px; font-size: 30px; color: #f8c92e; vertical-align: center;">⚠</div>
@@ -311,18 +310,18 @@ info:
 
     ## Create an attempt
 
-    To create an attempt call the [Create an attempt](#tag/Face-authentications/operation/create_attempt) endpoint using the `face_authentication_id` and provide the following fields:
+    To create an attempt call the [Create an attempt](#tag/Face-authentications/operation/create_attempt_face_authentication) endpoint using the `face_authentication_id` and provide the following fields:
     - `redirect_url` – The url the applicant will be redirected to once the capture is completed. 
     - Optionally:
-      - `phone_number` object – The user's mobile phone number for receiving the verification_url. 
+      - `phone_number` object – The user's mobile phone number for receiving the `verification_url`. 
       - `client_information` obejct – Used to pre-select fields in the web flow. This shortens the web flow and improves the experience.
 
 
     ## Redirect the user
 
     The create an attempt response contains a `_links.verification_url.href` field. 
-    To test the web flow, open the verification_url on your browser and follow the instructions.
-    To complete your integration, you will have to redirect applicants to our web application (see [Web integration](#tag/Web-integration)) or to use our SDK integration. 
+    To test the web flow, open the `verification_url` on your browser and follow the instructions.
+    To complete your integration, you will have to redirect applicants to our web application (see [Web integration](#section/Web-integration)) or to use our SDK integration. 
     
     ## Verify webhook notifications
 
@@ -366,7 +365,7 @@ info:
             <p>
           </td>
           <td style="width: 45%">
-            <p>Declined the applicant request.<p>
+            <p>Decline the applicant request.<p>
           </td>
         </tr>
         <tr>
@@ -418,12 +417,12 @@ info:
     </table>
 
     You can also use the `response_codes` to implement your own business rules. 
-    For more details and to decide on follow-up actions, see the [Reference info](#tag/Reference-info) section. 
+    For more details and to decide on follow-up actions, see the [Reference info](#section/Reference-info) section. 
 
     
     ## Retrieve detailed results
 
-    To retrieve the detailed verification results, call the [Retrieve a face authentication](#tag/Identity-verifications/operation/retrieve_face_authentication) endpoint with the face authentication id value returned in the Create a face authentication response. 
+    To retrieve the detailed verification results, call the [Retrieve a face authentication](#tag/Face-authentications/operation/retrieve_face_authentication) endpoint with the face authentication id value returned in the Create a face authentication response. 
 
     If the status of the authentication is `approved` or `declined` you will find the new face image in the face object.  
 
@@ -439,7 +438,7 @@ info:
 
     # AML Verification
 
-    After you have successfully verified a, applicant's identity with Identity Verification, you can perform additional anti-money laundering (AML) verifications.
+    After you have successfully verified an applicant's identity with Identity Verification, you can perform additional anti-money laundering (AML) verifications.
 
     In partnership with ComplyAdvantage, we propose you a solution to:
 
@@ -448,7 +447,7 @@ info:
     - Manually investigate cases. 
     - Monitor an applicant and get notified if an alert is raised.
     
-    Please note that this offer is only available if you subscribed to both services, reach out your account manager if you have are interested.
+    Please note that this offer is only available if you have also subscribed to ComplyAdvantage services, reach out your account manager if you are interested.
         
     ## Create an AML verification
 
@@ -470,14 +469,14 @@ info:
     
     You can get an initial risk scoring based on a model that you can customize in the ComplyAdvantage dashboard. 
     
-    The applicant will then be scored before the AML verification has been performed. The result of this scoring will be available as a `risk_level` in the results and can be one of `LOW`, `MEDIUM`, `HIGH` or `PROHIBITED`.
+    The applicant will then be scored before the AML verification has been performed. The result of this scoring will be available as a `risk_level` and can be one of `LOW`, `MEDIUM`, `HIGH` or `PROHIBITED`.
     
-    If the risk level is `PROHIBITED`, the AML verification is not performed and the `status` is declined. If the risk level is `LOW`, `MEDIUM` or `HIGH`, the AML verification will be performed and the results will depend on raised alerts. See below for more details.
+    If the risk level is `PROHIBITED`, the AML verification is not performed and the `status` is declined. If the risk level is `LOW`, `MEDIUM` or `HIGH`, the AML verification will be performed and the results will depend on raised alerts. 
     
     ## Verify webhook notification
 
     Once you've configured your webhook receiver, you'll be notified of events that occur during the face authentication flow via webhooks. 
-    For more details see the [Webhook](#section/Webhooks) section. 
+    For more details see the [Webhook](#section/Webhooks/AML-verification-events) section. 
     
     Events include an event `type` and the verification `status`. You can rely on this information to decide on follow-up actions. 
 
@@ -516,7 +515,7 @@ info:
             <p>
           </td>
           <td style="width: 45%">
-            <p>Declined the applicant request.<p>
+            <p>Decline the applicant request.<p>
           </td>
         </tr>
         <tr>
@@ -537,7 +536,7 @@ info:
       </tbody>
     </table>
 
-    For more details and to decide on follow-up actions, see the [Reference info](#tag/Reference-info) section. 
+    For more details and to decide on follow-up actions, see the [Reference info](#section/Reference-info) section. 
     
     ## Manually investigate the results
     
@@ -550,7 +549,7 @@ info:
     
     You will be notified if you change the `status` of an AML verification. The `event_type` field will be set to `aml_onboarding_review_completed` and the body will include the new `status`.
 
-    ## Monitor a search
+    ## Monitor an applicant
     
     If an applicant is monitored, you be notified if an alert is raised. 
     
@@ -579,23 +578,21 @@ info:
 
     ### How it works
 
+    - Customize the user interface of the web flow, and check which languages are supported.
+
     - Set up your redirect integration using any of the following options:
       - Web redirection – App and website
       - iframes – App and website
       - WebView – App only
 
-    - Customize the user interface of the web flow, and check which languages are supported.
-
-    - Users who start their journey on your desktop website are directed to their monbile. 
-    After completing the flow, checkout.com redirects the user to a return page in your app or website, which is updated in real time.
-
+    - Applicants who start their journey on your desktop website are directed to their mobile. 
 
 
     ## Customize the verification user experience
 
     Contact your Account Manager or support.idv@checkout.com to customize the verification user experience.
 
-    You can <a href="https://www.ubble.ai/customise-your-ubble-experience/" target="_blank">customize</a> the following elements on the verification screen displayed to your users:
+    You can <a href="https://cdn.ubble.ai/config-cko/index.html" target="_blank">customize</a> the following elements on the verification screen displayed to your users:
     - logo
     - colors
     - fonts
@@ -603,14 +600,6 @@ info:
     - message prompt text
 
     You can also pre-select customer details when creating an attempt for the verification request. 
-
-    ## Mobile redirection
-
-    All desktop users are redirected to their mobile device to perform verification. This allows the verification to be performed in a more secure environment, and ensures that users are more likely to complete the verification journey.
-
-    After a user has completed the verification on their mobile, we redirect them back to their desktop environment by providing them with a QR code or SMS link.
-
-    For the SMS link, you can provide a `phone_number` value when [creating an identity verification](#operation/create_identity_verification) to pre-fill the phone number associated with the redirection.
 
     ## Redirect using web redirection
 
@@ -901,6 +890,18 @@ info:
 
     When the user completes or terminates their verification, use the `destroy()` method for handling user redirection.
 
+    ## Mobile redirection
+
+    Whatever your integration applicants who start their journey on your desktop website are redirected to their mobile. 
+    This allows the verification to be performed in a more secure environment, and applicants are more likely to complete the verification journey.
+
+    You can integrate our application in your desktop website using iframe or web redirection. 
+    Applicants will be offered two solutions to be redirected on their mobile: scanning a QR code or receiving a SMS. 
+    For the SMS link, you can provide a `phone_number` value when [creating an attempt](#operation/create_attempt) to pre-fill the phone number associated with the redirection.
+    
+    Our application is synchronised with the mobile flow. 
+    After an applicant has completed the verification on their mobile, we redirect them back to their desktop environment and your desktop website. 
+
     # SDK integration (Coming soon)
     
     # Webhooks
@@ -924,7 +925,7 @@ info:
     Our webhook calls are made with the following user agent: `CkoIdvNotifier`. Please make sure to allow this user agent in your firewall settings.
 
     ### Signature
-    For security reasons all our webhook calls are signed, please refer to [signature](#section/Signature) for more details.
+    For security reasons all our webhook calls are signed, please refer to [signature](#section/API-Standard/Signature) for more details.
 
     ## Identity verification events
 
@@ -1053,8 +1054,8 @@ info:
       |--------------------------|-----------------------------------------------------------------------------------------|
       | applicant_id             | ID of the applicant, useful to recognize them                                           |
       | external_applicant_id    | Your applicant ID, only if you updated it in the applicant object                       |
-      | aml_verification_id      | ID of the identity verification                                                         |
-      | status                   | status of the identity verification                                                     |
+      | aml_verification_id      | ID of the AML verification                                                         |
+      | status                   | status of the AML verification                                                     |
 
 
       **Example**
@@ -1170,9 +1171,7 @@ info:
     # Reference info
     
     ## Status transitions
-    
     ![](https://raw.githubusercontent.com/ubbleai/docs/refs/heads/staging/life_cycle_diagram.png)
-    
     
     ## Verification statuses
 
@@ -1189,7 +1188,7 @@ info:
             <p><code>created</code></p>
           </td>
           <td style="width: 35%">
-            <p>The verification has been created</p>
+            <p>The verification has been created. </p>
           </td>
         </tr>
         <tr>
@@ -1197,7 +1196,7 @@ info:
             <p><code>pending</code></p>
           </td>
           <td style="width: 35%">
-            <p>The verification_url is available</p>
+            <p>The verification_url is available.</p>
           </td>
         </tr>
         <tr>
@@ -1205,7 +1204,7 @@ info:
             <p><code>capture_in_progress</code></p>
           </td>
           <td style="width: 35%">
-            <p>The applicant is performing the capture</p>
+            <p>The applicant is performing the capture.</p>
           </td>
         </tr>
         <tr>
@@ -1213,7 +1212,7 @@ info:
             <p><code>checks_in_progress</code></p>
           </td>
           <td style="width: 35%">
-            <p>We're performing checks for the applicant's identity verification</p>
+            <p>We're performing checks for the applicant's identity verification.</p>
           </td>
         </tr>
         <tr>
@@ -1221,7 +1220,7 @@ info:
             <p><code>approved</code></p>
           </td>
           <td style="width: 35%">
-            <p>The applicant's identity was verified successfully</p>
+            <p>The applicant's identity was verified successfully.</p>
           </td>
         </tr>
         <tr>
@@ -1229,7 +1228,7 @@ info:
             <p><code>declined</code></p>
           </td>
           <td style="width: 35%">
-            <p>The applicant's identity was not verified due to an irregularity</p>
+            <p>The applicant's identity was not verified due to an irregularity. </p>
           </td>
         </tr>
         <tr>
@@ -1239,7 +1238,7 @@ info:
           <td style="width: 35%">
             <p>
               We could not perform all of the required checks for the applicant's
-              verification
+              verification. 
             </p>
         </tr>
         <tr>
@@ -1248,7 +1247,7 @@ info:
           </td>
           <td style="width: 35%">
             <p>
-            Specific to AML verification - A case has been opened and you should manually investigate it. 
+            An AML verification case has been opened, you should manually investigate it. 
             </p>
         </tr>
         <tr>
@@ -1258,7 +1257,7 @@ info:
           <td style="width: 35%">
             <p>
               The verification checks were not completed and a retry is no
-              longer available 
+              longer available. 
             </p>
           </td>
         </tr>
@@ -1267,7 +1266,7 @@ info:
             <p><code>refused</code></p>
           </td>
           <td style="width: 35%">
-            <p>The applicant refused to perform the verification</p>
+            <p>The applicant refused to perform the verification. </p>
           </td>
         </tr>
       </tbody>
@@ -1386,7 +1385,9 @@ info:
     .three {width: 60%}
     </style>
 
-    #### Verification status: `approved`
+    ### Verification status: `approved`
+    Attempt status: `completed`
+
     <table class="tg">
     <colgroup>
       <col class="one" />
@@ -1395,8 +1396,8 @@ info:
     </colgroup>
     <thead>
       <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr"><nobr>Code</nobr></th>
+        <th class="tg-fymr">Summary</th>
         <th class="tg-fymr">Description</th>
       </tr>
     </thead>
@@ -1409,7 +1410,8 @@ info:
     </tbody>
     </table>
 
-    #### Verification status: `declined`
+    ### Verification status: `retry_required`
+    Attempt status: `expired`
 
     <table class="tg">
     <colgroup>
@@ -1419,198 +1421,8 @@ info:
     </colgroup>
     <thead>
       <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <td class="tg-dvid" colspan="6"> Document not compliant</td>
-      <tr>
-        <td class="tg-0pky">62101</td>
-        <td class="tg-0pky">document_expired</td>
-        <td class="tg-0pky">Applicant presented an expired document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62102</td>
-        <td class="tg-0pky">document_not_accepted</td>
-        <td class="tg-0pky">Applicant presented a document which is not accepted</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62103</td>
-        <td class="tg-0pky">document_damaged</td>
-        <td class="tg-0pky">Applicant has submitted a damaged document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62104</td>
-        <td class="tg-0pky">unsupported_alphabet</td>
-        <td class="tg-0pky">Applicant has submitted a document containing an unsupported alphabet</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62201</td>
-        <td class="tg-0pky">document_photocopy</td>
-        <td class="tg-0pky">Applicant presented a photocopy of the document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62202</td>
-        <td class="tg-0pky">document_screenshot</td>
-        <td class="tg-0pky">Applicant presented the document on a screen</td>
-      </tr>
-      <td class="tg-dvid" colspan="6"> Identity fraud</td>
-      <tr>
-        <td class="tg-0pky">62301</td>
-        <td class="tg-0pky">document_counterfeit</td>
-        <td class="tg-0pky">Applicant has submitted a counterfeit or falsification</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62302</td>
-        <td class="tg-0pky">document_stolen</td>
-        <td class="tg-0pky">Applicant presented a document declared as stolen or lost</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62303</td>
-        <td class="tg-0pky">document_swap</td>
-        <td class="tg-0pky">Applicant presented the front and back of two different documents</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62304</td>
-        <td class="tg-0pky">face_mismatch</td>
-        <td class="tg-0pky">Applicant does not match the photograph of the document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62305</td>
-        <td class="tg-0pky">face_not_live</td>
-        <td class="tg-0pky">Applicant has presented a photography or a video of someone else's face on a screen or on a physical medium</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62306</td>
-        <td class="tg-0pky">face_alteration</td>
-        <td class="tg-0pky">Applicant has altered their appearance</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62307</td>
-        <td class="tg-0pky">videos_digital_alteration</td>
-        <td class="tg-0pky">Applicant has digitally altered the videos</td>
-      </tr>
-      <td class="tg-dvid" colspan="6">Specific to certified identity verification</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62399</td>
-        <td class="tg-0pky">generic_fraud</td>
-        <td class="tg-0pky">For certified identity verifications, all the Identity fraud codes are replaced by this generic code.</td>
-      </tr>
-      <td class="tg-dvid" colspan="6">Specific to face authentication</td>
-      <tr>
-        <td class="tg-0pky">62321</td>
-        <td class="tg-0pky">face_face_mismatch</td>
-        <td class="tg-0pky">Applicant of the face authentication is not the one who performed the identity verification</td>
-      </tr>
-      <td class="tg-dvid" colspan="6">Specific to complementary document verification</td>
-      <tr>
-        <td class="tg-0pky">62121</td>
-        <td class="tg-0pky">complementary_document_expired</td>
-        <td class="tg-0pky">Applicant presented an expired complementary document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62122</td>
-        <td class="tg-0pky">complementary_document_not_accepted</td>
-        <td class="tg-0pky">Applicant presented an complementary document which is not accepted</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62123</td>
-        <td class="tg-0pky">complementary_document_damaged</td>
-        <td class="tg-0pky">Applicant has submitted a damaged complementary document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62221</td>
-        <td class="tg-0pky">complementary_document_photocopy</td>
-        <td class="tg-0pky">Applicant presented a photocopy of the complementary document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62222</td>
-        <td class="tg-0pky">complementary_document_screenshot</td>
-        <td class="tg-0pky">Applicant presented the complementary document on a screen</td>
-      <tr>
-        <td class="tg-0pky">62331</td>
-        <td class="tg-0pky">complementary_document_counterfeit</td>
-        <td class="tg-0pky">Applicant has submitted a counterfeit or falsification as an complementary document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62332</td>
-        <td class="tg-0pky">complementary_document_stolen</td>
-        <td class="tg-0pky">Applicant presented an complementary document declared as stolen or lost</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62333</td>
-        <td class="tg-0pky">complementary_document_swap</td>
-        <td class="tg-0pky">Applicant presented the front and back of two different documents</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62334</td>
-        <td class="tg-0pky">complementary_document_mismatch</td>
-        <td class="tg-0pky">Applicant is not the owner of the complementary documentl</td>
-      </tr>
-     <td class="tg-dvid" colspan="6">Suspicious behavior</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62401</td>
-        <td class="tg-0pky">declared_identity_mismatch</td>
-        <td class="tg-0pky">Applicant’s identity does not match with the expected one</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62402</td>
-        <td class="tg-0pky">suspicious_device</td>
-        <td class="tg-0pky">Applicant used a device that has been technically altered</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62403</td>
-        <td class="tg-0pky">consent_unclear</td>
-        <td class="tg-0pky">Applicant seems to have performed the capture against their will</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">62404</td>
-        <td class="tg-0pky">multiple_documents</td>
-        <td class="tg-0pky">Applicant show multiple documents</td>
-      </tr>
-    </tbody>
-    </table>
-
-    #### Verification status: `refused`
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="tg-0pky">63001</td>
-        <td class="tg-0pky">applicant_refusal</td>
-        <td class="tg-0pky">Applicant explicitly refused to do the verification process by clicking on the dedicated button.</td>
-      </tr>
-    </tbody>
-    </table>
-
-    #### Verification status: `retry_required`
-    
-    ##### Attempt status: `expired`
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr"><nobr>code</nobr></th>
+        <th class="tg-fymr">summary</th>
         <th class="tg-fymr">Description</th>
       </tr>
     </thead>
@@ -1623,7 +1435,8 @@ info:
     </tbody>
     </table>
 
-    ##### Attempt status: `capture_aborted`
+    ### Verification status: `retry_required` 
+    Attempt status: `capture_aborted`
 
     <table class="tg">
     <colgroup>
@@ -1633,9 +1446,10 @@ info:
     </colgroup>
     <thead>
       <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr"><nobr>code</nobr></th>
+        <th class="tg-fymr">summary</th>
         <th class="tg-fymr">Description</th>
+      </tr>
     </thead>
     <tbody>
       <tr>
@@ -1678,21 +1492,21 @@ info:
         <td class="tg-0pky">sms_not_received</td>
         <td class="tg-0pky">Applicant did not receive the SMS</td>
       </tr>
-      <td class="tg-dvid" colspan="6"> Specific to certified identity verification</td>
       <tr>
         <td class="tg-0pky">61314</td>
         <td class="tg-0pky">document_challenge_timeout</td>
-        <td class="tg-0pky">Applicant failed to meet the document challenge and the verification expired (only for certified identity verification)</td>
+        <td class="tg-0pky">Applicant failed to meet the document randomized challenge and the verification expired (only for certified identity verification)</td>
       </tr>
       <tr>
         <td class="tg-0pky">61413</td>
         <td class="tg-0pky">face_challenge_timeout</td>
-        <td class="tg-0pky">Applicant failed to meet the face challenge and the verification expired (only for certified identity verification)</td>
+        <td class="tg-0pky">Applicant failed to meet the face randomized challenge and the verification expired (only for certified identity verification)</td>
       </tr>
     </tbody>
     </table>
+      
+      Attempt status: `checks_inconclusive`
 
-      ##### Attempt status: `checks_inconclusive`
       <table class="tg">
      <colgroup>
       <col class="one" />
@@ -1787,8 +1601,200 @@ info:
         <td class="tg-0pky">corrupted_videos</td>
         <td class="tg-0pky">The received videos cannot be played</td>
       </tr>
-      <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Specific to complementary document</span></td>
-             <tr>
+    </tbody>
+    </table>
+
+    ### Verification status: `declined`
+    Attempt status: `completed`
+
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr>Code</nobr></th>
+        <th class="tg-fymr">Summary</th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Document non compliant</span></td>
+    <tbody>
+      <tr>
+        <td class="tg-0pky">62101</td>
+        <td class="tg-0pky">document_expired</td>
+        <td class="tg-0pky">Applicant presented an expired document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62102</td>
+        <td class="tg-0pky">document_not_accepted</td>
+        <td class="tg-0pky">Applicant presented a document which is not accepted</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62103</td>
+        <td class="tg-0pky">document_damaged</td>
+        <td class="tg-0pky">Applicant has submitted a damaged document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62104</td>
+        <td class="tg-0pky">unsupported_alphabet</td>
+        <td class="tg-0pky">Applicant has submitted a document containing an unsupported alphabet</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62201</td>
+        <td class="tg-0pky">document_photocopy</td>
+        <td class="tg-0pky">Applicant presented a photocopy of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62202</td>
+        <td class="tg-0pky">document_screenshot</td>
+        <td class="tg-0pky">Applicant presented the document on a screen</td>
+      </tr>
+      <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Identity fraud</span></td>
+    </tbody>
+    <tbody>
+        <td class="tg-0pky">62301</td>
+        <td class="tg-0pky">document_counterfeit</td>
+        <td class="tg-0pky">Applicant has submitted a counterfeit or falsification</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62302</td>
+        <td class="tg-0pky">document_stolen</td>
+        <td class="tg-0pky">Applicant presented a document declared as stolen or lost</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62303</td>
+        <td class="tg-0pky">document_swap</td>
+        <td class="tg-0pky">Applicant presented the front and back of two different documents</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62304</td>
+        <td class="tg-0pky">face_mismatch</td>
+        <td class="tg-0pky">Applicant does not match the photograph of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62305</td>
+        <td class="tg-0pky">face_not_live</td>
+        <td class="tg-0pky">Applicant has presented a photography or a video of someone else's face on a screen or on a physical medium</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62306</td>
+        <td class="tg-0pky">face_alteration</td>
+        <td class="tg-0pky">Applicant has altered their appearance</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62307</td>
+        <td class="tg-0pky">videos_digital_alteration</td>
+        <td class="tg-0pky">Applicant has digitally altered the videos</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62321</td>
+        <td class="tg-0pky">face_face_mismatch</td>
+        <td class="tg-0pky">Applicant of the face authentication is not the one who performed the identity verification</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62399</td>
+        <td class="tg-0pky">generic_fraud</td>
+        <td class="tg-0pky">For certified identity verifications, all the Identity fraud codes are replaced by this generic code.</td>
+      </tr>
+      <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Prohibited behavior</span></td>
+    </tbody>
+    <tbody>
+      <tr>
+        <td class="tg-0pky">62401</td>
+        <td class="tg-0pky">declared_identity_mismatch</td>
+        <td class="tg-0pky">Applicant’s identity does not match with the expected one</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62402</td>
+        <td class="tg-0pky">suspicious_device</td>
+        <td class="tg-0pky">Applicant used a device that has been technically altered</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62403</td>
+        <td class="tg-0pky">consent_unclear</td>
+        <td class="tg-0pky">Applicant seems to have performed the capture against their will</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62404</td>
+        <td class="tg-0pky">multiple_documents</td>
+        <td class="tg-0pky">Applicant presented multiple documents</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ### Verification status: `refused`
+    Attempt status: `capture_refused`
+
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr>code</nobr></th>
+        <th class="tg-fymr">summary</th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-0pky">63001</td>
+        <td class="tg-0pky">applicant_refusal</td>
+        <td class="tg-0pky">Applicant explicitly refused to do the verification process by clicking on the dedicated button.</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ### Verification status: N/A
+    Attempt status: `terminated`
+
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr>code</nobr></th>
+        <th class="tg-fymr">summary</th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+       <tr>
+      </tr>
+      <tr>
+        <td class="tg-0pky">64001</td>
+        <td class="tg-0pky">forcibly_closed</td>
+        <td class="tg-0pky">You have created a new attempt or the verification has been anonymised while the URL was still valid</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ### Complementary document
+    If you request a complementary document you may receive the following codes. 
+
+     <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr>code</nobr></th>
+        <th class="tg-fymr">summary</th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+          <tr>
         <td class="tg-0pky">61321</td>
         <td class="tg-0pky">complementary_document_video_blurry</td>
         <td class="tg-0pky">Applicant’s complementary document video is too blurry (mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
@@ -1818,34 +1824,53 @@ info:
         <td class="tg-0pky">complementary_document_not_tilted</td>
         <td class="tg-0pky">Applicant did not present a dynamic view of the complementary document</td>
       </tr>
+      <tr>
+        <td class="tg-0pky">62121</td>
+        <td class="tg-0pky">complementary_document_expired</td>
+        <td class="tg-0pky">Applicant presented an expired complementary document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62122</td>
+        <td class="tg-0pky">complementary_document_not_accepted</td>
+        <td class="tg-0pky">Applicant presented an complementary document which is not accepted</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62123</td>
+        <td class="tg-0pky">complementary_document_damaged</td>
+        <td class="tg-0pky">Applicant has submitted a damaged complementary document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62221</td>
+        <td class="tg-0pky">complementary_document_photocopy</td>
+        <td class="tg-0pky">Applicant presented a photocopy of the complementary document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62222</td>
+        <td class="tg-0pky">complementary_document_screenshot</td>
+        <td class="tg-0pky">Applicant presented the complementary document on a screen</td>
+      <tr>
+        <td class="tg-0pky">62331</td>
+        <td class="tg-0pky">complementary_document_counterfeit</td>
+        <td class="tg-0pky">Applicant has submitted a counterfeit or falsification as an complementary document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62332</td>
+        <td class="tg-0pky">complementary_document_stolen</td>
+        <td class="tg-0pky">Applicant presented an complementary document declared as stolen or lost</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62333</td>
+        <td class="tg-0pky">complementary_document_swap</td>
+        <td class="tg-0pky">Applicant presented the front and back of two different documents</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">62334</td>
+        <td class="tg-0pky">complementary_document_mismatch</td>
+        <td class="tg-0pky">Applicant is not the owner of the complementary documentl</td>
+      </tr>
     </tbody>
     </table>
 
-    ##### Attempt status: `terminated`
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-       <tr>
-        <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Attempt status: terminated</span></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">64001</td>
-        <td class="tg-0pky">forcibly_closed</td>
-        <td class="tg-0pky">You have created a new attempt or the verification has been anonymised while the URL was still valid</td>
-      </tr>
-    </tbody>
-    </table>
 
     # API Standard
 
