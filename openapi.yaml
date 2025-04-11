@@ -1385,7 +1385,7 @@ info:
 
     ### Attempt status: `completed`
 
-    Verification status: `approved`
+    #### Verification status: `approved`
 
     <table class="tg">
     <colgroup>
@@ -1409,7 +1409,7 @@ info:
     </tbody>
     </table>
 
-    Verification status: `declined`
+    #### Verification status: `declined`
 
     <table class="tg">
     <colgroup>
@@ -1529,8 +1529,9 @@ info:
     </tbody>
     </table>
 
-    Verification status: not impacted
-    These codes should be considered as risk signals
+    #### Verification status not impacted
+    
+    These codes should be considered as risk signals. 
 
     <table class="tg">
     <colgroup>
@@ -1555,7 +1556,7 @@ info:
     </table>
 
     ### Attempt status: `expired`
-    Verification status: `retry_required`
+    #### Verification status: `retry_required`
 
     <table class="tg">
     <colgroup>
@@ -1580,7 +1581,7 @@ info:
     </table>
 
     ### Attempt status: `capture_refused`
-    Verification status: `refused`
+    #### Verification status: `refused`
 
 
     <table class="tg">
@@ -1606,7 +1607,7 @@ info:
     </table>
 
     ### Attempt status: `capture_aborted`
-    Verification status: `retry_required` 
+    #### Verification status: `retry_required` 
     
     <table class="tg">
     <colgroup>
@@ -1676,7 +1677,7 @@ info:
     </table>
       
     ### Attempt status: `capture_aborted`
-    Verification status: `retry_required` 
+    #### Verification status: `retry_required` 
 
       <table class="tg">
      <colgroup>
@@ -1776,7 +1777,7 @@ info:
     </table>
 
     ### Attempt status: `terminated`
-    Verification status: `pending` or `inconclusive`
+    #### Verification status: `pending` or `inconclusive`
     
 
     <table class="tg">
