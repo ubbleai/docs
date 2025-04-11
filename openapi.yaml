@@ -24,8 +24,6 @@ info:
     - Open the [dashboard](https://dashboard.ubble.ai/) and navigate to the "API credentials" tab to create your certificate. We use mutual Transport Layer Security. 
     You must then authenticate your calls by including your mTLS certificate in API calls.
 
-    [PLACEHOLDER mTLS]
-
     - To receive notifications for the various identity verification events triggered throughout the steps, you will need to define a
     webhook url. You will find all details about webhook implementation in the [webhook section](#section/Webhooks).
 
@@ -1385,8 +1383,9 @@ info:
     .three {width: 70%}
     </style>
 
-    ### Verification status: `approved`
-    Attempt status: `completed`
+    ### Attempt status: `completed`
+
+    Verification status: `approved`
 
     <table class="tg">
     <colgroup>
@@ -1410,202 +1409,7 @@ info:
     </tbody>
     </table>
 
-    ### Verification status: `retry_required`
-    Attempt status: `expired`
-
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr>code</nobr></th>
-        <th class="tg-fymr">summary</th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="tg-0pky">61101</td>
-        <td class="tg-0pky">applicant_never_started</td>
-        <td class="tg-0pky">Applicant was not redirected to the application and never started the flow</td>
-      </tr>
-    </tbody>
-    </table>
-
-    ### Verification status: `retry_required` 
-    Attempt status: `capture_aborted`
-
-    <table class="tg">
-    <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="tg-fymr"><nobr>code</nobr></th>
-        <th class="tg-fymr">summary</th>
-        <th class="tg-fymr">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="tg-0pky">61111</td>
-        <td class="tg-0pky">applicant_not_ready</td>
-        <td class="tg-0pky">Applicant explicitly stated that they wanted to perform the identity verification later by clicking on the dedicated button</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61112</td>
-        <td class="tg-0pky">applicant_no_document</td>
-        <td class="tg-0pky">Applicant explicitly stated that they did not have their document with them by clicking on the dedicated button</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61113</td>
-        <td class="tg-0pky">camera_access_refused</td>
-        <td class="tg-0pky">Applicant did not give access to the camera despite the dedicated instructions</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61121</td>
-        <td class="tg-0pky">applicant_drop</td>
-        <td class="tg-0pky">Applicant left the process before the capture phase and the verification URL expired (by default the expiration time is 15 minutes)</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61201</td>
-        <td class="tg-0pky">connexion_insufficient</td>
-        <td class="tg-0pky">Applicant did not have a sufficient connexion to perform the capture</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61202</td>
-        <td class="tg-0pky">browser_not_supported</td>
-        <td class="tg-0pky">Applicant’s browser was not suitable for video streaming</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61203</td>
-        <td class="tg-0pky">camera_not_found</td>
-        <td class="tg-0pky">Applicant’s device did not have any camera</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61205</td>
-        <td class="tg-0pky">sms_not_received</td>
-        <td class="tg-0pky">Applicant did not receive the SMS</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61314</td>
-        <td class="tg-0pky">document_challenge_timeout</td>
-        <td class="tg-0pky">Applicant failed to meet the document randomized challenge and the verification expired (only for certified identity verification)</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61413</td>
-        <td class="tg-0pky">face_challenge_timeout</td>
-        <td class="tg-0pky">Applicant failed to meet the face randomized challenge and the verification expired (only for certified identity verification)</td>
-      </tr>
-    </tbody>
-    </table>
-      
-      Attempt status: `checks_inconclusive`
-
-      <table class="tg">
-     <colgroup>
-      <col class="one" />
-      <col class="two" />
-      <col class="three" />
-      </colgroup>
-     <thead>
-      <tr>
-        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-        <th class="tg-fymr"><code>summary</code></th>
-        <th class="tg-fymr">Description</th>
-      </thead>
-     <tbody>
-     <tr>
-       <tr>
-        <td class="tg-0pky">61201</td>
-        <td class="tg-0pky">connexion_insufficient</td>
-        <td class="tg-0pky">Applicant did not have a sufficient connexion to perform the capture</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61301</td>
-        <td class="tg-0pky">document_video_blurry</td>
-        <td class="tg-0pky">Applicant’s document video is too blurry<br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61302</td>
-        <td class="tg-0pky">document_video_lighting_issue</td>
-        <td class="tg-0pky">Applicant performed the document capture under poor lighting conditions</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61310</td>
-        <td class="tg-0pky">document_front_not_captured</td>
-        <td class="tg-0pky">Applicant has not captured the front of the document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61311</td>
-        <td class="tg-0pky">document_back_not_captured</td>
-        <td class="tg-0pky">Applicant has not captured the back of the document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61312</td>
-        <td class="tg-0pky">document_partially_hidden</td>
-        <td class="tg-0pky">Applicant hides part of the document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61313</td>
-        <td class="tg-0pky">document_not_tilted</td>
-        <td class="tg-0pky">Applicant did not present a dynamic view of the document</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61315</td>
-        <td class="tg-0pky">document_barcode_unreadable</td>
-        <td class="tg-0pky">The barcode of the document is unreadable</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61401</td>
-        <td class="tg-0pky">face_video_blurry</td>
-        <td class="tg-0pky">Applicant’s video of their face is too blurry <br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61402</td>
-        <td class="tg-0pky">face_video_lighting_issue</td>
-        <td class="tg-0pky">Applicant performed their identity verification under poor lighting conditions</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61410</td>
-        <td class="tg-0pky">face_not_captured</td>
-        <td class="tg-0pky">Applicant has not presented a face</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61411</td>
-        <td class="tg-0pky">face_partially_hidden</td>
-        <td class="tg-0pky">Applicant did not show the full front view of their face</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61412</td>
-        <td class="tg-0pky">face_not_turned</td>
-        <td class="tg-0pky">Applicant did not move to prove the liveness</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61414</td>
-        <td class="tg-0pky">various_faces_detected</td>
-        <td class="tg-0pky">Applicant also captured another person face</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61901</td>
-        <td class="tg-0pky">internal_error</td>
-        <td class="tg-0pky">An internal error prevents us from completing the verification, we do our best to reduce the occurrence of this case</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61911</td>
-        <td class="tg-0pky">corrupted_videos</td>
-        <td class="tg-0pky">The received videos cannot be played</td>
-      </tr>
-    </tbody>
-    </table>
-
-    ### Verification status: `declined`
-    Attempt status: `completed`
+    Verification status: `declined`
 
     <table class="tg">
     <colgroup>
@@ -1725,8 +1529,59 @@ info:
     </tbody>
     </table>
 
-    ### Verification status: `refused`
-    Attempt status: `capture_refused`
+    Verification status: not impacted
+    These codes should be considered as risk signals
+
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr>code</nobr></th>
+        <th class="tg-fymr">summary</th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-0pky">65001</td>
+        <td class="tg-0pky">various_faces_detected</td>
+        <td class="tg-0pky">Applicant also captured another person face</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ### Attempt status: `expired`
+    Verification status: `retry_required`
+
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr>code</nobr></th>
+        <th class="tg-fymr">summary</th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-0pky">61101</td>
+        <td class="tg-0pky">applicant_never_started</td>
+        <td class="tg-0pky">Applicant was not redirected to the application and never started the flow</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ### Attempt status: `capture_refused`
+    Verification status: `refused`
+
 
     <table class="tg">
     <colgroup>
@@ -1750,8 +1605,179 @@ info:
     </tbody>
     </table>
 
-    ### Verification status: N/A
-    Attempt status: `terminated`
+    ### Attempt status: `capture_aborted`
+    Verification status: `retry_required` 
+    
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr>code</nobr></th>
+        <th class="tg-fymr">summary</th>
+        <th class="tg-fymr">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-0pky">61111</td>
+        <td class="tg-0pky">applicant_not_ready</td>
+        <td class="tg-0pky">Applicant explicitly stated that they wanted to perform the identity verification later by clicking on the dedicated button</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61112</td>
+        <td class="tg-0pky">applicant_no_document</td>
+        <td class="tg-0pky">Applicant explicitly stated that they did not have their document with them by clicking on the dedicated button</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61113</td>
+        <td class="tg-0pky">camera_access_refused</td>
+        <td class="tg-0pky">Applicant did not give access to the camera despite the dedicated instructions</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61121</td>
+        <td class="tg-0pky">applicant_drop</td>
+        <td class="tg-0pky">Applicant left the process before the capture phase and the verification URL expired (by default the expiration time is 15 minutes)</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61201</td>
+        <td class="tg-0pky">connexion_insufficient</td>
+        <td class="tg-0pky">Applicant did not have a sufficient connexion to perform the capture</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61202</td>
+        <td class="tg-0pky">browser_not_supported</td>
+        <td class="tg-0pky">Applicant’s browser was not suitable for video streaming</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61203</td>
+        <td class="tg-0pky">camera_not_found</td>
+        <td class="tg-0pky">Applicant’s device did not have any camera</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61205</td>
+        <td class="tg-0pky">sms_not_received</td>
+        <td class="tg-0pky">Applicant did not receive the SMS</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61314</td>
+        <td class="tg-0pky">document_challenge_timeout</td>
+        <td class="tg-0pky">Applicant failed to meet the document randomized challenge and the verification expired (only for certified identity verification)</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61413</td>
+        <td class="tg-0pky">face_challenge_timeout</td>
+        <td class="tg-0pky">Applicant failed to meet the face randomized challenge and the verification expired (only for certified identity verification)</td>
+      </tr>
+    </tbody>
+    </table>
+      
+    ### Attempt status: `capture_aborted`
+    Verification status: `retry_required` 
+
+      <table class="tg">
+     <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+      </colgroup>
+     <thead>
+      <tr>
+        <th class="tg-fymr"><nobr><code>code</code></nobr></th>
+        <th class="tg-fymr"><code>summary</code></th>
+        <th class="tg-fymr">Description</th>
+      </thead>
+     <tbody>
+     <tr>
+       <tr>
+        <td class="tg-0pky">61201</td>
+        <td class="tg-0pky">connexion_insufficient</td>
+        <td class="tg-0pky">Applicant did not have a sufficient connexion to perform the capture</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61301</td>
+        <td class="tg-0pky">document_video_blurry</td>
+        <td class="tg-0pky">Applicant’s document video is too blurry<br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61302</td>
+        <td class="tg-0pky">document_video_lighting_issue</td>
+        <td class="tg-0pky">Applicant performed the document capture under poor lighting conditions</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61310</td>
+        <td class="tg-0pky">document_front_not_captured</td>
+        <td class="tg-0pky">Applicant has not captured the front of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61311</td>
+        <td class="tg-0pky">document_back_not_captured</td>
+        <td class="tg-0pky">Applicant has not captured the back of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61312</td>
+        <td class="tg-0pky">document_partially_hidden</td>
+        <td class="tg-0pky">Applicant hides part of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61313</td>
+        <td class="tg-0pky">document_not_tilted</td>
+        <td class="tg-0pky">Applicant did not present a dynamic view of the document</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61315</td>
+        <td class="tg-0pky">document_barcode_unreadable</td>
+        <td class="tg-0pky">The barcode of the document is unreadable</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61401</td>
+        <td class="tg-0pky">face_video_blurry</td>
+        <td class="tg-0pky">Applicant’s video of their face is too blurry <br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61402</td>
+        <td class="tg-0pky">face_video_lighting_issue</td>
+        <td class="tg-0pky">Applicant performed their identity verification under poor lighting conditions</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61410</td>
+        <td class="tg-0pky">face_not_captured</td>
+        <td class="tg-0pky">Applicant has not presented a face</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61411</td>
+        <td class="tg-0pky">face_partially_hidden</td>
+        <td class="tg-0pky">Applicant did not show the full front view of their face</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61412</td>
+        <td class="tg-0pky">face_not_turned</td>
+        <td class="tg-0pky">Applicant did not move to prove the liveness</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61414</td>
+        <td class="tg-0pky">various_faces_detected</td>
+        <td class="tg-0pky">DEPRECATED</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61901</td>
+        <td class="tg-0pky">internal_error</td>
+        <td class="tg-0pky">An internal error prevents us from completing the verification, we do our best to reduce the occurrence of this case</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61911</td>
+        <td class="tg-0pky">corrupted_videos</td>
+        <td class="tg-0pky">The received videos cannot be played</td>
+      </tr>
+    </tbody>
+    </table>
+
+    ### Attempt status: `terminated`
+    Verification status: `pending` or `inconclusive`
+    
 
     <table class="tg">
     <colgroup>
