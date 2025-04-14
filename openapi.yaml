@@ -1879,7 +1879,7 @@ info:
     ```json
     {
       "external_applicant_id": "eaplt_10000000000000000000000000",
-      "email": "toby.arden@example.com"
+      "email": "toby.smith@example.com"
     }
     ```
     
@@ -1891,7 +1891,7 @@ info:
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
       "external_applicant_id": "eaplt_10000000000000000000000000",
-      "email": "toby.arden@example.com",
+      "email": "toby.smith@example.com",
       "_links": {
         "self": {
           "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
@@ -1915,7 +1915,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7we",
       "declared_data": {
-        "name": "Toby Arden"
+        "name": "Toby Daniel Smith"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -1934,7 +1934,7 @@ info:
       "status": "pending",
       "response_codes": [],
       "declared_data": {
-        "name": "Toby Arden"
+        "name": "Toby Daniel Smith"
       },
       "documents": [],
       "redirect_url": "https://example.com?query-param=hello",
@@ -2024,20 +2024,39 @@ info:
         }
       ],
       "verified_identity": {
-        "full_name": "Toby Arden",
-        "birth_date": "1984-10-02"
+          "first_names": "Toby, Daniel",
+          "full_name": "Toby Daniel Smith",
+          "last_name": "Smith",
+          "birth_date": "1984-10-02",
+          "birth_place": "Paris",
+          "nationality": "FR",
+          "gender": "M"
       },
       "declared_data": {
-        "name": "Toby Arden"
+        "name": "Toby Daniel Smith"
       },
       "documents": [
-        {
-          "full_name": "Toby Arden",
-          "birth_date": "1984-10-02",
+       {
+          "full_name": "Toby Daniel Smith",
+          "first_names": "Toby, Daniel",
+          "last_name": "Smith",
+          "last_name_at_birth": "Smith",
           "document_type": "ID",
-          "document_issuing_country": "US",
+          "document_issuing_country": "FR",
           "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
-        }
+          "back_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50554"
+          "personal_number": "TIN123456789",
+          "tax_identification_number": "TIN123456789",
+          "document_number": "A12345678",
+          "document_expiry_date": "2035-03-25",
+          "document_issue_date": "2025-03-26",
+          "document_issue_place": "Paris",
+          "document_mrz": "P<FRASMITHJOHNDANIEL<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+          "birth_date": "1984-10-02",
+          "birth_place": "Paris",
+          "nationality": "FR",
+          "gender": "M"
+        },
       ],
       "face": {
         "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
@@ -2130,7 +2149,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr8hg",
       "declared_data": {
-        "name": "Jia Tsang"
+        "name": "Toby Daniel Smith"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -2149,7 +2168,7 @@ info:
       "status": "pending",
       "response_codes": [],
       "declared_data": {
-        "name": "Jia Tsang"
+        "name": "Toby Daniel Smith"
       },
       "documents": [],
       "redirect_url": "https://example.com?query-param=hello",
@@ -2287,20 +2306,39 @@ info:
         }
       ],
       "verified_identity": {
-        "full_name": "Jia Tsang",
-        "birth_date": "1984-10-02"
+          "first_names": "Toby, Daniel",
+          "full_name": "Toby Daniel Smith",
+          "last_name": "Smith",
+          "birth_date": "1984-10-02",
+          "birth_place": "Paris",
+          "nationality": "FR",
+          "gender": "M"
       },
       "declared_data": {
-        "name": "Jia Tsang"
+        "name": "Toby Daniel Smith"
       },
       "documents": [
-        {
-          "full_name": "Jia Tsang",
-          "birth_date": "1984-10-02",
+       {
+          "full_name": "Toby Daniel Smith",
+          "first_names": "Toby, Daniel",
+          "last_name": "Smith",
+          "last_name_at_birth": "Smith",
           "document_type": "ID",
-          "document_issuing_country": "US",
+          "document_issuing_country": "FR",
           "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
-        }
+          "back_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50554"
+          "personal_number": "TIN123456789",
+          "tax_identification_number": "TIN123456789",
+          "document_number": "A12345678",
+          "document_expiry_date": "2035-03-25",
+          "document_issue_date": "2025-03-26",
+          "document_issue_place": "Paris",
+          "document_mrz": "P<FRASMITHJOHNDANIEL<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+          "birth_date": "1984-10-02",
+          "birth_place": "Paris",
+          "nationality": "FR",
+          "gender": "M"
+        },
       ],
       "face": {
         "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
@@ -2393,7 +2431,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr7wf",
       "declared_data": {
-        "name": "Jia Tsang"
+        "name": "Toby Daniel Smith"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -2412,7 +2450,7 @@ info:
       "status": "pending",
       "response_codes": [ ],
       "declared_data": {
-        "name": "Jia Tsang"
+        "name": "Toby Daniel Smith"
       },
       "documents": [ ],
       "redirect_url": "https://example.com?query-param=hello",
@@ -2550,20 +2588,39 @@ info:
         }
       ],
       "verified_identity": {
-        "full_name": "Jia Tsang",
-        "birth_date": "1984-10-02"
+          "first_names": "Toby, Daniel",
+          "full_name": "Toby Daniel Smith",
+          "last_name": "Smith",
+          "birth_date": "1984-10-02",
+          "birth_place": "Paris",
+          "nationality": "FR",
+          "gender": "M"
       },
       "declared_data": {
-        "name": "Jia Tsang"
+        "name": "Toby Daniel Smith"
       },
       "documents": [
-        {
-          "full_name": "Jia Tsang",
-          "birth_date": "1984-10-02",
+       {
+          "full_name": "Toby Daniel Smith",
+          "first_names": "Toby, Daniel",
+          "last_name": "Smith",
+          "last_name_at_birth": "Smith",
           "document_type": "ID",
-          "document_issuing_country": "US",
+          "document_issuing_country": "FR",
           "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
-        }
+          "back_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50554"
+          "personal_number": "TIN123456789",
+          "tax_identification_number": "TIN123456789",
+          "document_number": "A12345678",
+          "document_expiry_date": "2035-03-25",
+          "document_issue_date": "2025-03-26",
+          "document_issue_place": "Paris",
+          "document_mrz": "P<FRASMITHJOHNDANIEL<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+          "birth_date": "1984-10-02",
+          "birth_place": "Paris",
+          "nationality": "FR",
+          "gender": "M"
+        },
       ],
       "face": {
         "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
@@ -2766,8 +2823,8 @@ info:
         {
           "full_name": "Hannah Bret",
           "birth_date": "1999-12-02",
-          "document_type": "ID",
-          "document_issuing_country": "US",
+          "document_type": "Passport",
+          "document_issuing_country": "FR",
           "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
         }
       ],
@@ -2828,7 +2885,7 @@ info:
     ```json
     {
       "external_applicant_id": "eaplt_61203A62103000000000000000",
-      "email": "toby.arden@example.com"
+      "email": "toby.smith@example.com"
     }
     ```   
     #### Response example
@@ -2839,7 +2896,7 @@ info:
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
       "external_applicant_id": "eaplt_61203A62103000000000000000",
-      "email": "toby.arden@example.com",
+      "email": "toby.smith@example.com",
       "_links": {
         "self": {
           "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr1ab"
@@ -3028,8 +3085,8 @@ info:
         {
           "full_name": "Ali Farid",
           "birth_date": "1990-12-20",
-          "document_type": "ID",
-          "document_issuing_country": "US",
+          "document_type": "Passport",
+          "document_issuing_country": "FR",
           "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
         }
       ],
@@ -3091,7 +3148,7 @@ info:
     ```json
     {
       "external_applicant_id": "eaplt_61411I62403000000000000000",
-      "email": "toby.arden@example.com"
+      "email": "toby.smith@example.com"
     }
     ```   
     #### Response example
@@ -3102,7 +3159,7 @@ info:
       "created_on": "2023-07-21T17:32:28Z",
       "modified_on": "2023-07-21T17:40:32Z",
       "external_applicant_id": "eaplt_61411I62403000000000000000",
-      "email": "toby.arden@example.com",
+      "email": "toby.smith@example.com",
       "_links": {
         "self": {
           "href": "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr6ft"
@@ -3126,7 +3183,7 @@ info:
     {
       "applicant_id": "aplt_tkoi5db4hryu5cei5vwoabr6ft",
       "declared_data": {
-        "name": "Toby Arden"
+        "name": "Toby Daniel Smith"
       },
       "redirect_url": "https://example.com?query-param=hello",
       "webhook_url": "https://my.api/events/"
@@ -3144,7 +3201,7 @@ info:
       "status": "pending",
       "response_codes": [],
       "declared_data": {
-        "name": "Toby Arden"
+        "name": "Toby Daniel Smith"
       },
       "documents": [],
       "redirect_url": "https://example.com?query-param=hello",
@@ -3281,20 +3338,39 @@ info:
         }
       ],
       "verified_identity": {
-        "full_name": "Toby Arden",
-        "birth_date": "1994-09-26"
+          "first_names": "Toby, Daniel",
+          "full_name": "Toby Daniel Smith",
+          "last_name": "Smith",
+          "birth_date": "1984-10-02",
+          "birth_place": "Paris",
+          "nationality": "FR",
+          "gender": "M"
       },
       "declared_data": {
-        "name": "Toby Arden"
+        "name": "Toby Daniel Smith"
       },
       "documents": [
-        {
-          "full_name": "Toby Arden",
-          "birth_date": "1994-09-26",
+       {
+          "full_name": "Toby Daniel Smith",
+          "first_names": "Toby, Daniel",
+          "last_name": "Smith",
+          "last_name_at_birth": "Smith",
           "document_type": "ID",
-          "document_issuing_country": "US",
+          "document_issuing_country": "FR",
           "front_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
-        }
+          "back_image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50554"
+          "personal_number": "TIN123456789",
+          "tax_identification_number": "TIN123456789",
+          "document_number": "A12345678",
+          "document_expiry_date": "2035-03-25",
+          "document_issue_date": "2025-03-26",
+          "document_issue_place": "Paris",
+          "document_mrz": "P<FRASMITHJOHNDANIEL<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+          "birth_date": "1984-10-02",
+          "birth_place": "Paris",
+          "nationality": "FR",
+          "gender": "M"
+        },
       ],
       "face": {
         "image_signed_url": "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20231006T174223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4"
@@ -4323,6 +4399,7 @@ components:
       properties:
         name:
           type: string
+          minLength: 2
           maxLength: 255
 
     Document:
