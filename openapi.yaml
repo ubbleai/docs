@@ -4484,6 +4484,7 @@ components:
         - ID
         - Passport
         - Residence Permit
+        - Visa
 
     Event:
       type: object
