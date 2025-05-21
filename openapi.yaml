@@ -4334,7 +4334,7 @@ paths:
   /v2/document-verifications:
     post:
       tags:
-        - Document Verifications
+        - Document verifications
       summary: Create a document verification
       operationId: create_document_verification
       description: Creates a document verification
@@ -4374,7 +4374,7 @@ paths:
   /v2/document-verifications/{document_verification_id}:
     get:
       tags:
-        - Document Verifications
+        - Document verifications
       summary: Get a document verification
       description: This endpoint allows you to get the detailed results of a document verification
       operationId: retrieve_document_verification
@@ -4402,7 +4402,7 @@ paths:
   /v2/document-verifications/{document_verification_id}/notify:
     post:
       tags:
-        - Document Verifications
+        - Document verifications
       summary: Request webhook notification
       operationId: notify_document_verification
       description: This endpoint can be used to initiate a webhook call containing the latest event of a document verification
@@ -4429,7 +4429,7 @@ paths:
   /v2/document-verifications/{document_verification_id}/attempts:
     get:
       tags:
-        - Document Verifications
+        - Document verifications
       summary: List document verification attempts
       operationId: list_attempts_document_verification
       description: This endpoint allows you to list all attempts of a document verification
@@ -4455,7 +4455,7 @@ paths:
           description: An error occurred while fetching the attempts
     post:
       tags:
-        - Document Verifications
+        - Document verifications
       summary: Create a document verification attempt
       description: "This endpoint allows you to create a document verification attempt. It is possible when the document verification 
         is one of the following statuses: `created`, `checks_in_progress`, `retry_required`"
@@ -4499,7 +4499,7 @@ paths:
   /v2/document-verifications/{document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
-        - Document Verifications
+        - Document verifications
       summary: Retrieve a document verification attempt
       description: This endpoint allows you to retrieve the details for a given document verification attempt
       operationId: fetch_attempts_document_verification
