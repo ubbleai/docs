@@ -1665,9 +1665,9 @@ info:
     Once you get the `face_authentication_id` you can use it to create an attempt and get a `verification_url`. 
 
     To request an identity verification, you must include the following fields:
-    
+  
     - `face_authentication_id` - the identifier of the face authentication
-    
+  
     - `redirect_url` - the URL to redirect the user to once face authentication is completed
     
     ## Verify webhook notification
@@ -1741,7 +1741,7 @@ info:
     
     ## Create a new attempt
     When the face authentication status is `retry_required`, you should create a new attempt. See the dedicated section. 
-    
+  
     We recommend that you use the response codes to guide the user. 
     
     For example, if the response codes indicate that the connection of the user is not sufficient, you should give this information to the user.
@@ -1834,7 +1834,7 @@ info:
     | `face_authentication_anonymized`                          | The face authentication has been anonymized                                                                                       |
     | `face_authentication_audit_completed`                     | The face authentication has been audited and the status may have been updated                                                     |
     
-    
+  
     ## Retry
 
     We expect that you will return us a 200 or 201 status code within 10 seconds before we retry, up to 2 retries will be performed. If needed, you can trigger webhook notifications manually using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
@@ -2366,7 +2366,7 @@ info:
     Have your webhook server ready to test real-time notifications for each event in this scenario. 
     
     Webhooks for first attempt:
-    
+  
       - identity_verification_created
       - identity_verification_opened
       - identity_verification_started
@@ -2374,7 +2374,7 @@ info:
       - identity_verification_checks_inconclusive
     
     Webhooks for final verdict:
-    
+      
       - identity_verification_retry_requested
       - identity_verification_started
       - identity_verification_capture_completed
@@ -2383,7 +2383,7 @@ info:
     ### Step 2: Create an applicant
     
     Set the value of `external_applicant_id` as `eaplt_61XXXI10000000000000000000`. Replace `61XXX` with any of the response codes starting with 61, that you would like to test for.
-    
+  
     For example, if you would like to test with response code `61310`, set the `external_application_id` to `eaplt_61411I10000000000000000000`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -2659,7 +2659,7 @@ info:
     
     Set the `external_applicant_id` value to `eaplt_62XXX000000000000000000000`. 
     Replace `62XXX` with any of the response codes starting with 62, that you would like to test for.
-    
+  
     For example, if you would like to test with `62201`, then set the value to `eaplt_62201000000000000000000000`
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3220,7 +3220,7 @@ info:
     ### Step 4: Create an attempt
     
     Pass the `id` from step 2 response as the path parameter.
-    
+  
     For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr6ft` as the `id`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3269,7 +3269,7 @@ info:
     When the `identity_verification_checks_inconclusive` webhook returns the `retry_required` status, create another attempt.
     
     To do this, pass the `id` from step 2 response as the path parameter.
-    
+  
     For example, in this case the response returned `idv_tkoi5db4hryu5cei5vwoabr6ft` as the `id`.
     
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
@@ -3483,6 +3483,8 @@ servers:
 tags:
   - name: identity verifications
     description: Identity verification endpoints documentation.
+  - name: document verifications
+    description: API for document verification
   - name: AML verifications
     description: AML verification endpoints documentation.
   - name: applicants
@@ -3495,6 +3497,7 @@ x-tagGroups:
     tags:
       - Applicants
       - Identity verifications
+      - Document verifications
       - Face authentications
       - AML verifications
       - Service status
@@ -3620,24 +3623,24 @@ paths:
                   - $ref: '#/components/schemas/IdentityVerificationOutputPost'
         '400':
           description: Bad request.
-        # Not taken into account in interface testing
-        #          content:
-        #            application/json:
-        #              example:
-        #                $ref: '#/components/examples/idv_identity_verification_creation_request_invalid_body'
-        #              schema:
-        #                $ref: '#/components/schemas/ResponseError'
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_creation_request_invalid_body'
+#              schema:
+#                $ref: '#/components/schemas/ResponseError'
         '401':
           description: Unauthorized
         '422':
           description: Unprocessable entity
-        # Not taken into account in interface testing
-        #          content:
-        #            application/json:
-        #              example:
-        #                $ref: '#/components/examples/idv_identity_verification_unprocessable_entity_body'
-        #              schema:
-        #                $ref: '#/components/schemas/ResponseError'
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_unprocessable_entity_body'
+#              schema:
+#                $ref: '#/components/schemas/ResponseError'
         '500':
           description: Internal server error.
         '503':
@@ -3794,7 +3797,7 @@ paths:
     post:
       tags:
         - Identity verifications
-      summary: Create an attempt
+      summary: Create an Attempt
       description: This endpoint allows you to create a new Attempt. It is possible when the identity-verification is in one of
         the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
       operationId: create_attempt
@@ -4252,7 +4255,7 @@ paths:
     post:
       tags:
         - Face authentications
-      summary: Create an attempt
+      summary: Create an Attempt
       description: This endpoint allows you to create a new Attempt. It is possible when the face-authentication is in one of
         the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
       operationId: create_attempt_face_authentication
@@ -4328,35 +4331,206 @@ paths:
         "500":
           description: An error occurred while fetching the attempt
 
-  /v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}/assets:
-    get:
+  /v2/document-verifications:
+    post:
       tags:
-        - Face authentications
-      summary: Retrieve attempt assets
-      description: |
-        Retrieves the assets associated with a face authentication attempt.
-        This includes face images and videos captured during the verification process.
-      operationId: retrieve_identity_verification_attempt_assets
-      parameters:
-        - name: face_authentication_id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: The ID of the face authentication
-        - name: attempt_id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: The ID of the attempt
+        - Document Verifications
+      summary: Create a document verification
+      operationId: create_document_verification
+      description: Creates a document verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Only required data:
+                $ref: "#/components/examples/document_verification_creation_request_body_min"
+              All possible data:
+                $ref: "#/components/examples/document_verification_creation_request_body_max"
+            schema:
+              $ref: "#/components/schemas/DocumentVerificationInputPost"
       responses:
-        '200':
-          description: The assets were retrieved successfully
+        "201":
+          description: Document verification created successfully
           content:
             application/json:
+              examples:
+                document_verification_creation_response_body:
+                  $ref: "#/components/examples/document_verification_creation_response_body"
               schema:
-                $ref: "#/components/schemas/FaceAuthenticationAttemptAssetsOutput"
+                allOf:
+                  - $ref: "#/components/schemas/DocumentVerificationOutputPost"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "422":
+          description: Unprocessable entity
+        "500":
+          description: Internal server error
+        "503":
+          description: Service unavailable
+
+  /v2/document-verifications/{document_verification_id}:
+    get:
+      tags:
+        - Document Verifications
+      summary: Get a document verification
+      description: This endpoint allows you to get the detailed results of a document verification
+      operationId: retrieve_document_verification
+      parameters:
+        - name: document_verification_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/DocumentVerificationId"
+      responses:
+        "200":
+          description: Document verification retrieved successfully
+          content:
+            application/json:
+              examples:
+                document_verification_creation_response_body:
+                  $ref: "#/components/examples/document_verification_creation_response_body"
+              schema:
+                $ref: "#/components/schemas/DocumentVerificationOutputGet"
+        "404":
+          description: Document verification not found
+        "500":
+          description: Internal server error
+  
+  /v2/document-verifications/{document_verification_id}/notify:
+    post:
+      tags:
+        - Document Verifications
+      summary: Request webhook notification
+      operationId: notify_document_verification
+      description: This endpoint can be used to initiate a webhook call containing the latest event of a document verification
+      parameters:
+        - name: document_verification_id
+          in: path
+          description: ID of the document verification to notify
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhook_url:
+                  type: string
+                  format: uri
+      responses:
+        "204":
+          description: Notification successfully requested
+    
+  /v2/document-verifications/{document_verification_id}/attempts:
+    get:
+      tags:
+        - Document Verifications
+      summary: List document verification attempts
+      operationId: list_attempts_document_verification
+      description: This endpoint allows you to list all attempts of a document verification
+      parameters:
+        - name: document_verification_id
+          in: path
+          description: ID of the document verification
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Document verification attempts retrieved successfully
+          content:
+            application/json:
+              ## TODO: add examples
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/DocumentVerificationAttemptOutputList"
+        "404":
+          description: The provided document verification ID is not valid
+        "500":
+          description: An error occurred while fetching the attempts
+    post:
+      tags:
+        - Document Verifications
+      summary: Create a document verification attempt
+      description: "This endpoint allows you to create a document verification attempt. It is possible when the document verification 
+        is one of the following statuses: `created`, `checks_in_progress`, `retry_required`"
+      operationId: create_document_verification_attempt
+      parameters:
+        - name: document_verification_id
+          in: path
+          description: ID of the document verification
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            examples:
+              document_verification_attempt_creation_request_body_min:
+                $ref: "#/components/examples/document_verification_attempt_creation_request_body_min"
+              document_verification_attempt_creation_request_body_max:
+                $ref: "#/components/examples/document_verification_attempt_creation_request_body_max"
+            schema:
+              $ref: "#/components/schemas/DocumentVerificationAttemptInputPost"
+      responses:
+        "201":
+          description: Document verification created
+          content:
+            application/json:
+              examples:
+                document_verification_attempt_creation_response_body:
+                  $ref: "#/components/examples/document_verification_attempt_creation_response_body"
+              schema:
+                $ref: "#/components/schemas/DocumentVerificationAttemptOutputPost"
+        "404":
+          description: The provdided document verification ID is not valid
+        "409":
+          description: The document verification is not in a valid state to create an attempt.
+            The document verification status must be `created`, `checks_in_progress` or `retry_required`
+        "500":
+          description: An error occurred while creating the attempt
+      
+  /v2/document-verifications/{document_verification_id}/attempts/{attempt_id}:
+    get:
+      tags:
+        - Document Verifications
+      summary: Retrieve a document verification attempt
+      description: This endpoint allows you to retrieve the details for a given document verification attempt
+      operationId: fetch_attempts_document_verification
+      parameters:
+        - name: document_verification_id
+          in: path
+          description: ID of the document verification
+          required: true
+          schema:
+            type: string
+        - name: attempt_id
+          in: path
+          description: ID of the document verification attempt
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Document verification attempt retrieved successfully
+          content:
+            application/json:
+              examples:
+                document_verification_attempt_get_response_body:
+                  $ref: "#/components/examples/document_verification_attempt_get_response_body"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/DocumentVerificationAttemptOutputGet"
+        "404":
+          description: The provided document verification attempt ID is not valid
+        "500":
+          description: An error occurred while fetching the attempt
 
 components:
   schemas:
@@ -4842,7 +5016,7 @@ components:
     IdentityVerificationInputBase:
       type: object
       allOf:
-        - $ref: "#/components/schemas/IdentityVerificationBase"
+          - $ref: "#/components/schemas/IdentityVerificationBase"
 
     IdentityVerificationOutputBase:
       type: object
@@ -5043,7 +5217,7 @@ components:
       description: Identity verification unique identifier.
       pattern: ^idv_\w+$
       example: idv_tkoi5db4hryu5cei5vwoabr7we
-      #######################################################################
+        #######################################################################
     #######################################################################
 
     ######################## Identity Attempt schemas #####################
@@ -5197,7 +5371,7 @@ components:
         - $ref: "#/components/schemas/BaseApplicantSessionInformation"
         ############################################################################
     #######################################################################
-
+    
     ######################### Face Attempt schemas ########################
     FaceAttemptBase:
       type: object
@@ -5265,7 +5439,7 @@ components:
       required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationAttemptOutputBase"
-
+          
     ###################### Face Attempt Utils schemas ####################
     FaceAuthenticationApplicantSessionInformation:
       type: object
@@ -5296,7 +5470,7 @@ components:
       type: object
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationBase"
-
+          
     FaceAuthenticationOutputBase:
       type: object
       properties:
@@ -5315,7 +5489,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationBase"
         - $ref: "#/components/schemas/DatedObject"
-
+    
     FaceAuthenticationInputPost:
       type: object
       required: [webhook_url, applicant_id, user_journey_id]
@@ -5330,7 +5504,7 @@ components:
           $ref: '#/components/schemas/VerificationFace'
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationOutputBase"
-
+    
     FaceAuthenticationOutputGet:
       type: object
       required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id, _links]
@@ -5359,6 +5533,168 @@ components:
         - $ref: "#/components/schemas/SelfLink"
         - $ref: "#/components/schemas/ApplicantLink"
         #######################################################################
+    #######################################################################
+
+    ###################### Document Verification schemas ####################
+    DocumentVerificationBase:
+      type: object
+      properties:
+        user_journey_id:
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
+        webhook_url:
+          type: string
+          format: uri
+
+
+    DocumentVerificationInputBase:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DocumentVerificationBase"
+    
+    DocumentVerificationOutputBase:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/DocumentVerificationId"
+        status:
+          $ref: "#/components/schemas/DocumentVerificationStatus"
+        response_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        documents:
+          type: array
+          items:
+            $ref: "#/components/schemas/Document"
+        _links:
+          $ref: "#/components/schemas/DocumentVerificationLinks"
+      allOf:
+        - $ref: "#/components/schemas/DocumentVerificationBase"
+        - $ref: "#/components/schemas/DatedObject"
+      
+    DocumentVerificationInputPost:
+      type: object
+      required: [declared_data, webhook_url, applicant_id]
+      allOf:
+        - $ref: "#/components/schemas/DocumentVerificationInputBase"
+    
+    DocumentVerificationOutputPost:
+      type: object
+      required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id]
+      allOf:
+        - $ref: "#/components/schemas/DocumentVerificationOutputBase"
+    
+    DocumentVerificationOutputGet:
+      type: object
+      required: [id, declared_data, status, webhook_url, _links, applicant_id, response_codes, user_journey_id]
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/DocumentVerificationOutputBase"
+
+
+    ################### Document Verification Attempts schemas #################
+    DocumentVerificationAttemptInputBase:
+      type: object
+      properties:
+        document_type:
+          $ref: "#/components/schemas/DocumentTypes"
+        issuing_country:
+          $ref: "#/components/schemas/CountryCodeIso2"
+        document_front:
+          type: string
+          format: binary
+        document_back:
+          type: string
+          format: binary
+    
+    DocumentVerificationAttemptOutputBase:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          $ref: "#/components/schemas/DocumentVerificationAttemptStates"
+        response_codes:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        _links:
+          $ref: "#/components/schemas/AttemptLinks"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+
+    DocumentVerificationAttemptOutputList:
+      type: object
+      required: [total_count, skip, limit, _links, data]
+      properties:
+        data:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/DocumentVerificationAttemptOutputGet"
+      allOf:
+        - $ref: "#/components/schemas/BaseOutputList"
+
+    DocumentVerificationAttemptInputPost:
+      type: object
+      required: [document_type, issuing_country, document_front]
+      allOf:
+        - $ref: "#/components/schemas/DocumentVerificationAttemptInputBase"
+    
+    DocumentVerificationAttemptOutputPost:
+      type: object
+      required: [id, status, response_codes, _links]
+      allOf:
+        - $ref: "#/components/schemas/DocumentVerificationAttemptOutputBase"
+    
+    DocumentVerificationAttemptOutputGet:
+      type: object
+      required: [id, status, response_codes, _links]
+      allOf:
+        - $ref: "#/components/schemas/DocumentVerificationAttemptOutputBase"
+
+    ################### Document Verification Utils schemas #################
+    DocumentVerificationId:
+      type: string
+      description: Document verification unique identifier.
+      pattern: ^dv_\w+$
+      example: dv_tkoi5db4hryu5cei5vwoabr7we
+    
+    DocumentVerificationStatus:
+      type: string
+      description: Document verification status.
+      enum:
+        - created
+        - quality_checks_in_progress
+        - checks_in_progress
+        - approved
+        - declined
+        - retry_required
+        - inconclusive
+    
+    DocumentVerificationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+        - $ref: "#/components/schemas/ApplicantLink"
+
+    DocumentVerificationAttemptStates:
+      type: string
+      description: Document verification attempt state.
+      enum:
+        - quality_checks_in_progress
+        - checks_in_progress
+        - completed
+        - quality_checks_aborted
+        - checks_inconclusive
+        - terminated
     #######################################################################
 
     ################## AML Verifications schemas ##########################
@@ -5762,19 +6098,19 @@ components:
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
 
-    #    idv_identity_verification_creation_request_invalid_body:
-    #      value:
-    #        error_type: request_invalid
-    #        error_codes:
-    #          - declared_data__birth_date__invalid_format
-    #          - declared_data__name__required
-    #          - phone_number__country_code__invalid
+#    idv_identity_verification_creation_request_invalid_body:
+#      value:
+#        error_type: request_invalid
+#        error_codes:
+#          - declared_data__birth_date__invalid_format
+#          - declared_data__name__required
+#          - phone_number__country_code__invalid
 
-    #    idv_identity_verification_unprocessable_entity_body:
-    #      value:
-    #        error_type: unprocessable_entity
-    #        error_codes:
-    #          - organization__no_configuration
+#    idv_identity_verification_unprocessable_entity_body:
+#      value:
+#        error_type: unprocessable_entity
+#        error_codes:
+#          - organization__no_configuration
 
     # Face Authentication
     face_authentication_creation_response_body:
@@ -5892,10 +6228,12 @@ components:
             created_on: 2017-07-21T16:30:28Z
             modified_on: 2017-07-21T16:32:32Z
             status: "checks_inconclusive"
-            response_codes: [{
-              "code": 61402,
-              "summary": "face_video_lighting_issue"
-            } ]
+            response_codes: [
+              {
+                "code": 61402,
+                "summary": "face_video_lighting_issue"
+              }
+            ]
             phone_number:
               country_code: "+1"
               number: "2068133616"
@@ -5916,3 +6254,76 @@ components:
             href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
           previous:
             href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
+    
+    document_verification_creation_request_body_min:
+      value:
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        declared_data:
+          name: John Smith
+        webhook_url: "https://my.api/events/"
+    
+    document_verification_creation_request_body_max:
+      value:
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        declared_data:
+          name: David Vincent
+        webhook_url: https://my.api/events/
+    
+    document_verification_creation_response_body:
+      value:
+        id: dv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: "2017-07-21T17:32:28Z"
+        modified_on: "2017-07-21T17:40:32Z"
+        user_journey_id: "usj_tkoi5db4hryu5cei5vwoabr7we"
+        applicant_id: "aplt_tkoi5db4hryu5cei5vwoabr7we"
+        status: created
+        response_codes: []
+        declared_data:
+          name: "David Vincent"
+        documents: []
+        webhook_url: "https://my.api/events/"
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/document-verifications/dv_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+    
+    document_verification_attempt_creation_request_body_min:
+      value:
+        document_type: Passport
+        issuing_country: FR
+        document_front: <binary data>
+    
+    document_verification_attempt_creation_request_body_max:
+      value:
+        document_type: ID
+        issuing_country: US
+        document_front: <binary data>
+        document_back: <binary data>
+    
+    document_verification_attempt_creation_response_body:
+      value:
+        id: dv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        status: created
+        response_codes: []
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/document-verifications/dv_tkoi5db4hryu5cei5vwoabr7we"
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
+    
+    document_verification_attempt_get_response_body:
+      value:
+        id: dv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        status: created
+        response_codes: []
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/document-verifications/dv_tkoi5db4hryu5cei5vwoabr7we"
+          verification_url:
+            href: "https://id.ubble.ai/4hryu5cei5/"
