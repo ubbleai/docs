@@ -5870,16 +5870,16 @@ components:
                   type: string
                   format: uri
 
-    ################### Document Verification Utils schemas #################
+    ################### ID Document Verification Utils schemas #################
     IdDocumentVerificationId:
       type: string
-      description: Document verification unique identifier.
+      description: ID document verification unique identifier.
       pattern: ^dv_\w+$
       example: dv_tkoi5db4hryu5cei5vwoabr7we
     
     IdDocumentVerificationStatus:
       type: string
-      description: Document verification status.
+      description: ID document verification status.
       enum:
         - created
         - quality_checks_in_progress
@@ -5897,7 +5897,7 @@ components:
 
     IdDocumentVerificationAttemptStates:
       type: string
-      description: Document verification attempt state.
+      description: ID document verification attempt state.
       enum:
         - quality_checks_in_progress
         - checks_in_progress
