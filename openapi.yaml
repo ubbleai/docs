@@ -4429,35 +4429,6 @@ paths:
         "500":
           description: Internal server error
 
-  /v2/id-document-verification/{id_document_verification_id}/results:
-    get:
-      tags:
-        - ID document verification
-      summary: Get the results of an ID document verification
-      operationId: get_id_document_verification_results
-      description: This endpoint allows you to get the results of an ID document verification
-      parameters:
-        - name: id_document_verification_id
-          in: path
-          description: ID of the document verification to get the results of
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: ID document verification results retrieved successfully
-          content:
-            application/json:
-              # examples:
-              #   id_document_verification_results_response_body:
-              #     $ref: "#/components/examples/id_document_verification_results_response_body"
-              schema:
-                $ref: "#/components/schemas/IdDocumentVerificationOutputResults"
-        "404":
-          description: ID document verification not found
-        "500":
-          description: Internal server error
-
   /v2/id-document-verification/{id_document_verification_id}/anonymize:
     post:
       tags:
@@ -5825,20 +5796,6 @@ components:
       required: [id, status, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputBase"
-
-    IdDocumentVerificationOutputResults:
-      type: object
-      properties:
-        id:
-          $ref: "#/components/schemas/IdDocumentVerificationId"
-        status:
-          $ref: "#/components/schemas/IdDocumentVerificationStatus"
-        response_codes:
-          type: array
-          items:
-            $ref: "#/components/schemas/ResponseCodes"
-        document:
-          $ref: "#/components/schemas/Document"
 
     IdDocumentVerificationAttemptOutputAssets:
       type: object
