@@ -6372,14 +6372,14 @@ components:
           previous:
             href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
     
-    document_verification_creation_request_body_min:
+    id_document_verification_creation_request_body_min:
       value:
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: John Smith
         webhook_url: "https://my.api/events/"
     
-    document_verification_creation_request_body_max:
+    id_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
@@ -6387,7 +6387,7 @@ components:
           name: David Vincent
         webhook_url: https://my.api/events/
     
-    document_verification_creation_response_body:
+    id_document_verification_creation_response_body:
       value:
         id: dv_tkoi5db4hryu5cei5vwoabr7we
         created_on: "2017-07-21T17:32:28Z"
@@ -6398,28 +6398,61 @@ components:
         response_codes: []
         declared_data:
           name: "David Vincent"
-        documents: []
+        document:
+          full_name: David Vincent
+          birth_date: 1934-10-02
+          document_type: ID
+          document_issuing_country: US
+          front_image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555
         webhook_url: "https://my.api/events/"
         _links:
           self:
-            href: "https://api.ubble.ai/v2/document-verifications/dv_tkoi5db4hryu5cei5vwoabr7we"
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we"
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
     
-    document_verification_attempt_creation_request_body_min:
+    id_document_verification_anonymization_response_body:
+      value:
+        id: dv_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        status: created
+        response_codes: []
+        declared_data: 
+          name: "David Vincent"
+        document:
+          full_name: David Vincent
+          birth_date: 1934-10-02
+          document_type: ID
+          document_issuing_country: US
+          front_image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555
+        webhook_url: "https://my.api/events/"
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we"
+          applicant:
+            href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+
+    id_document_verification_pdf_report_response_body:
+      value:
+        pdf_report: www.pdf.com
+
+    id_document_verification_attempt_creation_request_body_min:
       value:
         document_type: Passport
         issuing_country: FR
         document_front: <binary data>
     
-    document_verification_attempt_creation_request_body_max:
+    id_document_verification_attempt_creation_request_body_max:
       value:
         document_type: ID
         issuing_country: US
         document_front: <binary data>
         document_back: <binary data>
     
-    document_verification_attempt_creation_response_body:
+    id_document_verification_attempt_creation_response_body:
       value:
         id: dv_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
@@ -6428,11 +6461,9 @@ components:
         response_codes: []
         _links:
           self:
-            href: "https://api.ubble.ai/v2/document-verifications/dv_tkoi5db4hryu5cei5vwoabr7we"
-          verification_url:
-            href: "https://id.ubble.ai/4hryu5cei5/"
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we"
     
-    document_verification_attempt_get_response_body:
+    id_document_verification_attempt_get_response_body:
       value:
         id: dv_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
@@ -6441,6 +6472,19 @@ components:
         response_codes: []
         _links:
           self:
-            href: "https://api.ubble.ai/v2/document-verifications/dv_tkoi5db4hryu5cei5vwoabr7we"
-          verification_url:
-            href: "https://id.ubble.ai/4hryu5cei5/"
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we"
+
+    id_document_verification_attempt_list_response_body:
+      value:
+        total_count: 2  
+        skip: 10
+        limit: 10
+        data:
+        - id: dv_tkoi5db4hryu5cei5vwoabr7we
+          created_on: 2017-07-21T17:32:28Z
+          modified_on: 2017-07-21T17:40:32Z
+          status: created
+          response_codes: []
+          _links:
+            self:
+              href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we"
