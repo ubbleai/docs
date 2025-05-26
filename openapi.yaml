@@ -5831,8 +5831,8 @@ components:
     IdDocumentVerificationId:
       type: string
       description: ID document verification unique identifier.
-      pattern: ^dv_\w+$
-      example: dv_tkoi5db4hryu5cei5vwoabr7we
+      pattern: ^iddv_\w+$
+      example: iddv_tkoi5db4hryu5cei5vwoabr7we
     
     IdDocumentVerificationStatus:
       type: string
@@ -6439,7 +6439,7 @@ components:
     
     id_document_verification_creation_response_body:
       value:
-        id: dv_tkoi5db4hryu5cei5vwoabr7we
+        id: iddv_tkoi5db4hryu5cei5vwoabr7we
         created_on: "2017-07-21T17:32:28Z"
         modified_on: "2017-07-21T17:40:32Z"
         user_journey_id: "usj_tkoi5db4hryu5cei5vwoabr7we"
@@ -6463,7 +6463,7 @@ components:
     
     id_document_verification_anonymization_response_body:
       value:
-        id: dv_tkoi5db4hryu5cei5vwoabr7we
+        id: iddv_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
@@ -6504,7 +6504,7 @@ components:
     
     id_document_verification_attempt_creation_response_body:
       value:
-        id: dv_tkoi5db4hryu5cei5vwoabr7we
+        id: iddv_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         status: created
@@ -6515,7 +6515,7 @@ components:
     
     id_document_verification_attempt_get_response_body:
       value:
-        id: dv_tkoi5db4hryu5cei5vwoabr7we
+        id: iddv_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         status: created
@@ -6530,7 +6530,7 @@ components:
         skip: 10
         limit: 10
         data:
-        - id: dv_tkoi5db4hryu5cei5vwoabr7we
+        - id: iddv_tkoi5db4hryu5cei5vwoabr7we
           created_on: 2017-07-21T17:32:28Z
           modified_on: 2017-07-21T17:40:32Z
           status: created
