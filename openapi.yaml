@@ -4255,7 +4255,7 @@ paths:
     post:
       tags:
         - Face authentications
-      summary: Create an Attempt
+      summary: Create an attempt
       description: This endpoint allows you to create a new Attempt. It is possible when the face-authentication is in one of
         the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
       operationId: create_attempt_face_authentication
@@ -4330,6 +4330,36 @@ paths:
           description: The provided face authentication ID or attempt ID is not valid
         "500":
           description: An error occurred while fetching the attempt
+
+  /v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}/assets:
+    get:
+      tags:
+        - Face authentications
+      summary: Retrieve attempt assets
+      description: |
+        Retrieves the assets associated with a face authentication attempt.
+        This includes face images and videos captured during the verification process.
+      operationId: retrieve_identity_verification_attempt_assets
+      parameters:
+        - name: face_authentication_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the face authentication
+        - name: attempt_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the attempt
+      responses:
+        '200':
+          description: The assets were retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FaceAuthenticationAttemptAssetsOutput"
 
   /v2/id-document-verification:
     post:
@@ -4624,6 +4654,39 @@ paths:
           description: The provided document verification attempt ID is not valid
         "500":
           description: An error occurred while fetching the attempt
+
+  /v2/id-document-verification/{document_verification_id}/attempts/{attempt_id}/assets:
+    get:
+      tags:
+        - ID document verification
+      summary: Retrieve an ID document verification attempt asset
+      operationId: fetch_asset_id_document_verification_attempt
+      description: |
+        This endpoint allows you to retrieves the assets associated with an ID document verification.
+        This includes the document front image and the document back image.
+      parameters:
+        - name: document_verification_id
+          in: path
+          description: ID of the ID document verification
+          required: true
+          schema:
+            type: string
+        - name: attempt_id
+          in: path
+          description: ID of the ID document verification attempt
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ID document verification attempt asset retrieved successfully
+          content:
+            application/json:
+              examples:
+                id_document_verification_attempt_output_assets_response_body:
+                  $ref: "#/components/examples/id_document_verification_attempt_output_assets_response_body"
+              schema:
+                $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputAssets"
 
 components:
   schemas:
@@ -5777,6 +5840,36 @@ components:
         document:
           $ref: "#/components/schemas/Document"
 
+    IdDocumentVerificationAttemptOutputAssets:
+      type: object
+      required: [total_count, skip, limit, _links, data]
+      properties:
+        data:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputAssetOutput"
+      allOf:
+        - $ref: "#/components/schemas/BaseOutputList"
+
+    IdDocumentVerificationAttemptOutputAssetOutput:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - document_front_image
+            - document_back_image
+        _links:
+          type: object
+          properties:
+            asset_url:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
+
     ################### Document Verification Utils schemas #################
     IdDocumentVerificationId:
       type: string
@@ -6488,3 +6581,21 @@ components:
           _links:
             self:
               href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we"
+    
+    id_document_verification_attempt_output_assets_response_body:
+      value:
+        total_count: 2
+        skip: 10
+        limit: 10
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we/attempts"
+          next:
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we/attempts/..."
+          previous:
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we/attempts/..."
+        data:
+        - type: document_front_image
+          _links:
+            asset_url:
+              href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we/assets/document_front_image"
