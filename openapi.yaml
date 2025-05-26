@@ -4401,7 +4401,7 @@ paths:
         "503":
           description: Service unavailable
 
-  /v2/id-document-verification/{document_verification_id}:
+  /v2/id-document-verification/{id_document_verification_id}:
     get:
       tags:
         - ID document verification
@@ -4409,7 +4409,7 @@ paths:
       description: This endpoint allows you to get the detailed results of an ID document verification
       operationId: retrieve_id_document_verification
       parameters:
-        - name: document_verification_id
+        - name: id_document_verification_id
           in: path
           required: true
           schema:
@@ -4429,7 +4429,7 @@ paths:
         "500":
           description: Internal server error
 
-  /v2/id-document-verification/{document_verification_id}/results:
+  /v2/id-document-verification/{id_document_verification_id}/results:
     get:
       tags:
         - ID document verification
@@ -4437,7 +4437,7 @@ paths:
       operationId: get_id_document_verification_results
       description: This endpoint allows you to get the results of an ID document verification
       parameters:
-        - name: document_verification_id
+        - name: id_document_verification_id
           in: path
           description: ID of the document verification to get the results of
           required: true
@@ -4458,7 +4458,7 @@ paths:
         "500":
           description: Internal server error
 
-  /v2/id-document-verification/{document_verification_id}/anonymize:
+  /v2/id-document-verification/{id_document_verification_id}/anonymize:
     post:
       tags:
         - ID document verification
@@ -4466,7 +4466,7 @@ paths:
       operationId: anonymize_id_document_verification
       description: Anonymize the personal data of an ID document verification with the specified ID.
       parameters:
-        - name: document_verification_id
+        - name: id_document_verification_id
           in: path
           description: ID of the document verification to anonymize
           required: true
@@ -4489,7 +4489,7 @@ paths:
         "500":
           description: Internal server error
   
-  /v2/id-document-verification/{document_verification_id}/pdf-report:
+  /v2/id-document-verification/{id_document_verification_id}/pdf-report:
     get:
       tags:
         - ID document verification
@@ -4501,7 +4501,7 @@ paths:
         Please note that the PDF report is only available for ID document verifications that 
         in status `declined` and `approved` once you receive the `id_document_verification_report_created` event.
       parameters:
-        - name: document_verification_id
+        - name: id_document_verification_id
           in: path
           description: ID of the ID document verification 
           required: true
@@ -4520,7 +4520,7 @@ paths:
         "404":
           description: The PDF report is not available
 
-  /v2/id-document-verification/{document_verification_id}/notify:
+  /v2/id-document-verification/{id_document_verification_id}/notify:
     post:
       tags:
         - ID document verification
@@ -4528,7 +4528,7 @@ paths:
       operationId: notify_document_verification
       description: This endpoint can be used to initiate a webhook call containing the latest event of an ID document verification
       parameters:
-        - name: document_verification_id
+        - name: id_document_verification_id
           in: path
           description: ID of the document verification to notify
           required: true
@@ -4547,7 +4547,7 @@ paths:
         "204":
           description: Notification successfully requested
     
-  /v2/id-document-verification/{document_verification_id}/attempts:
+  /v2/id-document-verification/{id_document_verification_id}/attempts:
     get:
       tags:
         - ID document verification
@@ -4555,7 +4555,7 @@ paths:
       operationId: list_attempts_id_document_verification
       description: This endpoint allows you to list all attempts of an ID document verification
       parameters:
-        - name: document_verification_id
+        - name: id_document_verification_id
           in: path
           description: ID of the document verification
           required: true
@@ -4584,7 +4584,7 @@ paths:
         is one of the following statuses: `created`, `retry_required`"
       operationId: create_id_document_verification_attempt
       parameters:
-        - name: document_verification_id
+        - name: id_document_verification_id
           in: path
           description: ID of the document verification
           required: true
@@ -4619,7 +4619,7 @@ paths:
         "500":
           description: An error occurred while creating the attempt
       
-  /v2/id-document-verification/{document_verification_id}/attempts/{attempt_id}:
+  /v2/id-document-verification/{id_document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
         - ID document verification
@@ -4627,7 +4627,7 @@ paths:
       description: This endpoint allows you to retrieve the details for a given ID document verification attempt
       operationId: fetch_attempts_id_document_verification
       parameters:
-        - name: document_verification_id
+        - name: id_document_verification_id
           in: path
           description: ID of the document verification
           required: true
@@ -4655,7 +4655,7 @@ paths:
         "500":
           description: An error occurred while fetching the attempt
 
-  /v2/id-document-verification/{document_verification_id}/attempts/{attempt_id}/assets:
+  /v2/id-document-verification/{id_document_verification_id}/attempts/{attempt_id}/assets:
     get:
       tags:
         - ID document verification
@@ -4665,7 +4665,7 @@ paths:
         This endpoint allows you to retrieves the assets associated with an ID document verification.
         This includes the document front image and the document back image.
       parameters:
-        - name: document_verification_id
+        - name: id_document_verification_id
           in: path
           description: ID of the ID document verification
           required: true
