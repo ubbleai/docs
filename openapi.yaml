@@ -4331,35 +4331,35 @@ paths:
         "500":
           description: An error occurred while fetching the attempt
 
-  /v2/document-verifications:
+  /v2/id-document-verification:
     post:
       tags:
-        - Document verifications
-      summary: Create a document verification
-      operationId: create_document_verification
-      description: Creates a document verification
+        - ID document verification
+      summary: Create an ID document verification
+      operationId: create_id_document_verification
+      description: Creates an ID document verification
       requestBody:
         required: true
         content:
           application/json:
             examples:
               Only required data:
-                $ref: "#/components/examples/document_verification_creation_request_body_min"
+                $ref: "#/components/examples/id_document_verification_creation_request_body_min"
               All possible data:
-                $ref: "#/components/examples/document_verification_creation_request_body_max"
+                $ref: "#/components/examples/id_document_verification_creation_request_body_max"
             schema:
-              $ref: "#/components/schemas/DocumentVerificationInputPost"
+              $ref: "#/components/schemas/IdDocumentVerificationInputPost"
       responses:
         "201":
-          description: Document verification created successfully
+          description: ID document verification created successfully
           content:
             application/json:
               examples:
-                document_verification_creation_response_body:
-                  $ref: "#/components/examples/document_verification_creation_response_body"
+                id_document_verification_creation_response_body:
+                  $ref: "#/components/examples/id_document_verification_creation_response_body"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/DocumentVerificationOutputPost"
+                  - $ref: "#/components/schemas/IdDocumentVerificationOutputPost"
         "400":
           description: Bad request
         "401":
@@ -4371,41 +4371,132 @@ paths:
         "503":
           description: Service unavailable
 
-  /v2/document-verifications/{document_verification_id}:
+  /v2/id-document-verification/{document_verification_id}:
     get:
       tags:
-        - Document verifications
-      summary: Get a document verification
-      description: This endpoint allows you to get the detailed results of a document verification
-      operationId: retrieve_document_verification
+        - ID document verification
+      summary: Retrieve an ID document verification
+      description: This endpoint allows you to get the detailed results of an ID document verification
+      operationId: retrieve_id_document_verification
       parameters:
         - name: document_verification_id
           in: path
           required: true
           schema:
-            $ref: "#/components/schemas/DocumentVerificationId"
+            $ref: "#/components/schemas/IdDocumentVerificationId"
       responses:
         "200":
           description: Document verification retrieved successfully
           content:
             application/json:
               examples:
-                document_verification_creation_response_body:
-                  $ref: "#/components/examples/document_verification_creation_response_body"
+                id_document_verification_creation_response_body:
+                  $ref: "#/components/examples/id_document_verification_creation_response_body"
               schema:
-                $ref: "#/components/schemas/DocumentVerificationOutputGet"
+                $ref: "#/components/schemas/IdDocumentVerificationOutputGet"
         "404":
-          description: Document verification not found
+          description: ID document verification not found
+        "500":
+          description: Internal server error
+
+  /v2/id-document-verification/{document_verification_id}/results:
+    get:
+      tags:
+        - ID document verification
+      summary: Get the results of an ID document verification
+      operationId: get_id_document_verification_results
+      description: This endpoint allows you to get the results of an ID document verification
+      parameters:
+        - name: document_verification_id
+          in: path
+          description: ID of the document verification to get the results of
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ID document verification results retrieved successfully
+          content:
+            application/json:
+              # examples:
+              #   id_document_verification_results_response_body:
+              #     $ref: "#/components/examples/id_document_verification_results_response_body"
+              schema:
+                $ref: "#/components/schemas/IdDocumentVerificationOutputResults"
+        "404":
+          description: ID document verification not found
+        "500":
+          description: Internal server error
+
+  /v2/id-document-verification/{document_verification_id}/anonymize:
+    post:
+      tags:
+        - ID document verification
+      summary: Anonymize an ID document verification
+      operationId: anonymize_id_document_verification
+      description: Anonymize the personal data of an ID document verification with the specified ID.
+      parameters:
+        - name: document_verification_id
+          in: path
+          description: ID of the document verification to anonymize
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ID document verification anonymized
+          content:
+            application/json:
+              examples:
+                id_document_verification_anonymization_response_body:
+                  $ref: "#/components/examples/id_document_verification_anonymization_response_body"
+              schema:
+                required: [applicant_id, user_journey_id]
+                allOf:
+                  - $ref: "#/components/schemas/IdDocumentVerificationOutputAnonymize"
+        "404":
+          description: ID document verification not found
         "500":
           description: Internal server error
   
-  /v2/document-verifications/{document_verification_id}/notify:
+  /v2/id-document-verification/{document_verification_id}/pdf-report:
+    get:
+      tags:
+        - ID document verification
+      summary: Retrieve PDF report of an ID document verification
+      operationId: pdf_id_document_verification
+      description: |
+        This endpoint allows you to retrieve a PDF report of an ID document verification.
+
+        Please note that the PDF report is only available for ID document verifications that 
+        in status `declined` and `approved` once you receive the `id_document_verification_report_created` event.
+      parameters:
+        - name: document_verification_id
+          in: path
+          description: ID of the ID document verification 
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ID document verification PDF report retrieved successfully
+          content:
+            application/json:
+              examples:
+                id_document_verification_pdf_report_response_body:
+                  $ref: "#/components/examples/id_document_verification_pdf_report_response_body"
+              schema:
+                $ref: "#/components/schemas/IdDocumentVerificationOutputPdfReport"
+        "404":
+          description: The PDF report is not available
+
+  /v2/id-document-verification/{document_verification_id}/notify:
     post:
       tags:
-        - Document verifications
+        - ID document verification
       summary: Request webhook notification
       operationId: notify_document_verification
-      description: This endpoint can be used to initiate a webhook call containing the latest event of a document verification
+      description: This endpoint can be used to initiate a webhook call containing the latest event of an ID document verification
       parameters:
         - name: document_verification_id
           in: path
@@ -4426,13 +4517,13 @@ paths:
         "204":
           description: Notification successfully requested
     
-  /v2/document-verifications/{document_verification_id}/attempts:
+  /v2/id-document-verification/{document_verification_id}/attempts:
     get:
       tags:
-        - Document verifications
-      summary: List document verification attempts
-      operationId: list_attempts_document_verification
-      description: This endpoint allows you to list all attempts of a document verification
+        - ID document verification
+      summary: List ID document verification attempts
+      operationId: list_attempts_id_document_verification
+      description: This endpoint allows you to list all attempts of an ID document verification
       parameters:
         - name: document_verification_id
           in: path
@@ -4442,24 +4533,26 @@ paths:
             type: string
       responses:
         "200":
-          description: Document verification attempts retrieved successfully
+          description: ID document verification attempts retrieved successfully
           content:
             application/json:
-              ## TODO: add examples
+              examples:
+                id_document_verification_attempt_list_response_body:
+                  $ref: "#/components/examples/id_document_verification_attempt_list_response_body"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/DocumentVerificationAttemptOutputList"
+                  - $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputList"
         "404":
           description: The provided document verification ID is not valid
         "500":
           description: An error occurred while fetching the attempts
     post:
       tags:
-        - Document verifications
-      summary: Create a document verification attempt
-      description: "This endpoint allows you to create a document verification attempt. It is possible when the document verification 
-        is one of the following statuses: `created`, `checks_in_progress`, `retry_required`"
-      operationId: create_document_verification_attempt
+        - ID document verification
+      summary: Create an ID document verification attempt
+      description: "This endpoint allows you to create an ID document verification attempt. It is possible when the ID document verification 
+        is one of the following statuses: `created`, `retry_required`"
+      operationId: create_id_document_verification_attempt
       parameters:
         - name: document_verification_id
           in: path
@@ -4472,37 +4565,37 @@ paths:
         content:
           multipart/form-data:
             examples:
-              document_verification_attempt_creation_request_body_min:
-                $ref: "#/components/examples/document_verification_attempt_creation_request_body_min"
-              document_verification_attempt_creation_request_body_max:
-                $ref: "#/components/examples/document_verification_attempt_creation_request_body_max"
+              id_document_verification_attempt_creation_request_body_min:
+                $ref: "#/components/examples/id_document_verification_attempt_creation_request_body_min"
+              id_document_verification_attempt_creation_request_body_max:
+                $ref: "#/components/examples/id_document_verification_attempt_creation_request_body_max"
             schema:
-              $ref: "#/components/schemas/DocumentVerificationAttemptInputPost"
+              $ref: "#/components/schemas/IdDocumentVerificationAttemptInputPost"
       responses:
         "201":
-          description: Document verification created
+          description: ID document verification attempt created
           content:
             application/json:
               examples:
-                document_verification_attempt_creation_response_body:
-                  $ref: "#/components/examples/document_verification_attempt_creation_response_body"
+                id_document_verification_attempt_creation_response_body:
+                  $ref: "#/components/examples/id_document_verification_attempt_creation_response_body"
               schema:
-                $ref: "#/components/schemas/DocumentVerificationAttemptOutputPost"
+                $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputPost"
         "404":
-          description: The provdided document verification ID is not valid
+          description: The provided ID document verification ID is not valid
         "409":
-          description: The document verification is not in a valid state to create an attempt.
-            The document verification status must be `created`, `checks_in_progress` or `retry_required`
+          description: The ID document verification is not in a valid state to create an attempt.
+            The ID document verification status must be `created` or `retry_required`
         "500":
           description: An error occurred while creating the attempt
       
-  /v2/document-verifications/{document_verification_id}/attempts/{attempt_id}:
+  /v2/id-document-verification/{document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
-        - Document verifications
-      summary: Retrieve a document verification attempt
-      description: This endpoint allows you to retrieve the details for a given document verification attempt
-      operationId: fetch_attempts_document_verification
+        - ID document verification
+      summary: Retrieve an ID document verification attempt
+      description: This endpoint allows you to retrieve the details for a given ID document verification attempt
+      operationId: fetch_attempts_id_document_verification
       parameters:
         - name: document_verification_id
           in: path
@@ -4518,15 +4611,15 @@ paths:
             type: string
       responses:
         "200":
-          description: Document verification attempt retrieved successfully
+          description: ID document verification attempt retrieved successfully
           content:
             application/json:
               examples:
-                document_verification_attempt_get_response_body:
-                  $ref: "#/components/examples/document_verification_attempt_get_response_body"
+                id_document_verification_attempt_get_response_body:
+                  $ref: "#/components/examples/id_document_verification_attempt_get_response_body"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/DocumentVerificationAttemptOutputGet"
+                  - $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputGet"
         "404":
           description: The provided document verification attempt ID is not valid
         "500":
@@ -5536,7 +5629,7 @@ components:
     #######################################################################
 
     ###################### Document Verification schemas ####################
-    DocumentVerificationBase:
+    IdDocumentVerificationBase:
       type: object
       properties:
         user_journey_id:
@@ -5552,54 +5645,64 @@ components:
           format: uri
 
 
-    DocumentVerificationInputBase:
+    IdDocumentVerificationInputBase:
       type: object
       allOf:
-        - $ref: "#/components/schemas/DocumentVerificationBase"
+        - $ref: "#/components/schemas/IdDocumentVerificationBase"
     
-    DocumentVerificationOutputBase:
+    IdDocumentVerificationOutputBase:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/DocumentVerificationId"
+          $ref: "#/components/schemas/IdDocumentVerificationId"
         status:
-          $ref: "#/components/schemas/DocumentVerificationStatus"
+          $ref: "#/components/schemas/IdDocumentVerificationStatus"
         response_codes:
           type: array
           items:
             $ref: "#/components/schemas/ResponseCodes"
-        documents:
-          type: array
-          items:
-            $ref: "#/components/schemas/Document"
+        document:
+          $ref: "#/components/schemas/Document"
         _links:
-          $ref: "#/components/schemas/DocumentVerificationLinks"
+          $ref: "#/components/schemas/IdDocumentVerificationLinks"
       allOf:
-        - $ref: "#/components/schemas/DocumentVerificationBase"
+        - $ref: "#/components/schemas/IdDocumentVerificationBase"
         - $ref: "#/components/schemas/DatedObject"
       
-    DocumentVerificationInputPost:
+    IdDocumentVerificationInputPost:
       type: object
-      required: [declared_data, webhook_url, applicant_id]
+      required: [declared_data, webhook_url, applicant_id, user_journey_id]
       allOf:
-        - $ref: "#/components/schemas/DocumentVerificationInputBase"
+        - $ref: "#/components/schemas/IdDocumentVerificationInputBase"
     
-    DocumentVerificationOutputPost:
+    IdDocumentVerificationOutputPost:
       type: object
       required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id]
       allOf:
-        - $ref: "#/components/schemas/DocumentVerificationOutputBase"
+        - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
     
-    DocumentVerificationOutputGet:
+    IdDocumentVerificationOutputGet:
       type: object
       required: [id, declared_data, status, webhook_url, _links, applicant_id, response_codes, user_journey_id]
       allOf:
         - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/DocumentVerificationOutputBase"
+        - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
 
+    IdDocumentVerificationOutputAnonymize:
+      type: object
+      required: [id, status, webhook_url, applicant_id, user_journey_id, _links]
+      allOf:
+        - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
+    
+    IdDocumentVerificationOutputPdfReport:
+      type: object
+      properties:
+        pdf_report:
+          type: string
+          format: uri
 
     ################### Document Verification Attempts schemas #################
-    DocumentVerificationAttemptInputBase:
+    IdDocumentVerificationAttemptInputBase:
       type: object
       properties:
         document_type:
@@ -5613,24 +5716,24 @@ components:
           type: string
           format: binary
     
-    DocumentVerificationAttemptOutputBase:
+    IdDocumentVerificationAttemptOutputBase:
       type: object
       properties:
         id:
           type: string
         status:
-          $ref: "#/components/schemas/DocumentVerificationAttemptStates"
+          $ref: "#/components/schemas/IdDocumentVerificationAttemptStates"
         response_codes:
           type: array
           minItems: 0
           items:
             $ref: "#/components/schemas/ResponseCodes"
         _links:
-          $ref: "#/components/schemas/AttemptLinks"
+          $ref: "#/components/schemas/SelfLink"
       allOf:
         - $ref: "#/components/schemas/DatedObject"
 
-    DocumentVerificationAttemptOutputList:
+    IdDocumentVerificationAttemptOutputList:
       type: object
       required: [total_count, skip, limit, _links, data]
       properties:
@@ -5638,36 +5741,50 @@ components:
           type: array
           minItems: 0
           items:
-            $ref: "#/components/schemas/DocumentVerificationAttemptOutputGet"
+            $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputGet"
       allOf:
         - $ref: "#/components/schemas/BaseOutputList"
 
-    DocumentVerificationAttemptInputPost:
+    IdDocumentVerificationAttemptInputPost:
       type: object
       required: [document_type, issuing_country, document_front]
       allOf:
-        - $ref: "#/components/schemas/DocumentVerificationAttemptInputBase"
+        - $ref: "#/components/schemas/IdDocumentVerificationAttemptInputBase"
     
-    DocumentVerificationAttemptOutputPost:
+    IdDocumentVerificationAttemptOutputPost:
       type: object
       required: [id, status, response_codes, _links]
       allOf:
-        - $ref: "#/components/schemas/DocumentVerificationAttemptOutputBase"
+        - $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputBase"
     
-    DocumentVerificationAttemptOutputGet:
+    IdDocumentVerificationAttemptOutputGet:
       type: object
       required: [id, status, response_codes, _links]
       allOf:
-        - $ref: "#/components/schemas/DocumentVerificationAttemptOutputBase"
+        - $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputBase"
+
+    IdDocumentVerificationOutputResults:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/IdDocumentVerificationId"
+        status:
+          $ref: "#/components/schemas/IdDocumentVerificationStatus"
+        response_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        document:
+          $ref: "#/components/schemas/Document"
 
     ################### Document Verification Utils schemas #################
-    DocumentVerificationId:
+    IdDocumentVerificationId:
       type: string
       description: Document verification unique identifier.
       pattern: ^dv_\w+$
       example: dv_tkoi5db4hryu5cei5vwoabr7we
     
-    DocumentVerificationStatus:
+    IdDocumentVerificationStatus:
       type: string
       description: Document verification status.
       enum:
@@ -5679,13 +5796,13 @@ components:
         - retry_required
         - inconclusive
     
-    DocumentVerificationLinks:
+    IdDocumentVerificationLinks:
       type: object
       allOf:
         - $ref: "#/components/schemas/SelfLink"
         - $ref: "#/components/schemas/ApplicantLink"
 
-    DocumentVerificationAttemptStates:
+    IdDocumentVerificationAttemptStates:
       type: string
       description: Document verification attempt state.
       enum:
