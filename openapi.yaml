@@ -3483,8 +3483,8 @@ servers:
 tags:
   - name: identity verifications
     description: Identity verification endpoints documentation.
-  - name: document verifications
-    description: API for document verification
+  - name: ID document verification
+    description: API for ID document verification
   - name: AML verifications
     description: AML verification endpoints documentation.
   - name: applicants
@@ -3497,7 +3497,7 @@ x-tagGroups:
     tags:
       - Applicants
       - Identity verifications
-      - Document verifications
+      - ID document verification
       - Face authentications
       - AML verifications
       - Service status
