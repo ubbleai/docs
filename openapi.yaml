@@ -1837,7 +1837,9 @@ info:
   
     ## Retry
 
-    We expect that you will return us a 200 or 201 status code within 10 seconds before we retry, up to 2 retries will be performed. If needed, you can trigger webhook notifications manually using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
+    We require a 200 or 201 status code response within 10 seconds to avoid a retry.
+    We will perform up to 5 retries.
+    If necessary, you can manually trigger webhook notifications using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
 
     ## Signature
     For security reasons all our webhook calls are signed, please refer to [signature](#section/Signature) for more details.
@@ -3794,7 +3796,7 @@ paths:
     post:
       tags:
         - Identity verifications
-      summary: Create an Attempt
+      summary: Create an attempt
       description: This endpoint allows you to create a new Attempt. It is possible when the identity-verification is in one of
         the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
       operationId: create_attempt
@@ -3869,7 +3871,42 @@ paths:
         "500":
           description: An error occurred while fetching the attempt
 
-# Applicants
+  /v2/identity-verifications/{identity_verification_id}/attempts/{attempt_id}/assets:
+    get:
+      tags:
+        - Identity verifications
+      summary: Retrieve attempt assets
+      description: |
+        Retrieves the assets associated with an identity verification attempt.
+        This includes face images, videos, and document images captured during the verification process.
+        Please note that videos are not exposed by default, contact your account manager to enable this feature.
+      operationId: retrieve_identity_verification_attempt_assets
+      parameters:
+        - name: identity_verification_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the identity verification
+        - name: attempt_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the attempt
+      responses:
+        '200':
+          description: The assets were retrieved successfully
+          content:
+            application/json:
+              examples:
+                identity_verification_attempt_assets_response_body:
+                  $ref: "#/components/examples/identity_verification_attempt_assets_response_body"
+              schema:
+                $ref: "#/components/schemas/IdentityVerificationAttemptAssetsOutput"
+
+
+  # Applicants
   /v2/applicants:
     post:
       tags:
@@ -4221,7 +4258,7 @@ paths:
     post:
       tags:
         - Face authentications
-      summary: Create an Attempt
+      summary: Create an attempt
       description: This endpoint allows you to create a new Attempt. It is possible when the face-authentication is in one of
         the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
       operationId: create_attempt_face_authentication
@@ -4296,6 +4333,41 @@ paths:
           description: The provided face authentication ID or attempt ID is not valid
         "500":
           description: An error occurred while fetching the attempt
+
+  /v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}/assets:
+    get:
+      tags:
+        - Face authentications
+      summary: Retrieve attempt assets
+      description: |
+        Retrieves the assets associated with a face authentication attempt.
+        This includes face images and videos captured during the verification process.
+        Please note that videos are not exposed by default, contact your account manager to enable this feature.
+      operationId: retrieve_face_authentication_attempt_assets
+      parameters:
+        - name: face_authentication_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the face authentication
+        - name: attempt_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the attempt
+      responses:
+        '200':
+          description: The assets were retrieved successfully
+          content:
+            application/json:
+              examples:
+                face_authentication_attempt_assets_response_body:
+                  $ref: "#/components/examples/face_authentication_attempt_assets_response_body"
+              schema:
+                $ref: "#/components/schemas/FaceAuthenticationAttemptAssetsOutput"
+
 components:
   schemas:
     ########################### Utils schemas #############################
@@ -4401,6 +4473,9 @@ components:
           type: string
           minLength: 2
           maxLength: 255
+        birth_date:
+          type: string
+          format: date
 
     Document:
       type: object
@@ -4531,38 +4606,6 @@ components:
                 ],
             }
 
-    Identity:
-      type: object
-      required: [full_name, birth_date]
-      properties:
-        full_name:
-          type: string
-          minLength: 2
-          maxLength: 510
-        first_names:
-          type: string
-          minLength: 1
-          maxLength: 255
-        last_name:
-          type: string
-          minLength: 1
-          maxLength: 255
-        last_name_at_birth:
-          type: string
-          minLength: 1
-          maxLength: 255
-        birth_date:
-          type: string
-          format: date
-        birth_place:
-          type: string
-          minLength: 1
-          maxLength: 255
-        nationality:
-          $ref: "#/components/schemas/CountryCodeIso2"
-        gender:
-          $ref: "#/components/schemas/Gender"
-
     BaseOutputList:
       type: object
       properties:
@@ -4573,30 +4616,24 @@ components:
         limit:
           type: integer
         _links:
-          allOf:
-            - $ref: "#/components/schemas/SelfLink"
-            - $ref: "#/components/schemas/NextLink"
-            - $ref: "#/components/schemas/PreviousLink"
+          $ref: "#/components/schemas/ListLinks"
+
+    ListLinks:
+      type: object
+      required: [self]
+      properties:
+        self:
+          $ref: "#/components/schemas/HalLink"
+        previous:
+          $ref: "#/components/schemas/HalLink"
+        next:
+          $ref: "#/components/schemas/HalLink"
 
     SelfLink:
       type: object
       required: [self]
       properties:
         self:
-          $ref: "#/components/schemas/HalLink"
-
-    NextLink:
-      type: object
-      required: [next]
-      properties:
-        next:
-          $ref: "#/components/schemas/HalLink"
-
-    PreviousLink:
-      type: object
-      required: [previous]
-      properties:
-        previous:
           $ref: "#/components/schemas/HalLink"
 
     ActiveLink:
@@ -4886,6 +4923,58 @@ components:
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/IdentityVerificationOutputBase"
 
+    IdentityVerificationAttemptAssetsOutput:
+      type: object
+      required: [total_count, skip, limit, _links, data]
+      properties:
+        data:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/IdentityVerificationAttemptAssetOutput"
+      allOf:
+        - $ref: "#/components/schemas/BaseOutputList"
+
+    IdentityVerificationAttemptAssetOutput:
+      type: object
+      required: [ type, _links ]
+      properties:
+        type:
+          type: string
+          enum: [face_image, face_video, document_front_image, document_back_image, document_back_image, document_front_video, document_signature_image, document_back_video, secondary_document_front_video, secondary_document_front_image, secondary_document_back_image, secondary_document_signature_image, secondary_document_back_video, secondary_document_front_video]
+        _links:
+          type: object
+          required: [ asset_url ]
+          properties:
+            asset_url:
+              $ref: "#/components/schemas/HalLink"
+
+    FaceAuthenticationAttemptAssetsOutput:
+      type: object
+      required: [total_count, skip, limit, _links, data]
+      properties:
+        data:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/FaceAuthenticationAttemptAssetOutput"
+      allOf:
+        - $ref: "#/components/schemas/BaseOutputList"
+
+    FaceAuthenticationAttemptAssetOutput:
+      type: object
+      required: [ type, _links ]
+      properties:
+        type:
+          type: string
+          enum: [face_image, face_video]
+        _links:
+          required: [ asset_url ]
+          type: object
+          properties:
+            asset_url:
+              $ref: "#/components/schemas/HalLink"
+
     IdentityVerificationOutputPdfReport:
       type: object
       properties:
@@ -5054,7 +5143,7 @@ components:
           description: Ip address of the applicant during the session
           example: "123:456:789:00"
         number_of_sessions:
-          type: int
+          type: integer
           description: Number of sessions opened by user
           example: 3
         user_agent:
@@ -5421,6 +5510,33 @@ components:
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
 
+    identity_verification_attempt_assets_response_body:
+      value:
+        data:
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "face_image"
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "face_video"
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "document_front_image"
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "document_front_video"
+        _links:
+          self:
+            href: "https://api.ubble.ai/api/v2/face-authentications/fau_116kcr6z00h62kzvf4hw2twb3b/attempts/fatp_116kcr6z00h62kzvf4hw2twb3d/assets"
+
+        limit: 10
+        skip: 0
+        total_count: 4
+
 
     identity_verification_response_body:
       value:
@@ -5717,6 +5833,25 @@ components:
             href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}"
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
+
+    face_authentication_attempt_assets_response_body:
+      value:
+        data:
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "face_image"
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "face_video"
+        _links:
+          self:
+            href: "https://api.ubble.ai/api/v2/face-authentications/fau_116kcr6z00h62kzvf4hw2twb3b/attempts/fatp_116kcr6z00h62kzvf4hw2twb3d/assets"
+
+        limit: 10
+        skip: 0
+        total_count: 2
 
     face_authentication_attempt_creation_response_body:
       value:
