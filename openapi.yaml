@@ -1837,7 +1837,9 @@ info:
   
     ## Retry
 
-    We expect that you will return us a 200 or 201 status code within 10 seconds before we retry, up to 2 retries will be performed. If needed, you can trigger webhook notifications manually using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
+    We require a 200 or 201 status code response within 10 seconds to avoid a retry.
+    We will perform up to 5 retries.
+    If necessary, you can manually trigger webhook notifications using the [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
 
     ## Signature
     For security reasons all our webhook calls are signed, please refer to [signature](#section/Signature) for more details.
@@ -3483,7 +3485,7 @@ servers:
 tags:
   - name: identity verifications
     description: Identity verification endpoints documentation.
-  - name: ID document verification
+  - name: ID document verification (Coming soon)
     description: API for ID document verification
   - name: AML verifications
     description: AML verification endpoints documentation.
@@ -3497,7 +3499,7 @@ x-tagGroups:
     tags:
       - Applicants
       - Identity verifications
-      - ID document verification
+      - ID document verification (Coming soon)
       - Face authentications
       - AML verifications
       - Service status
@@ -3797,7 +3799,7 @@ paths:
     post:
       tags:
         - Identity verifications
-      summary: Create an Attempt
+      summary: Create an attempt
       description: This endpoint allows you to create a new Attempt. It is possible when the identity-verification is in one of
         the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
       operationId: create_attempt
@@ -3880,6 +3882,7 @@ paths:
       description: |
         Retrieves the assets associated with an identity verification attempt.
         This includes face images, videos, and document images captured during the verification process.
+        Please note that videos are not exposed by default, contact your account manager to enable this feature.
       operationId: retrieve_identity_verification_attempt_assets
       parameters:
         - name: identity_verification_id
@@ -3899,11 +3902,14 @@ paths:
           description: The assets were retrieved successfully
           content:
             application/json:
+              examples:
+                identity_verification_attempt_assets_response_body:
+                  $ref: "#/components/examples/identity_verification_attempt_assets_response_body"
               schema:
                 $ref: "#/components/schemas/IdentityVerificationAttemptAssetsOutput"
+                
 
-
-  # Applicants
+# Applicants
   /v2/applicants:
     post:
       tags:
@@ -4043,7 +4049,7 @@ paths:
         "500":
           description: Internal server error
 
-  # AML Verifications
+# AML Verifications
   /v2/aml-verifications:
     post:
       tags:
@@ -4102,7 +4108,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/AMLVerificationOutputGet"
 
-  # Face Authentications
+# Face Authentications
   /v2/face-authentications:
     post:
       tags:
@@ -4339,7 +4345,8 @@ paths:
       description: |
         Retrieves the assets associated with a face authentication attempt.
         This includes face images and videos captured during the verification process.
-      operationId: retrieve_identity_verification_attempt_assets
+        Please note that videos are not exposed by default, contact your account manager to enable this feature.
+      operationId: retrieve_face_authentication_attempt_assets
       parameters:
         - name: face_authentication_id
           in: path
@@ -4358,13 +4365,17 @@ paths:
           description: The assets were retrieved successfully
           content:
             application/json:
+              examples:
+                face_authentication_attempt_assets_response_body:
+                  $ref: "#/components/examples/face_authentication_attempt_assets_response_body"
               schema:
                 $ref: "#/components/schemas/FaceAuthenticationAttemptAssetsOutput"
+
 
   /v2/id-document-verification:
     post:
       tags:
-        - ID document verification
+        - ID document verification (Coming soon)
       summary: Create an ID document verification
       operationId: create_id_document_verification
       description: Creates an ID document verification
@@ -4373,10 +4384,8 @@ paths:
         content:
           application/json:
             examples:
-              Only required data:
-                $ref: "#/components/examples/id_document_verification_creation_request_body_min"
-              All possible data:
-                $ref: "#/components/examples/id_document_verification_creation_request_body_max"
+              id_document_verification_creation_request_body:
+                $ref: "#/components/examples/id_document_verification_creation_request_body"
             schema:
               $ref: "#/components/schemas/IdDocumentVerificationInputPost"
       responses:
@@ -4404,7 +4413,7 @@ paths:
   /v2/id-document-verification/{id_document_verification_id}:
     get:
       tags:
-        - ID document verification
+        - ID document verification (Coming soon)
       summary: Retrieve an ID document verification
       description: This endpoint allows you to get the detailed results of an ID document verification
       operationId: retrieve_id_document_verification
@@ -4432,7 +4441,7 @@ paths:
   /v2/id-document-verification/{id_document_verification_id}/anonymize:
     post:
       tags:
-        - ID document verification
+        - ID document verification (Coming soon)
       summary: Anonymize an ID document verification
       operationId: anonymize_id_document_verification
       description: Anonymize the personal data of an ID document verification with the specified ID.
@@ -4463,7 +4472,7 @@ paths:
   /v2/id-document-verification/{id_document_verification_id}/pdf-report:
     get:
       tags:
-        - ID document verification
+        - ID document verification (Coming soon)
       summary: Retrieve PDF report of an ID document verification
       operationId: pdf_id_document_verification
       description: |
@@ -4494,7 +4503,7 @@ paths:
   /v2/id-document-verification/{id_document_verification_id}/notify:
     post:
       tags:
-        - ID document verification
+        - ID document verification (Coming soon)
       summary: Request webhook notification
       operationId: notify_document_verification
       description: This endpoint can be used to initiate a webhook call containing the latest event of an ID document verification
@@ -4521,7 +4530,7 @@ paths:
   /v2/id-document-verification/{id_document_verification_id}/attempts:
     get:
       tags:
-        - ID document verification
+        - ID document verification (Coming soon)
       summary: List ID document verification attempts
       operationId: list_attempts_id_document_verification
       description: This endpoint allows you to list all attempts of an ID document verification
@@ -4549,7 +4558,7 @@ paths:
           description: An error occurred while fetching the attempts
     post:
       tags:
-        - ID document verification
+        - ID document verification (Coming soon)
       summary: Create an ID document verification attempt
       description: "This endpoint allows you to create an ID document verification attempt. It is possible when the ID document verification 
         is one of the following statuses: `created`, `retry_required`"
@@ -4593,7 +4602,7 @@ paths:
   /v2/id-document-verification/{id_document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
-        - ID document verification
+        - ID document verification (Coming soon)
       summary: Retrieve an ID document verification attempt
       description: This endpoint allows you to retrieve the details for a given ID document verification attempt
       operationId: fetch_attempts_id_document_verification
@@ -4625,11 +4634,11 @@ paths:
           description: The provided document verification attempt ID is not valid
         "500":
           description: An error occurred while fetching the attempt
-
+  
   /v2/id-document-verification/{id_document_verification_id}/attempts/{attempt_id}/assets:
     get:
       tags:
-        - ID document verification
+        - ID document verification (Coming soon)
       summary: Retrieve an ID document verification attempt asset
       operationId: fetch_asset_id_document_verification_attempt
       description: |
@@ -4657,7 +4666,7 @@ paths:
                 id_document_verification_attempt_output_assets_response_body:
                   $ref: "#/components/examples/id_document_verification_attempt_output_assets_response_body"
               schema:
-                $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputAssets"
+                $ref: "#/components/schemas/IdDocumentVerificationAttemptAssetsOutput"
 
 components:
   schemas:
@@ -4764,6 +4773,9 @@ components:
           type: string
           minLength: 2
           maxLength: 255
+        birth_date:
+          type: string
+          format: date
 
     Document:
       type: object
@@ -4894,38 +4906,6 @@ components:
                 ],
             }
 
-    Identity:
-      type: object
-      required: [full_name, birth_date]
-      properties:
-        full_name:
-          type: string
-          minLength: 2
-          maxLength: 510
-        first_names:
-          type: string
-          minLength: 1
-          maxLength: 255
-        last_name:
-          type: string
-          minLength: 1
-          maxLength: 255
-        last_name_at_birth:
-          type: string
-          minLength: 1
-          maxLength: 255
-        birth_date:
-          type: string
-          format: date
-        birth_place:
-          type: string
-          minLength: 1
-          maxLength: 255
-        nationality:
-          $ref: "#/components/schemas/CountryCodeIso2"
-        gender:
-          $ref: "#/components/schemas/Gender"
-
     BaseOutputList:
       type: object
       properties:
@@ -4936,30 +4916,24 @@ components:
         limit:
           type: integer
         _links:
-          allOf:
-            - $ref: "#/components/schemas/SelfLink"
-            - $ref: "#/components/schemas/NextLink"
-            - $ref: "#/components/schemas/PreviousLink"
+          $ref: "#/components/schemas/ListLinks"
+
+    ListLinks:
+        type: object
+        required: [self]
+        properties:
+          self:
+            $ref: "#/components/schemas/HalLink"
+          previous:
+            $ref: "#/components/schemas/HalLink"
+          next:
+            $ref: "#/components/schemas/HalLink"
 
     SelfLink:
       type: object
       required: [self]
       properties:
         self:
-          $ref: "#/components/schemas/HalLink"
-
-    NextLink:
-      type: object
-      required: [next]
-      properties:
-        next:
-          $ref: "#/components/schemas/HalLink"
-
-    PreviousLink:
-      type: object
-      required: [previous]
-      properties:
-        previous:
           $ref: "#/components/schemas/HalLink"
 
     ActiveLink:
@@ -5267,15 +5241,13 @@ components:
       properties:
         type:
           type: string
-          enum: [face_image, face_video, document_front_image, document_back_image, document_signature_image, document_back_video, secondary_document_front_video, secondary_document_front_image, secondary_document_back_image, secondary_document_signature_image, secondary_document_back_video, secondary_document_front_video]
+          enum: [face_image, face_video, document_front_image, document_back_image, document_back_image, document_front_video, document_signature_image, document_back_video, secondary_document_front_video, secondary_document_front_image, secondary_document_back_image, secondary_document_signature_image, secondary_document_back_video, secondary_document_front_video]
         _links:
           type: object
+          required: [ asset_url ]
           properties:
             asset_url:
-              type: object
-              properties:
-                href:
-                  type: string
+              $ref: "#/components/schemas/HalLink"
 
     FaceAuthenticationAttemptAssetsOutput:
       type: object
@@ -5297,13 +5269,11 @@ components:
           type: string
           enum: [face_image, face_video]
         _links:
+          required: [ asset_url ]
           type: object
           properties:
             asset_url:
-              type: object
-              properties:
-                href:
-                  type: string
+              $ref: "#/components/schemas/HalLink"
 
     IdentityVerificationOutputPdfReport:
       type: object
@@ -5473,7 +5443,7 @@ components:
           description: Ip address of the applicant during the session
           example: "123:456:789:00"
         number_of_sessions:
-          type: int
+          type: integer
           description: Number of sessions opened by user
           example: 3
         user_agent:
@@ -5711,7 +5681,7 @@ components:
     
     IdDocumentVerificationOutputPost:
       type: object
-      required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id]
+      required: [id, declared_data, status, webhook_url, applicant_id, response_codes, user_journey_id, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
     
@@ -5724,18 +5694,19 @@ components:
 
     IdDocumentVerificationOutputAnonymize:
       type: object
-      required: [id, status, webhook_url, applicant_id, user_journey_id, _links]
+      required: [id, declared_data, status, webhook_url, applicant_id, user_journey_id, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
     
     IdDocumentVerificationOutputPdfReport:
       type: object
+      required: [pdf_report]
       properties:
         pdf_report:
           type: string
           format: uri
 
-    ################### Document Verification Attempts schemas #################
+    ################### ID Document Verification Attempts schemas #################
     IdDocumentVerificationAttemptInputBase:
       type: object
       properties:
@@ -5796,8 +5767,8 @@ components:
       required: [id, status, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputBase"
-
-    IdDocumentVerificationAttemptOutputAssets:
+    
+    IdDocumentVerificationAttemptAssetsOutput:
       type: object
       required: [total_count, skip, limit, _links, data]
       properties:
@@ -5811,6 +5782,7 @@ components:
 
     IdDocumentVerificationAttemptOutputAssetOutput:
       type: object
+      required: [type, _links]
       properties:
         type:
           type: string
@@ -5830,7 +5802,7 @@ components:
     ################### ID Document Verification Utils schemas #################
     IdDocumentVerificationId:
       type: string
-      description: ID document verification unique identifier.
+      description: ID ocument verification unique identifier.
       pattern: ^iddv_\w+$
       example: iddv_tkoi5db4hryu5cei5vwoabr7we
     
@@ -6041,6 +6013,33 @@ components:
             href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we"
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
+
+    identity_verification_attempt_assets_response_body:
+      value:
+        data:
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "face_image"
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "face_video"
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "document_front_image"
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "document_front_video"
+        _links:
+          self:
+            href: "https://api.ubble.ai/api/v2/face-authentications/fau_116kcr6z00h62kzvf4hw2twb3b/attempts/fatp_116kcr6z00h62kzvf4hw2twb3d/assets"
+      
+        limit: 10
+        skip: 0
+        total_count: 4
 
 
     identity_verification_response_body:
@@ -6339,6 +6338,25 @@ components:
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
+    face_authentication_attempt_assets_response_body:
+      value:
+        data:
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "face_image"
+          - _links:
+              asset_url:
+                href: "https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/tight_crops/FRA-I5-Front-bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921906596.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163228Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=87d8467ab92cbad7c00171af28e613d495f3ff441ce0ea59dd013d68abc50555"
+            type: "face_video"
+        _links:
+          self:
+            href: "https://api.ubble.ai/api/v2/face-authentications/fau_116kcr6z00h62kzvf4hw2twb3b/attempts/fatp_116kcr6z00h62kzvf4hw2twb3d/assets"
+      
+        limit: 10
+        skip: 0
+        total_count: 2
+
     face_authentication_attempt_creation_response_body:
       value:
         id: "fatp_tkoi5db4hryu5cei5vwoabrPoQ"
@@ -6422,14 +6440,8 @@ components:
           previous:
             href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
     
-    id_document_verification_creation_request_body_min:
-      value:
-        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
-        declared_data:
-          name: John Smith
-        webhook_url: "https://my.api/events/"
     
-    id_document_verification_creation_request_body_max:
+    id_document_verification_creation_request_body:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
@@ -6493,21 +6505,26 @@ components:
       value:
         document_type: Passport
         issuing_country: FR
-        document_front: <binary data>
+        document_front: |
+          data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…
+
     
     id_document_verification_attempt_creation_request_body_max:
       value:
         document_type: ID
         issuing_country: US
-        document_front: <binary data>
-        document_back: <binary data>
+        document_front: |
+          data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
+        document_back: |
+          data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
+
     
     id_document_verification_attempt_creation_response_body:
       value:
         id: iddv_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
-        status: created
+        status: completed
         response_codes: []
         _links:
           self:
@@ -6518,7 +6535,7 @@ components:
         id: iddv_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
-        status: created
+        status: completed
         response_codes: []
         _links:
           self:
@@ -6533,11 +6550,18 @@ components:
         - id: iddv_tkoi5db4hryu5cei5vwoabr7we
           created_on: 2017-07-21T17:32:28Z
           modified_on: 2017-07-21T17:40:32Z
-          status: created
+          status: completed
           response_codes: []
           _links:
             self:
               href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we"
+        _links:
+          self:
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we/attempts"
+          next:
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we/attempts/..."
+          previous:
+            href: "https://api.ubble.ai/v2/id-document-verification/dv_tkoi5db4hryu5cei5vwoabr7we/attempts/..."
     
     id_document_verification_attempt_output_assets_response_body:
       value:
