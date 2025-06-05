@@ -3888,7 +3888,7 @@ paths:
         Retrieves the assets associated with an identity verification attempt.
         This includes face images, videos, and document images captured during the verification process.
         Please note that videos are not exposed by default, contact your account manager to enable this feature.
-        Videos cannot are also not exposed in the certified offer.
+        Videos are also not exposed in the certified offer.
       operationId: retrieve_identity_verification_attempt_assets
       parameters:
         - name: identity_verification_id
