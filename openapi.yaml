@@ -1281,6 +1281,14 @@ info:
         <td class="tg-center">&#9989;</td>
         <td class="tg-center">&#10060;</td>
       </tr>
+      <tr>
+        <td class="tg-0pky">62405</td>
+        <td class="tg-0pky">known_fraudulent_face</td>
+        <td class="tg-0pky">(Coming soon) The applicant has recently performed a fraud attempt</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+        <td class="tg-center">&#9989;</td>
+      </tr>
     </tbody>
     </table>
 
@@ -3880,6 +3888,7 @@ paths:
         Retrieves the assets associated with an identity verification attempt.
         This includes face images, videos, and document images captured during the verification process.
         Please note that videos are not exposed by default, contact your account manager to enable this feature.
+        Videos are also not exposed in the certified offer.
       operationId: retrieve_identity_verification_attempt_assets
       parameters:
         - name: identity_verification_id
