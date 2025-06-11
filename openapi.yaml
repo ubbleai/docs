@@ -1645,7 +1645,7 @@ info:
     
     When the review is completed, you will get a notification with the `event_type` field set to `aml_monitoring_review_completed` and the body will include the new `status, depending of you decision to accept or not the risk related to the monitoring case.
     
-    # Face Authentication (Coming soon)
+    # Face Authentication
     
     You may want to verify that a person is the same person who performed the identity verification. 
 
