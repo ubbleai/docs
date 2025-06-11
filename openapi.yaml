@@ -1728,7 +1728,7 @@ info:
         <td class="center-icon"><svg></svg></td>
       </tr>
       <tr>
-        <td class="tg-dvid" colspan="6">Technical issue</td>
+        <td class="tg-dvid" colspan="6">Video streaming issue</td>
       </tr>
       <tr>
         <td class="tg-0pky">61201</td>
@@ -1755,6 +1755,14 @@ info:
         <td class="center-icon"><svg></svg></td>
       </tr>
       <tr>
+        <td class="tg-0pky">61911</td>
+        <td class="tg-0pky">corrupted_videos</td>
+        <td class="tg-0pky">The received videos cannot be played</td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
+      </tr>
+      <tr>
         <td class="tg-0pky">61205</td>
         <td class="tg-0pky">sms_not_received</td>
         <td class="tg-0pky">DEPRECATED</td>
@@ -1767,19 +1775,27 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">61301</td>
-        <td class="tg-0pky">document_video_blurry</td>
-        <td class="tg-0pky">Applicant's document video is too blurry<br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
+        <td class="tg-0pky">document_blurry</td>
+        <td class="tg-0pky">Applicant's document is too blurry<br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
-        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
       <tr>
         <td class="tg-0pky">61302</td>
-        <td class="tg-0pky">document_video_lighting_issue</td>
+        <td class="tg-0pky">document_lighting_issue</td>
         <td class="tg-0pky">Applicant performed the document capture under poor lighting conditions</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">61302</td>
+        <td class="tg-0pky">document_not_in_color</td>
+        <td class="tg-0pky">Applicant's document is not captured in color</td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
       <tr>
         <td class="tg-0pky">61310</td>
@@ -1787,7 +1803,7 @@ info:
         <td class="tg-0pky">Applicant has not captured the front of the document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
-        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
       <tr>
         <td class="tg-0pky">61311</td>
@@ -1795,7 +1811,7 @@ info:
         <td class="tg-0pky">Applicant has not captured the back of the document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
-        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
       <tr>
         <td class="tg-0pky">61312</td>
@@ -1803,7 +1819,7 @@ info:
         <td class="tg-0pky">Applicant hides part of the document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
-        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
       <tr>
         <td class="tg-0pky">61313</td>
@@ -1824,24 +1840,24 @@ info:
       <tr>
         <td class="tg-0pky">61315</td>
         <td class="tg-0pky">document_barcode_unreadable</td>
-        <td class="tg-0pky">The barcode of the document is unreadable</td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="tg-0pky">DEPRECATED</td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
-    <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Secondary document video capture issue</span></td>
+    <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Secondary document capture issue</span></td>
     </tr>
       <tr>
         <td class="tg-0pky">61321</td>
-        <td class="tg-0pky">secondary_document_video_blurry</td>
-        <td class="tg-0pky">Applicant's secondary document video is too blurry (mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
+        <td class="tg-0pky">secondary_document_blurry</td>
+        <td class="tg-0pky">Applicant's secondary document is too blurry (mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
       <tr>
         <td class="tg-0pky">61322</td>
-        <td class="tg-0pky">secondary_document_video_lighting_issue</td>
+        <td class="tg-0pky">secondary_document_lighting_issue</td>
         <td class="tg-0pky">Applicant performed the secondary document capture under poor lighting conditions</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -1938,48 +1954,6 @@ info:
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
-      <td class="tg-fymr" colspan="6"><span style="font-weight:bold">Uploaded asset issue</span></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61501</td>
-        <td class="tg-0pky">uploaded_document_not_in_color</td>
-        <td class="tg-0pky">Asset submitted is not captured in color</td>
-        <td class="center-icon"></td>
-        <td class="center-icon"></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61502</td>
-        <td class="tg-0pky">uploaded_document_blurry</td>
-        <td class="tg-0pky">Asset appears too blurry</td>
-        <td class="center-icon"></td>
-        <td class="center-icon"></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61503</td>
-        <td class="tg-0pky">uploaded_document_not_present</td>
-        <td class="tg-0pky">Expected asset is not present</td>
-        <td class="center-icon"></td>
-        <td class="center-icon"></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61504</td>
-        <td class="tg-0pky">uploaded_document_partially_hidden</td>
-        <td class="tg-0pky">Part of the asset is hidden</td>
-        <td class="center-icon"></td>
-        <td class="center-icon"></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61505</td>
-        <td class="tg-0pky">uploaded_document_barcode_unreadable</td>
-        <td class="tg-0pky">The barcode of the document is unreadable</td>
-        <td class="center-icon"></td>
-        <td class="center-icon"></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-      </tr>
       <tr>
         <td class="tg-dvid" colspan="6">Other issues</td>
       </tr>
@@ -1990,14 +1964,6 @@ info:
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky">61911</td>
-        <td class="tg-0pky">corrupted_videos</td>
-        <td class="tg-0pky">The received videos cannot be played</td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"></td>
       </tr>
     </tbody>
     </table>
@@ -2210,19 +2176,11 @@ info:
         </tr>
         <tr>
           <td class="tg-0pky">62307</td>
-          <td class="tg-0pky">videos_digital_alteration</td>
-          <td class="tg-0pky">Applicant has digitally altered the videos</td>
+          <td class="tg-0pky">assets_digital_alteration</td>
+          <td class="tg-0pky">Applicant has digitally altered the assets</td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
-        </tr>
-        <tr>
-        <td class="tg-0pky">62308</td>
-        <td class="tg-0pky">asset_digital_alteration</td>
-        <td class="tg-0pky">Applicant has digitally altered the submitted assets</td>
-        <td class="center-icon"></td>
-        <td class="center-icon"></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         </tr>
         <tr>
           <td class="tg-0pky">62321</td>
