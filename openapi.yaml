@@ -261,6 +261,7 @@ info:
     To create an attempt, call the Create an attempt endpoint with the `id_document_verification_id` and provide the following fields:
     - `document_type`, among `passport`, `identity_card`, `resident_permit`, `driving_license`
     - `document_issuing_country`, using ISO-Alpha2 code
+    - `document_issuing_country_subdivision` (optional), using ISO 3166-2 subdivision code (e.g., US-CA for California)
     - capture of the front of the document
     - capture of the back of the document (if relevant)
 
@@ -3691,6 +3692,18 @@ components:
         - code
         - summary
 
+    RiskLabels:
+          type: array
+          items:
+            $ref: "#/components/schemas/RiskLabel"
+          description: Risk assessment labels
+
+    RiskLabel:
+      type: string
+      description: Risk assessment label.
+      enum:
+        - multiple_faces_detected
+
     ResponseSummary:
       type: string
       description: A descriptive code of the response code.
@@ -4118,6 +4131,8 @@ components:
         verification_policy_version:
           type: string
           description: returned ONLY for certified verifications
+        risk_labels:
+          $ref: "#/components/schemas/RiskLabels"
       allOf:
         - $ref: "#/components/schemas/IdentityVerificationBase"
 
@@ -4129,7 +4144,7 @@ components:
 
     IdentityVerificationOutputPost:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, response_codes, applicant_id, user_journey_id]
+      required: [id, declared_data, status, webhook_url, _links, response_codes, risk_labels, applicant_id, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4153,7 +4168,7 @@ components:
 
     IdentityVerificationOutputHelper:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, response_codes, redirect_url, applicant_id, user_journey_id]
+      required: [id, declared_data, status, webhook_url, _links, response_codes, risk_labels, redirect_url, applicant_id, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4170,7 +4185,7 @@ components:
 
     IdentityVerificationOutputGet:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, applicant_id, redirect_url, response_codes, user_journey_id]
+      required: [id, declared_data, status, webhook_url, redirect_url, _links, applicant_id, response_codes, risk_labels, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4180,14 +4195,14 @@ components:
           type: string
           format: uri
         _links:
-          $ref: "#/components/schemas/IdentityVerificationHelperLinks"
+          $ref: "#/components/schemas/IdentityVerificationLinks"
       allOf:
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/IdentityVerificationOutputBase"
 
     IdentityVerificationOutputAnonymize:
       type: object
-      required: [id, status, webhook_url, _links, applicant_id, redirect_url, response_codes, user_journey_id]
+      required: [id, status, webhook_url, _links, applicant_id, redirect_url, response_codes, risk_labels, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4558,6 +4573,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResponseCodes'
+        risk_labels:
+          $ref: '#/components/schemas/RiskLabels'
         face:
           $ref: '#/components/schemas/VerificationFace'
         _links:
@@ -4574,7 +4591,7 @@ components:
 
     FaceAuthenticationOutputPost:
       type: object
-      required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id, _links]
+      required: [id, status, webhook_url, applicant_id, response_codes, risk_labels, user_journey_id, _links]
       properties:
         face:
           $ref: '#/components/schemas/VerificationFace'
@@ -4583,13 +4600,13 @@ components:
     
     FaceAuthenticationOutputGet:
       type: object
-      required: [id, status, webhook_url, applicant_id, response_codes, user_journey_id, _links]
+      required: [id, status, webhook_url, applicant_id, response_codes, risk_labels, user_journey_id, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationOutputBase"
 
     FaceAuthenticationOutputAnonymize:
       type: object
-      required: [id, status, webhook_url, applicant_id, user_journey_id, _links]
+      required: [id, status, webhook_url, applicant_id, user_journey_id, response_codes, risk_labels, _links]
       properties:
         face:
           $ref: '#/components/schemas/VerificationFace'
@@ -4693,6 +4710,9 @@ components:
           $ref: "#/components/schemas/DocumentTypes"
         document_issuing_country:
           $ref: "#/components/schemas/CountryCodeIso2"
+        document_issuing_country_subdivision:
+          type: string
+          description: State, province, or region subdivision code (e.g., US-CA for California)
         document_front:
           type: string
           format: binary
@@ -4946,6 +4966,7 @@ components:
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         status: pending
         response_codes: []
+        risk_labels: []
         declared_data:
           name: David Vincent
         documents: []
@@ -4983,6 +5004,7 @@ components:
         applicant_id: "aplt_tkoi5db4hryu5cei5vwoabr7we"
         status: "created"
         response_codes: []
+        risk_labels: []
         declared_data:
           name: "David Vincent"
         documents: []
@@ -5032,6 +5054,8 @@ components:
         response_codes:
           - { "code": 61310, "summary": "document_front_not_captured" }
           - { "code": 62102, "summary": "document_not_accepted" }
+        risk_labels:
+          - multiple_faces_detected
         verified_identity:
           full_name: David Vincent
           birth_date: 1934-10-02
@@ -5067,6 +5091,8 @@ components:
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         status: pending
         response_codes: []
+        risk_labels:
+          - multiple_faces_detected
         phone_number:
           country_code: '+1'
           number: '5555550102'
@@ -5269,6 +5295,8 @@ components:
         response_codes:
           - { "code": 62403, "summary": "consent_unclear" }
           - { "code": 61402, "summary": "face_video_lighting_issue" }
+        risk_labels:
+          - multiple_faces_detected
         face:
           image_signed_url: https://storage-b.env.ubble.ai/ubble-ai/NDYOOVHGZPAQ/a54b3393-f02a-47c9-a9c5-2f6ee73560e1/bb603e2f-5de9-40f2-9631-8285a33c24c0/live_face/bb603e2f-5de9-40f2-9631-8285a33c24c0-1679921946714.png?response-content-type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=V9jgOdpOdeVSFTkA4ZsG%2F20230327%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230327T163223Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=2b7d87fec4f11f0df949da7beade2519cf1a51ce70fe9cc1cf0470d73f5340e4
         webhook_url: https://my.api/events/
@@ -5289,6 +5317,8 @@ components:
         response_codes:
           - { "code": 62403, "summary": "consent_unclear" }
           - { "code": 61402, "summary": "face_video_lighting_issue" }
+        risk_labels:
+          - multiple_faces_detected
         webhook_url: https://my.api/events/
         _links:
           self:
@@ -5484,6 +5514,7 @@ components:
       value:
         document_type: ID
         document_issuing_country: US
+        document_issuing_country_subdivision: US-CA
         document_front: |
           data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
         document_back: |
