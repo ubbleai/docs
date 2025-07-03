@@ -261,11 +261,10 @@ info:
     To create an attempt, call the Create an attempt endpoint with the `id_document_verification_id` and provide the following fields:
     - `document_type`, among `passport`, `identity_card`, `resident_permit`, `driving_license`
     - `document_issuing_country`, using ISO-Alpha2 code
-    - `document_issuing_country_subdivision` (optional), using ISO 3166-2 subdivision code (e.g., US-CA for California)
     - capture of the front of the document
     - capture of the back of the document (if relevant)
 
-    Assets should adhere to a specified format (to be defined) and must be of a size below (to be defined). 
+    Assets must be in one of the following formats: PDF, JPEG, or PNG, and must not exceed 10MB in size.
     Additionally, we will conduct malware detection checks on every file received. 
     
     ## Verify webhook notifications
@@ -286,32 +285,32 @@ info:
       </thead>
       <tbody>
         <tr>
-          <td class="tg-0pky"><code>document_verification_quality_checks_in_progress</code></td>
+          <td class="tg-0pky"><code>id_document_verification_quality_checks_in_progress</code></td>
           <td class="tg-0pky"><code>quality_checks_in_progress</code></td>
           <td class="tg-0pky">You submitted the document and Checkout.com perfoms the quality checks.</td>
         </tr>
         <tr>
-          <td class="tg-0pky"><code>document_verification_checks_in_progress</code></td>
+          <td class="tg-0pky"><code>id_document_verification_checks_in_progress</code></td>
           <td class="tg-0pky"><code>checks_in_progress</code></td>
           <td class="tg-0pky">Checkout.com has performed the quality checks and processes the security checks.</td>
         </tr>
         <tr>
-          <td class="tg-0pky"><code>document_verification_completed</code></td>
+          <td class="tg-0pky"><code>id_document_verification_completed</code></td>
           <td class="tg-0pky"><code>approved</code></td>
           <td class="tg-0pky">The applicant's document has been approved</td>
         </tr>
         <tr>
-          <td class="tg-0pky"><code>document_verification_completed</code></td>
+          <td class="tg-0pky"><code>id_document_verification_completed</code></td>
           <td class="tg-0pky"><code>declined</code></td>
           <td class="tg-0pky">The applicant's document has been declined</td>
         </tr>
         <tr>
-          <td class="tg-0pky"><code>document_verification_quality_checks_aborted</code></td>
+          <td class="tg-0pky"><code>id_document_verification_quality_checks_aborted</code></td>
           <td class="tg-0pky"><code>retry_required</code></td>
           <td class="tg-0pky">The quality of the the images does not allow us to perform the checks, create a new attempt with other images</td>
         </tr>
         <tr>
-          <td class="tg-0pky"><code>document_verification_checks_inconclusive</code></td>
+          <td class="tg-0pky"><code>id_document_verification_checks_inconclusive</code></td>
           <td class="tg-0pky"><code>retry_required</code></td>
           <td class="tg-0pky">Result is inconclusive, create a new attempt with other images</td>
         </tr>
@@ -363,12 +362,12 @@ info:
 
     ## Retrieve detailed results
 
-    To retrieve the detailed verification results, call the Retrieve an ID Document Verification endpoint with the identity verification id value returned in the Create an ID document verification response. 
+    To retrieve the detailed verification results, call the Retrieve an ID Document Verification endpoint with the ID Document Verification id value returned in the Create an ID document verification response. 
 
     If the status of the verification is `approved` or `declined`, you will find all the information extracted from the document in the `document` object. 
     
-    You will also receive the `document_verification_report_created` event. 
-    Call the Retrieve PDF report to retrieve a PDF report containing all the information of the identity verification.
+    You will also receive the `id_document_verification_report_created` event. 
+    Call the Retrieve PDF report to retrieve a PDF report containing all the information of the ID Document Verification.
 
     ## Manage retries
     
@@ -1068,8 +1067,8 @@ info:
 
     ## Configuration
 
-    When [creating an identity verification](#tag/Identity-verifications/operation/create_identity_verification), you need to provide the webhook url you want to be notified on.
-    You will be notified of each event on identity verifications. For more details see the event section.
+    When creating a verification, you need to provide the webhook url you want to be notified on.
+    You will be notified of each event on verifications. For more details see the event section.
     To help you integrate your webhook you can trigger it with the standard answers, see [notify endpoint](#tag/Identity-verifications/operation/notify_identity_verification).
 
     ## Retry
@@ -1192,18 +1191,18 @@ info:
 
       | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
       |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-      | `document_verification_created`                           | You created a document verification                                                                                               |
-      | `document_verification_quality_checks_in_progress`        | You created a first attempt and we assess the quality of the images                                                               |
-      | `document_verification_reset`                             | You created a new attempt while the status was checks in progress or quality_ checks_in_progres                                   |
-      | `document_verification_checks_in_progress`                | We completed the quality assessment and perform the safety checks                                                                 |
-      | `document_verification_checks_completed`                  | We completed the safety checks                                                                                                    |
-      | `document_verification_quality_checks_aborted`            | The applicant did not provide assets of good enough quality to perform the verification                                           |
-      | `document_verification_checks_inconclusive`               | The applicant did not provide the assets required to perform the checks                                                           |
-      | `document_verification_retry_requested`                   | You requested a retry for this document verification                                                                              |
-      | `document_verification_closed`                            | The verification has been forcibly closed                                                                                         |
-      | `document_verification_anonymized`                        | The document verification has been anonymized                                                                                     |
-      | `document_verification_audit_completed`                   | 	The verification has been audited and the status may have been updated                                                          |
-      | `document_verification_report_created`                    | The pdf report is available                                                                                                       |
+      | `id_document_verification_created`                           | You created a document verification                                                                                               |
+      | `id_document_verification_quality_checks_in_progress`        | You created a first attempt and we assess the quality of the images                                                               |
+      | `id_document_verification_reset`                             | You created a new attempt while the status was checks in progress or quality_ checks_in_progres                                   |
+      | `id_document_verification_checks_in_progress`                | We completed the quality assessment and perform the safety checks                                                                 |
+      | `id_document_verification_checks_completed`                  | We completed the safety checks                                                                                                    |
+      | `id_document_verification_quality_checks_aborted`            | The applicant did not provide assets of good enough quality to perform the verification                                           |
+      | `id_document_verification_checks_inconclusive`               | The applicant did not provide the assets required to perform the checks                                                           |
+      | `id_document_verification_retry_requested`                   | You requested a retry for this document verification                                                                              |
+      | `id_document_verification_closed`                            | The verification has been forcibly closed                                                                                         |
+      | `id_document_verification_anonymized`                        | The document verification has been anonymized                                                                                     |
+      | `id_document_verification_audit_completed`                   | 	The verification has been audited and the status may have been updated                                                          |
+      | `id_document_verification_report_created`                    | The pdf report is available                                                                                                       |
     
     ## AML verification
 
@@ -1643,6 +1642,7 @@ info:
     }
     </style>
 
+    <!-- Replace Unicode checkmark with SVG -->
     <svg style="display: none;">
       <symbol id="checkmark" viewBox="0 0 24 24">
               <path stroke="currentColor" fill="none" stroke-width="2" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
@@ -1810,7 +1810,7 @@ info:
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
       <tr>
-        <td class="tg-0pky">61302</td>
+        <td class="tg-0pky">61303</td>
         <td class="tg-0pky">document_not_in_color</td>
         <td class="tg-0pky">Applicant's document is not captured in color</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -2200,7 +2200,7 @@ info:
           <td class="tg-0pky">Applicant has digitally altered the assets</td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         </tr>
         <tr>
           <td class="tg-0pky">62321</td>
