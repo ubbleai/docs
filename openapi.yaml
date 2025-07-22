@@ -1813,7 +1813,7 @@ info:
         <td class="tg-0pky">61303</td>
         <td class="tg-0pky">document_not_in_color</td>
         <td class="tg-0pky">Applicant's document is not captured in color</td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"><svg></svg></td>
         <td class="center-icon"></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
