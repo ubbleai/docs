@@ -2256,7 +2256,7 @@ info:
         <tr>
           <td class="tg-0pky">62405</td>
           <td class="tg-0pky">known_fraudulent_face</td>
-          <td class="tg-0pky">(Coming soon) The applicant has recently performed a fraud attempt</td>
+          <td class="tg-0pky">The applicant has recently performed a fraud attempt</td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
@@ -2418,12 +2418,17 @@ info:
 
     ### Resources identifiers formatting
 
-    | resource name          | prefix  | example                          |
-    |------------------------|---------|---------------------------------|
-    | applicants             | aplt    | aplt_tkoi5db4hryu5cei5vwoabr7we |
-    | identity-verifications  | idv     | idv_tkoi5db4hryu5cei5vwoabr7we  |
-    | aml-verifications       | amlv    | amlv_tkoi5db4hryu5cei5vwoabr7we |
-    | user-journey           | usj     | usj_tkoi5db4hryu5cei5vwoabr7we  |
+    | resource name                    | prefix  | example                         |
+    |----------------------------------|---------|---------------------------------|
+    | aml-verifications                | amlv    | amlv_tkoi5db4hryu5cei5vwoabr7we |
+    | applicants                       | aplt    | aplt_tkoi5db4hryu5cei5vwoabr7we |
+    | face-authentication-attempt      | fatp    | fatp_tkoi5db4hryu5cei5vwoabr7we |
+    | face-authentications             | fav     | fav_tkoi5db4hryu5cei5vwoabr7we  |
+    | identity-verification-attempt    | iatp    | iatp_tkoi5db4hryu5cei5vwoabr7we |
+    | identity-verifications           | idv     | idv_tkoi5db4hryu5cei5vwoabr7we  |
+    | id-document-verification-attempt | datp    | datp_tkoi5db4hryu5cei5vwoabr7we |
+    | id-document-verifications        | iddv    | iddv_tkoi5db4hryu5cei5vwoabr7we |
+    | user-journey                     | usj     | usj_tkoi5db4hryu5cei5vwoabr7we  |
 
     ## Content type
     The API accepts and returns `application/json` type.
