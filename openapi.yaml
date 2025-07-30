@@ -1728,7 +1728,7 @@ info:
         <td class="tg-0pky">applicant_no_document</td>
         <td class="tg-0pky">Applicant explicitly stated that they did not have their document with them by clicking on the dedicated button</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
       <tr>
@@ -1813,7 +1813,7 @@ info:
         <td class="tg-0pky">61303</td>
         <td class="tg-0pky">document_not_in_color</td>
         <td class="tg-0pky">Applicant's document is not captured in color</td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
