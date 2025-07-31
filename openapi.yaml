@@ -3680,7 +3680,6 @@ components:
     LanguageCode:
       type: string
       format: IETF BCP 47 language tag
-      pattern: ^[a-z]{2,3}(?:[-_][A-Za-z]{4})?(?:[-_][A-Za-z]{2})?$
       description: Language code following IETF BCP 47 standard
       example: en-US
 
