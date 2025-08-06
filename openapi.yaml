@@ -3677,6 +3677,12 @@ components:
       pattern: ^[A-Za-z]{2}$
       example: US
 
+    LanguageCode:
+      type: string
+      format: IETF BCP 47 language tag
+      description: (coming soon) Language tag following IETF BCP 47 standard
+      example: en-US
+
     Gender:
       type: string
       description: Person gender.
@@ -4421,6 +4427,8 @@ components:
           $ref: "#/components/schemas/CountryCodeIso2"
         pre_selected_document_type:
           $ref: "#/components/schemas/DocumentTypes"
+        pre_selected_language:
+          $ref: "#/components/schemas/LanguageCode"
 
     SelectedDocument:
       type: object
@@ -4547,6 +4555,8 @@ components:
       properties:
         pre_selected_residence_country:
           $ref: "#/components/schemas/CountryCodeIso2"
+        pre_selected_language:
+          $ref: "#/components/schemas/LanguageCode"
           ######################################################################
     #######################################################################
 
