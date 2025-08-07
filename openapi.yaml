@@ -3860,6 +3860,7 @@ components:
       enum:
         - Driving licence
         - ID
+        - Other
         - Passport
         - Residence Permit
         - Visa
