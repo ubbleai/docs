@@ -259,8 +259,6 @@ info:
     ## Create an attempt
 
     To create an attempt, call the Create an attempt endpoint with the `id_document_verification_id` and provide the following fields:
-    - `document_type`, among `passport`, `identity_card`, `resident_permit`, `driving_license`
-    - `document_issuing_country`, using ISO-Alpha2 code
     - capture of the front of the document
     - capture of the back of the document (if relevant)
 
@@ -4722,13 +4720,6 @@ components:
     IdDocumentVerificationAttemptInputBase:
       type: object
       properties:
-        document_type:
-          $ref: "#/components/schemas/DocumentTypes"
-        document_issuing_country:
-          $ref: "#/components/schemas/CountryCodeIso2"
-        document_issuing_country_subdivision:
-          type: string
-          description: State, province, or region subdivision code (e.g., US-CA for California)
         document_front:
           type: string
           format: binary
@@ -4767,7 +4758,7 @@ components:
 
     IdDocumentVerificationAttemptInputPost:
       type: object
-      required: [document_type, document_issuing_country, document_front]
+      required: [document_front]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationAttemptInputBase"
     
@@ -5520,17 +5511,12 @@ components:
 
     id_document_verification_attempt_creation_request_body_min:
       value:
-        document_type: Passport
-        document_issuing_country: FR
         document_front: |
           data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…
 
     
     id_document_verification_attempt_creation_request_body_max:
       value:
-        document_type: ID
-        document_issuing_country: US
-        document_issuing_country_subdivision: US-CA
         document_front: |
           data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
         document_back: |
