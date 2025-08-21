@@ -3678,7 +3678,7 @@ components:
     LanguageCode:
       type: string
       format: IETF BCP 47 language tag
-      description: (coming soon) Language tag following IETF BCP 47 standard
+      description: Language tag following IETF BCP 47 standard
       example: en-US
 
     Gender:
