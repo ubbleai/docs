@@ -3367,8 +3367,10 @@ paths:
         content:
           application/json:
             examples:
-              id_document_verification_creation_request_body:
-                $ref: "#/components/examples/id_document_verification_creation_request_body"
+              id_document_verification_creation_request_body_min:
+                $ref: "#/components/examples/id_document_verification_creation_request_body_min"
+              id_document_verification_creation_request_body_max:
+                $ref: "#/components/examples/id_document_verification_creation_request_body_max"
             schema:
               $ref: "#/components/schemas/IdDocumentVerificationInputPost"
       responses:
@@ -4685,26 +4687,26 @@ components:
       
     IdDocumentVerificationInputPost:
       type: object
-      required: [declared_data, webhook_url, applicant_id, user_journey_id]
+      required: [declared_data, applicant_id, user_journey_id]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationInputBase"
     
     IdDocumentVerificationOutputPost:
       type: object
-      required: [id, declared_data, status, webhook_url, applicant_id, response_codes, user_journey_id, _links]
+      required: [id, declared_data, status, applicant_id, response_codes, user_journey_id, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
     
     IdDocumentVerificationOutputGet:
       type: object
-      required: [id, declared_data, status, webhook_url, _links, applicant_id, response_codes, user_journey_id]
+      required: [id, declared_data, status, _links, applicant_id, response_codes, user_journey_id]
       allOf:
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
 
     IdDocumentVerificationOutputAnonymize:
       type: object
-      required: [id, status, webhook_url, applicant_id, user_journey_id, response_codes, _links]
+      required: [id, status, applicant_id, user_journey_id, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
     
@@ -5455,9 +5457,15 @@ components:
             href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
           previous:
             href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
-    
-    
-    id_document_verification_creation_request_body:
+
+    id_document_verification_creation_request_body_min:
+      value:
+        user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        declared_data:
+          name: David Vincent
+
+    id_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
