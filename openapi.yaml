@@ -1750,7 +1750,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">61201</td>
-        <td class="tg-0pky">connexion_insufficient</td>
+        <td class="tg-0pky">connection_insufficient</td>
         <td class="tg-0pky">Applicant did not have a sufficient connection to perform the capture</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -1793,7 +1793,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">61301</td>
-        <td class="tg-0pky">document_video_blurry</td>
+        <td class="tg-0pky">document_blurry</td>
         <td class="tg-0pky">Applicant's document is too blurry<br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -1801,7 +1801,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">61302</td>
-        <td class="tg-0pky">document_video_lighting_issue</td>
+        <td class="tg-0pky">document_lighting_issue</td>
         <td class="tg-0pky">Applicant performed the document capture under poor lighting conditions</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -1867,7 +1867,7 @@ info:
     </tr>
       <tr>
         <td class="tg-0pky">61321</td>
-        <td class="tg-0pky">complementary_document_video_blurry</td>
+        <td class="tg-0pky">secondary_document_blurry</td>
         <td class="tg-0pky">Applicant's secondary document is too blurry (mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -1875,7 +1875,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">61322</td>
-        <td class="tg-0pky">complementary_document_video_lighting_issue</td>
+        <td class="tg-0pky">secondary_document_lighting_issue</td>
         <td class="tg-0pky">Applicant performed the secondary document capture under poor lighting conditions</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -1883,7 +1883,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">61330</td>
-        <td class="tg-0pky">complementary_document_front_not_captured</td>
+        <td class="tg-0pky">secondary_document_front_not_captured</td>
         <td class="tg-0pky">Applicant has not captured the front of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -1891,7 +1891,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">61331</td>
-        <td class="tg-0pky">complementary_document_back_not_captured</td>
+        <td class="tg-0pky">secondary_document_back_not_captured</td>
         <td class="tg-0pky">Applicant has not captured the back of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -1907,7 +1907,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">61333</td>
-        <td class="tg-0pky">complementary_document_not_tilted</td>
+        <td class="tg-0pky">secondary_document_not_tilted</td>
         <td class="tg-0pky">Applicant did not present a dynamic view of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2063,7 +2063,7 @@ info:
         </tr>
         <tr>
         <td class="tg-0pky">62121</td>
-        <td class="tg-0pky">complementary_document_expired</td>
+        <td class="tg-0pky">secondary_document_expired</td>
         <td class="tg-0pky">Applicant presented an expired secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2071,7 +2071,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">62122</td>
-        <td class="tg-0pky">complementary_document_not_accepted</td>
+        <td class="tg-0pky">secondary_document_not_accepted</td>
         <td class="tg-0pky">Applicant presented an secondary document which is not accepted</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2079,7 +2079,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">62123</td>
-        <td class="tg-0pky">complementary_document_damaged</td>
+        <td class="tg-0pky">secondary_document_damaged</td>
         <td class="tg-0pky">Applicant has submitted a damaged secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2087,7 +2087,7 @@ info:
       </tr>
        <tr>
         <td class="tg-0pky">62124</td>
-        <td class="tg-0pky">complementary_document_unsupported_alphabet</td>
+        <td class="tg-0pky">secondary_document_unsupported_alphabet</td>
         <td class="tg-0pky">Applicant presented an secondary document containing an unsupported alphabet</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2095,7 +2095,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">62221</td>
-        <td class="tg-0pky">complementary_document_photocopy</td>
+        <td class="tg-0pky">secondary_document_photocopy</td>
         <td class="tg-0pky">Applicant presented a photocopy of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2103,7 +2103,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">62222</td>
-        <td class="tg-0pky">complementary_document_screenshot</td>
+        <td class="tg-0pky">secondary_document_screenshot</td>
         <td class="tg-0pky">Applicant presented the secondary document on a screen</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2138,7 +2138,7 @@ info:
         </tr>
        <tr>
         <td class="tg-0pky">62331</td>
-        <td class="tg-0pky">complementary_document_counterfeit</td>
+        <td class="tg-0pky">secondary_document_counterfeit</td>
         <td class="tg-0pky">Applicant has submitted a counterfeit or falsification as an secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2146,7 +2146,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">62332</td>
-        <td class="tg-0pky">complementary_document_stolen</td>
+        <td class="tg-0pky">secondary_document_stolen</td>
         <td class="tg-0pky">Applicant presented an secondary document declared as stolen or lost</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2154,7 +2154,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">62333</td>
-        <td class="tg-0pky">complementary_document_swap</td>
+        <td class="tg-0pky">secondary_document_swap</td>
         <td class="tg-0pky">Applicant presented the front and back of two different documents</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2162,7 +2162,7 @@ info:
       </tr>
       <tr>
         <td class="tg-0pky">62334</td>
-        <td class="tg-0pky">complementary_document_mismatch</td>
+        <td class="tg-0pky">secondary_document_mismatch</td>
         <td class="tg-0pky">Applicant is not the owner of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
@@ -2194,7 +2194,7 @@ info:
         </tr>
         <tr>
           <td class="tg-0pky">62307</td>
-          <td class="tg-0pky">videos_digital_alteration</td>
+          <td class="tg-0pky">asset_digital_alteration</td>
           <td class="tg-0pky">Applicant has digitally altered the assets</td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -4687,19 +4687,19 @@ components:
       
     IdDocumentVerificationInputPost:
       type: object
-      required: [declared_data, applicant_id, user_journey_id]
+      required: [applicant_id, user_journey_id]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationInputBase"
     
     IdDocumentVerificationOutputPost:
       type: object
-      required: [id, declared_data, status, applicant_id, response_codes, user_journey_id, _links]
+      required: [id, status, applicant_id, response_codes, user_journey_id, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
     
     IdDocumentVerificationOutputGet:
       type: object
-      required: [id, declared_data, status, _links, applicant_id, response_codes, user_journey_id]
+      required: [id, status, _links, applicant_id, response_codes, user_journey_id]
       allOf:
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
