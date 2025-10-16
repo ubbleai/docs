@@ -9,7 +9,7 @@ info:
     # Introduction
 
     Welcome to [Checkout.com](https://www.checkout.com/) Identities API documentation. 
-
+ 
     The Identities solutions enable you to verify identities, perform anti-money laundering (AML) screenings, and authenticate with biometrics. This helps meet compliance requirements and reduce the risk of fraud.
 
     - [Applicants](#section/Applicant-Profiles) – Create a profile for each physical person applying to use your services, where you can manage their identity.
@@ -21,13 +21,13 @@ info:
     The dedicated IDV Dashboard enables you to view and manage your identities activity, data, and metrics.
 
     ## Before You Begin
-
+ 
     - Contact your Account Manager or email support.idv@checkout.com to obtain a test account. 
     - Access the [dashboard](https://dashboard.ubble.ai/) to create your API credentials:
         - Generate your mutual Transport Layer Security (mTLS) certificate in the "API credentials" tab
         - Include your mTLS certificate in all API calls
     - Define a [webhook URL](#section/Webhooks) to receive identity verification event notifications.   
-
+    
     # Applicant Profiles
 
     The Identities solutions require a profile for each physical person applying to use your services. 
@@ -2277,7 +2277,7 @@ info:
           <td class="tg-0pky">generic_fraud</td>
           <td class="tg-0pky">Replace all other Identity Fraud codes for certified identity verification</td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
           <td class="center-icon"></td>
         </tr>
@@ -2669,13 +2669,13 @@ paths:
           application/json:
             examples:
               Only required data:
-                $ref: "#/components/examples/identity_verification_creation_request_body_min"
+                $ref: '#/components/examples/identity_verification_creation_request_body_min'
               All possible data:
-                $ref: "#/components/examples/identity_verification_creation_request_body_max"
+                $ref: '#/components/examples/identity_verification_creation_request_body_max'
             schema:
-              $ref: "#/components/schemas/IdentityVerificationInputPost"
+              $ref: '#/components/schemas/IdentityVerificationInputPost'
       responses:
-        "201":
+        '201':
           description: Identity verification created successfully
           content:
             application/json:
@@ -2684,30 +2684,30 @@ paths:
                   $ref: "#/components/examples/identity_verification_creation_response_body"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/IdentityVerificationOutputPost"
-        "400":
+                  - $ref: '#/components/schemas/IdentityVerificationOutputPost'
+        '400':
           description: Bad request.
-        # Not taken into account in interface testing
-        #          content:
-        #            application/json:
-        #              example:
-        #                $ref: '#/components/examples/idv_identity_verification_creation_request_invalid_body'
-        #              schema:
-        #                $ref: '#/components/schemas/ResponseError'
-        "401":
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_creation_request_invalid_body'
+#              schema:
+#                $ref: '#/components/schemas/ResponseError'
+        '401':
           description: Unauthorized
-        "422":
+        '422':
           description: Unprocessable entity
-        # Not taken into account in interface testing
-        #          content:
-        #            application/json:
-        #              example:
-        #                $ref: '#/components/examples/idv_identity_verification_unprocessable_entity_body'
-        #              schema:
-        #                $ref: '#/components/schemas/ResponseError'
-        "500":
+# Not taken into account in interface testing
+#          content:
+#            application/json:
+#              example:
+#                $ref: '#/components/examples/idv_identity_verification_unprocessable_entity_body'
+#              schema:
+#                $ref: '#/components/schemas/ResponseError'
+        '500':
           description: Internal server error.
-        "503":
+        '503':
           description: Service unavailable
 
   /v2/identity-verifications/{identity_verification_id}:
@@ -2861,8 +2861,7 @@ paths:
       tags:
         - Identity verifications
       summary: Create an attempt
-      description:
-        This endpoint allows you to create a new Attempt. It is possible when the identity-verification is in one of
+      description: This endpoint allows you to create a new Attempt. It is possible when the identity-verification is in one of
         the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
       operationId: create_attempt
       parameters:
@@ -2960,7 +2959,7 @@ paths:
             type: string
           description: The ID of the attempt
       responses:
-        "200":
+        '200':
           description: The assets were retrieved successfully
           content:
             application/json:
@@ -2969,8 +2968,9 @@ paths:
                   $ref: "#/components/examples/identity_verification_attempt_assets_response_body"
               schema:
                 $ref: "#/components/schemas/IdentityVerificationAttemptAssetsOutput"
+                
 
-  # Applicants
+# Applicants
   /v2/applicants:
     post:
       tags:
@@ -3110,7 +3110,7 @@ paths:
         "500":
           description: Internal server error
 
-  # AML Verifications
+# AML Verifications
   /v2/aml-verifications:
     post:
       tags:
@@ -5453,19 +5453,19 @@ components:
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
 
-    #    idv_identity_verification_creation_request_invalid_body:
-    #      value:
-    #        error_type: request_invalid
-    #        error_codes:
-    #          - declared_data__birth_date__invalid_format
-    #          - declared_data__name__required
-    #          - phone_number__country_code__invalid
+#    idv_identity_verification_creation_request_invalid_body:
+#      value:
+#        error_type: request_invalid
+#        error_codes:
+#          - declared_data__birth_date__invalid_format
+#          - declared_data__name__required
+#          - phone_number__country_code__invalid
 
-    #    idv_identity_verification_unprocessable_entity_body:
-    #      value:
-    #        error_type: unprocessable_entity
-    #        error_codes:
-    #          - organization__no_configuration
+#    idv_identity_verification_unprocessable_entity_body:
+#      value:
+#        error_type: unprocessable_entity
+#        error_codes:
+#          - organization__no_configuration
 
     # Face Authentication
     face_authentication_creation_response_body:
@@ -5520,7 +5520,7 @@ components:
           number: "2068133616"
         redirect_url: "https://myweb.site?query-param=hello"
         status: "checks_in_progress"
-        response_codes: []
+        response_codes: [ ]
         client_information:
           pre_selected_residence_country: FR
         applicant_session_information:
@@ -5606,8 +5606,12 @@ components:
             created_on: 2017-07-21T16:30:28Z
             modified_on: 2017-07-21T16:32:32Z
             status: "checks_inconclusive"
-            response_codes:
-              [{ "code": 61402, "summary": "face_video_lighting_issue" }]
+            response_codes: [
+              {
+                "code": 61402,
+                "summary": "face_video_lighting_issue"
+              }
+            ]
             phone_number:
               country_code: "+1"
               number: "2068133616"
@@ -5724,18 +5728,18 @@ components:
 
     id_document_verification_attempt_list_response_body:
       value:
-        total_count: 2
+        total_count: 2  
         skip: 10
         limit: 10
         data:
-          - id: iddv_tkoi5db4hryu5cei5vwoabr7we
-            created_on: 2017-07-21T17:32:28Z
-            modified_on: 2017-07-21T17:40:32Z
-            status: completed
-            response_codes: []
-            _links:
-              self:
-                href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we"
+        - id: iddv_tkoi5db4hryu5cei5vwoabr7we
+          created_on: 2017-07-21T17:32:28Z
+          modified_on: 2017-07-21T17:40:32Z
+          status: completed
+          response_codes: []
+          _links:
+            self:
+              href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we"
         _links:
           self:
             href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we/attempts"
@@ -5757,7 +5761,7 @@ components:
           previous:
             href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we/attempts/..."
         data:
-          - type: document_front_image
-            _links:
-              asset_url:
-                href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we/assets/document_front_image"
+        - type: document_front_image
+          _links:
+            asset_url:
+              href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we/assets/document_front_image"
