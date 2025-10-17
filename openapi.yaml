@@ -1617,9 +1617,9 @@ info:
     <style type="text/css">
     .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0}
     .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
-      font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+      font-family:Arial, sans-serif;font-size:12px;overflow:hidden;padding:10px 5px;word-break:normal;}
     .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
-      font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+      font-family:Arial, sans-serif;font-size:12px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
     .tg .tg-dvid{background-color:#efefef;border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
     .tg .tg-fymr{background-color:#f0f0f0;border-color:inherit;font-weight:bold;text-align:left;vertical-align:center;}
     .tg .tg-center{border-color:inherit;text-align:center;vertical-align:center}
@@ -2038,13 +2038,13 @@ info:
       </colgroup>
       <thead>
         <tr>
-          <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-          <th class="tg-fymr"><code>summary</code></th>
+          <th class="tg-fymr"><nobr>code</nobr></th>
+          <th class="tg-fymr">summary</th>
           <th class="tg-fymr">Description</th>
-          <th class="tg-fymr">idv</th>
-          <th class="tg-fymr">certified idv</th>
-          <th class="tg-fymr">fav</th>
-          <th class="tg-fymr">iddv</th>
+          <th class="tg-fymr" style="text-align: center">idv</th>
+          <th class="tg-fymr" style="text-align: center">certified idv</th>
+          <th class="tg-fymr" style="text-align: center">fav</th>
+          <th class="tg-fymr" style="text-align: center">iddv</th>
         </tr>
       </thead>
       <tbody>
