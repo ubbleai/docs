@@ -36,10 +36,11 @@ info:
     ## Create an applicant
 
     To create an applicant, call the [Create an applicant](#tag/Applicants/operation/create_applicant) endpoint. 
-
+    
     Optionally, provide the following fields:
 
     - `external_applicant_id` – Your identifier for this applicant
+    - `external_applicant_name` – The name of the applicant
     - `email` – The applicant's email address
 
     Make a note of the applicant `id` value in the response. You'll need it to create verifications later.
@@ -47,7 +48,7 @@ info:
     Once you have created an applicant, you can start creating verifications as described in the sections below. 
     You can then [retrieve](#tag/Applicants/operation/retrieve_applicant) or [update](#tag/Applicants/operation/update_applicant) the profile.
     If requested under the GDPR, you can [remove the applicant's personal data](#tag/Applicants/operation/anonymize_applicant) from the profile.
-
+    
     # Identity Verification
 
     The Identity Verification solution enables you to verify the identity of a physical person applying to use your services. This helps you meet compliance requirements and reduce the risk of fraud.
@@ -65,13 +66,13 @@ info:
     <img src="https://raw.githubusercontent.com/ubbleai/docs/refs/heads/staging/idv_flow.png" alt="intro_diagram" style="max-width:70%; height: auto; display: block; margin: 0 auto; padding: 20px 10%; object-fit: contain;">
 
     ## Before you begin
-
+    
     - Set up your webhook receiver and prepare to [handle webhooks](#section/Webhooks).
     - Contact your account manager to obtain a configuration ID. 
     - [Create a profile](#section/Applicant-Profiles) for the applicant whose identity you want to verify.
 
     #### Configuration
-
+    
     When you request an account, your account manager provides you a configuration ID, prefixed usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
 
     - The service level agreement for receiving the result from Checkout.com
@@ -84,8 +85,8 @@ info:
         - Fast – Highly automated processing, with human review if required
         - Expert – Systematic human review
         - Certified – Certified by the French Government for merchants with a French banking license
-
-
+    
+    
     ## Create an identity verification
 
     To create an identity verification, call the [Create an identity verification](#tag/Identity-verifications/operation/create_identity_verification) endpoint, and provide the following fields:
@@ -107,7 +108,7 @@ info:
     The create an attempt response contains a `_links.verification_url.href` field. 
     To test the web flow, open the `verification_url` in your browser and follow the instructions.
     To complete your integration, you will need to redirect applicants to [integrate our web application](#section/Web-integration). 
-
+    
     ## Verify webhook notifications
 
     Once you've configured your webhook receiver, you'll be notified of events that occur during the identity verification flow via webhooks. 
@@ -206,15 +207,15 @@ info:
     To retrieve the detailed verification results, call the [Retrieve an identity verification](#tag/Identity-verifications/operation/retrieve_identity_verification) endpoint with the identity verification id value returned in the Create an identity verification response. 
 
     If the status of the verification is `approved` or `declined`, you will find all the information extracted from the document in the `document` object. 
-
+    
     You will also receive the `identity_verification_report_created` event. 
     Call the [Retrieve PDF report](#tag/Identity-verifications/operation/pdf_identity_verification) to retrieve a PDF report containing all the information of the identity verification.
 
     ## Manage retries
-
+    
     If the first attempt is unsuccessful and the verification status changes to `retry-required`, you can create a new attempt for the user to retry the flow.
     You can use the [Create an attempt](#tag/Identity-verifications/operation/create_attempt) endpoint. 
-
+    
     We recommend sharing guidance from the [response codes](#section/Reference-info/Response-codes) with the applicant to help them succeed in their next attempt. 
     For example, if the user's data connection is poor, let them know so they can try to improve it.
 
@@ -232,20 +233,20 @@ info:
     - Retrieve the verification report.
 
     ## Before you begin
-
+    
     - Set up your webhook receiver and prepare to [handle webhooks](#section/Webhooks).
     - Contact your account manager to obtain a configuration ID. 
     - [Create a profile](#section/Applicant-Profiles) for the applicant whose document you want to verify.
 
     #### Configuration
-
+    
     When you request an account, your account manager provides you a configuration ID, prefixed usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
 
     - The service level agreement for receiving the result from Checkout.com
     - Identity documents: 
         - The documents you want to accept, if supported by Checkout.com
         - The data you want to extract from documents
-
+    
     ## Create an ID Document Verification
 
     To create an ID Document verification, call the Create an ID Document Verification endpoint, and provide the following fields:
@@ -264,7 +265,7 @@ info:
 
     Assets must be in one of the following formats: PDF, JPEG, or PNG, and must not exceed 10MB in size.
     Additionally, we will conduct malware detection checks on every file received. 
-
+    
     ## Verify webhook notifications
 
     Once you've configured your webhook receiver, you'll be notified of events that occur during the ID Document Verification flow via webhooks. 
@@ -363,50 +364,50 @@ info:
     To retrieve the detailed verification results, call the Retrieve an ID Document Verification endpoint with the ID Document Verification id value returned in the Create an ID document verification response. 
 
     If the status of the verification is `approved` or `declined`, you will find all the information extracted from the document in the `document` object. 
-
+    
     You will also receive the `id_document_verification_report_created` event. 
     Call the Retrieve PDF report to retrieve a PDF report containing all the information of the ID Document Verification.
 
     ## Manage retries
-
+    
     If the first attempt is unsuccessful and the verification status changes to `retry-required`, you can create a new attempt using other images.
     You can use the Create an attempt endpoint. 
-
+    
     We recommend sharing guidance from the [response codes](#section/Reference-info/Response-codes) with the applicant to help them succeed in their next attempt. 
 
     If the verification status changes to `declined`, you will need to create a new ID Document Verification if you want to allow the applicant to retry. 
 
     # AML Screening
-
+    
     In partnership with ComplyAdvantage, we propose an Identity verification and AML screening bundle. After having verified the applicant's identity you will be able to:  
-
+    
     Search them in the Politically Exposed Person (PEP) lists, Sanction lists and Adverse media database,
-
+    
     Get a risk score based on a customized model,
-
+    
     Manually investigate cases,
-
+    
     Monitor an applicant and get notified if an alert is raised.
-
+    
     Please note that this offer is only available if you subscribed to both services, reach out your account manager if you have any questions.
-
+    
     ## Create an AML verification
-
+    
     To use it, you will first need an `applicant_id` and an approved identity verification. 
 
     You can then request an AML verification and include the following fields:
-
+    
     - `applicant_id` - the unique identifier of the applicant.
-
+    
     - `webhook_url` - the URL where you want to be notified when the status of the AML verification change.
-
+    
     - `screening_configuration_identifier` - the identifier of the configuration you want to use to screen the applicant. It can be defined and retrieved via the ComplyAdvantage dashboard.
-
+    
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
       <span type="post" class="sc-EgOXT hniGzf http-verb post">post</span>
       <span class="sc-ejfMa-d jgeKJH">/v2/aml-verifications</span>
     </div>
-
+    
     Request example
 
     ```json
@@ -418,9 +419,9 @@ info:
         },
     }
     ```
-
+    
     Response example
-
+    
     ```json
     {
         "id": "amlv_01hr7269mkxva7msc443jz4jbf",
@@ -442,25 +443,25 @@ info:
     ```
 
     Make a note of the AML verification `id` value in the response. You'll need this to retrieve the detailed results later.
-
+    
     ## Set up an initial risk scoring 
-
+    
     You can get an initial risk scoring based on a model that you can customize in the ComplyAdvantage dashboard. 
-
+    
     The applicant will then be scored before the AML verification has been performed. The result of this scoring will be available as a `risk_level` in the results and can be one of `LOW`, `MEDIUM`, `HIGH` or `PROHIBITED`.
-
+    
     If the risk level is `PROHIBITED`, the AML verification is not performed and the `status` is declined. If the risk level is `LOW`, `MEDIUM` or `HIGH`, the AML verification will be performed and the results will depend on raised alerts. See below for more details.
-
+    
     ## Verify webhook notification
-
+    
     You'll be notified of events that occur during the AML verification process via webhooks. Among other information, the webhooks will contain:
-
+    
     - the event `type` - for example, `aml_verification_created`,
-
+    
     - the AML verification `status` - for example, `created` or `review_required`.
-
+    
     Example
-
+    
     ```json
     {
       "specversion": "2.0",
@@ -476,13 +477,13 @@ info:
       }
     }
     ```
-
+    
     When the AML verification is completed, you will receive a webhook notification with the event `type` field set to `aml_verification_completed`, and the body will include the `status` of the AML verification. See the section below.
-
+    
     ## Handle AML verification results
-
+    
     The webhooks also return the current `status` of the AML verification. The follow-up action you should take depends on the `status` value returned:
-
+    
     | <div style="width:12em">Status</div>     | Description                                                                                              | Recommended action                    |
     |------------------------------------------|----------------------------------------------------------------------------------------------------------|---------------------------------------|
     | `created`                                | The AML verification has been created.                                                                   | Wait for a change in `status`.        |
@@ -490,16 +491,16 @@ info:
     | `approved`                               | The initial risk scoring is not `PROHIBITED` and there are no alerts.                                     | Accept the applicant’s request.       |
     | `declined`                               | The initial risk scoring is `PROHIBITED`.                                                                | Refuse the applicant’s request.       |
     | `review_required`                        | The initial risk scoring is not `PROHIBITED` but there are screening alerts and a case has been created. | Manually investigate the case.        |
-
+    
     You can also get this status by calling the following endpoint with the unique `id` returned in the create AML verification response:
-
+    
     <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
       <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
       <span class="sc-ejfMa-d jgeKJH">/v2/aml-verifications/{aml_verification_id}</span>
     </div>
-
+    
     Response example
-
+    
     ```json
     {
         "id": "amlv_01hr7269mkxva7msc443jz4jbf",
@@ -519,21 +520,21 @@ info:
         }
     }
     ```
-
+    
     ## Manually investigate the results
-
+    
     If the `status` is `review_required` you might want to investigate the case and determine if the applicant can access your service or not. You can do it via the ComplyAdvantage case management tool. 
-
+    
     You will be able to review the alerts and to determine if you accept the risk associated to the case or not.
-
+    
     If you accept it, the status will switch to `approved`.
-
+    
     If you refuse it, the status will switch to `declined`.
-
+    
     You will be notified if you change the `status` of an AML verification. The `event_type` field will be set to `aml_onboarding_review_completed` and the body will include the new `status`.
-
+    
     Example
-
+    
     ```json
     {
       "specversion": "2.0",
@@ -549,17 +550,17 @@ info:
     ```
 
     ## Monitor a search
-
+    
     If an applicant is monitored, you be notified if an alert is raised. 
-
+    
     The `status` of the AML verification will switch to `review_required`.
-
+    
     In this case, you will get a notification with the `event_type` field set to `aml_monitoring_alert` and the body will include the new `status`.
-
+    
     You can then use the ComplyAdvantage case management tool to manually investigate the results. 
-
+    
     When the review is completed, you will get a notification with the `event_type` field set to `aml_monitoring_review_completed` and the body will include the new `status, depending of you decision to accept or not the risk related to the monitoring case.
-
+    
     # Face Authentication
 
     The Face Authentication solution enables you to confirm a user is the same person whose identity you've successfully verified using the Identity Verification solution. 
@@ -579,7 +580,7 @@ info:
     - The applicant must been approved through an identity verification or a face authentication that has not been yet anonymized. 
 
     #### Configuration
-
+    
     When you request an account, your account manager provides you a configuration ID, prefixed usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
 
     - The service level agreement for receiving the result from Checkout.com
@@ -698,11 +699,11 @@ info:
         vertical-align: top;
       }
     </style>
-
+    
     You can also use the `response_codes` to implement your own business rules. 
     For more details and to decide on follow-up actions, see the [Reference info](#section/Reference-info) section. 
 
-
+    
     ## Retrieve detailed results
 
     To retrieve the detailed verification results, call the [Retrieve a face authentication](#tag/Face-authentications/operation/retrieve_face_authentication) endpoint with the face authentication id value returned in the Create a face authentication response. 
@@ -713,24 +714,24 @@ info:
 
     If the first attempt is unsuccessful and the authentication status changes to `retry-required`, you can create a new attempt for the user to retry the flow.
     You can use the [Create an attempt](#tag/Face-authentication/operation/create_attempt) endpoint. 
-
+    
     We recommend sharing guidance from the [response codes](#section/Reference-info/Response-codes) with the applicant to help them succeed in their next attempt. 
     For example, if the user's data connection is poor, let them know so they can try to improve it.
 
     If authentication status changes to `declined`, you will have to create a new face authentication if you want to allow the applicant to retry. 
 
     # Web integration
-
+   
     When you request an [identity verification](#section/Get-Started), you’ll receive a `verification_url` in the response. Redirect your user to this URL so they can perform the verification.
 
     To ensure a smooth user experience, you can control how the redirection is handled.
-
+    
     ## URL expiration and attempt creation
-
+    
     For security purposes, URLs generated for user verification expire after 15 minutes. To ensure applicants are consistently redirected to a valid URL, it is strongly recommended to create a new attempt each time a user initiates the verification process.
-
+    
     ## Pre-select customer details
-
+    
     To enhance the security and user experience, you can pre-select customer details when creating an attempt for the verification request. We highly recommend using the RESTful endpoints for creating the applicant, initiating the identity verification, and then creating the attempt.
 
     ## Customize the verification user experience
@@ -1087,7 +1088,7 @@ info:
     ## Identity Verification
 
     #### Body
-
+    
       The webhook body contains the following information: 
 
       | Attribute                | Description                                                                             |
@@ -1124,7 +1125,7 @@ info:
             }
         }
       ```
-
+  
     #### Events
 
       | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
@@ -1144,11 +1145,11 @@ info:
       | `identity_verification_anonymized`                        | The verification has been anonymized                                                                                              |
       | `identity_verification_audit_completed`                   | The verification has been audited and the status may have been updated                                                            |
       | `identity_verification_report_created`                    | The pdf report is available                                                                                                       |
-
+    
     ## ID Document Verification
 
     #### Body
-
+    
       The webhook body contains the following information: 
 
       | Attribute                   | Description                                                                             |
@@ -1184,7 +1185,7 @@ info:
             }
         }
       ```
-
+  
     #### Events
 
       | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
@@ -1201,11 +1202,11 @@ info:
       | `id_document_verification_anonymized`                        | The document verification has been anonymized                                                                                     |
       | `id_document_verification_audit_completed`                   | 	The verification has been audited and the status may have been updated                                                          |
       | `id_document_verification_report_created`                    | The pdf report is available                                                                                                       |
-
+    
     ## AML verification
 
      #### Body
-
+    
       The webhook body contains the following information: 
 
       | Attribute                | Description                                                                             |
@@ -1233,7 +1234,7 @@ info:
         }
       }
       ```
-
+  
     #### Events
 
     | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
@@ -1245,13 +1246,13 @@ info:
     | `aml_verification_monitoring_alert`                       | A monitoring alert has been detected                                                                                              |
     | `aml_verification_monitoring_reviewed`                    | Manual review has been completed, customer status was updated                                                                     |
     | `aml_verification_status_changed`                         | Manual review has been reopened, customer status was updated                                                                      |
-
-
-
+    
+    
+    
     ## Face authentication
 
      #### Body
-
+    
       The webhook body contains the following information: 
 
       | Attribute                | Description                                                                             |
@@ -1284,7 +1285,7 @@ info:
         }
       }
       ```
-
+  
     #### Events
 
     | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
@@ -1308,7 +1309,7 @@ info:
 
     Use the following examples to test different Identity Verification scenarios.
     Testing is only available for Identity Verification. 
-
+    
     ## Choose your scenario
 
     To choose the scenario you want to test, you will have to [create an applicant](#tag/Applicants/operation/create_applicant) and set the `external_applicant_id` value to one of the values described in the table below.
@@ -1324,16 +1325,16 @@ info:
 
     - Replace 61XXX with any of the response codes starting with 61, that you would like to test for.
     - Replace 62XXX with any of the response codes starting with 62, that you would like to test for.
-
+    
     For example, if you would like to test a "Declined" scenario with `62201`, then set the value to `eaplt_62201000000000000000000000`.      
-
+    
     Make a note of the applicant `id` value in the response. You'll need it to create verifications later.
 
     ## Create a first attempt
 
     Create an identity verification by calling  the [Create an identity verification](#tag/Identity-verifications/operation/create_identity_verification) endpoint. 
     Set the `id` you received in the Create an applicant response as the `applicant_id` value. Make a note of the identity verification `id` value in the response. 
-
+    
     You can then create a first attempt by calling the [Create an attempt](#tag/Identity-verifications/operation/create_attempt) endpoint. 
     Pass the `id` value from Create an identity verification response as the `identity_verification_id` path parameter.
 
@@ -1356,7 +1357,7 @@ info:
     For the **Approved scenario**, webhook for the final verdict is triggered. 
     The identity_verification_checks_completed webhook will return the status `approved` and the response code `10000`. 
     You can call the [Retrieve an identity verification](#tag/Identity-verifications/operation/retrieve_identity_verification) endpoint to get the detailed results. 
-
+    
     For the **Declined scenario**, webhook for the final verdict is triggered. 
     The identity_verification_checks_completed webhook will return the status `declined` and the response code starting with 62 that you passed as part of the `external_applicant_id`.
     You can call the [Retrieve an identity verification](#tag/Identity-verifications/operation/retrieve_identity_verification) endpoint to get the detailed results. 
@@ -1367,19 +1368,19 @@ info:
     ## Manage retries
 
     Once you have receceived the `identity_verification_capture_aborted` or `identity_verification_checks_inconclusive` events, you can request a retry. 
-
+    
     To do that you should create a new attempt using the [Create an attempt](#tag/Identity-verifications/operation/create_attempt) endpoint. 
     You'll be notified of events that occur during this second attempt flow via webhooks and a `identity_verification_checks_completed` webhook will be triggered with the final verdict. 
 
     For the **Approved verification on retry after capture aborted**, the identity_verification_checks_completed webhook will return the status `approved` and the response code `10000`. 
     You can call the [Retrieve an identity verification](#tag/Identity-verifications/operation/retrieve_identity_verification) endpoint to get the detailed results. 
-
+    
     For the **Approved verification on retry after checks inconclusive**, the identity_verification_checks_completed webhook will return the status `approved` and the response code `10000`. 
     You can call the [Retrieve an identity verification](#tag/Identity-verifications/operation/retrieve_identity_verification) endpoint to get the detailed results. 
 
     For the **Declined verification on retry after capture aborted**, the identity_verification_checks_completed webhook will return the status `declined` and the response code starting with 62 that you passed as part of the `external_applicant_id`.
     You can call the [Retrieve an identity verification](#tag/Identity-verifications/operation/retrieve_identity_verification) endpoint to get the detailed results. 
-
+    
     For the **Declined verification on retry after checks inconclusive**, the identity_verification_checks_completed webhook will return the status `declined` and the response code starting with 62 that you passed as part of the `external_applicant_id`.
     You can call the [Retrieve an identity verification](#tag/Identity-verifications/operation/retrieve_identity_verification) endpoint to get the detailed results. 
 
@@ -1502,7 +1503,7 @@ info:
     </table>
 
     ## Attempt statuses
-
+    
     <table style="width: 100%">
       <colgroup>
         <col style="width: 30%">
@@ -1873,7 +1874,7 @@ info:
         <td class="tg-0pky">61314</td>
         <td class="tg-0pky">document_challenge_timeout</td>
         <td class="tg-0pky">Applicant failed to meet the document challenge and the verification expired</td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
@@ -1894,7 +1895,7 @@ info:
         <td class="tg-0pky">secondary_document_blurry</td>
         <td class="tg-0pky">Applicant's secondary document is too blurry (mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -1903,7 +1904,7 @@ info:
         <td class="tg-0pky">secondary_document_lighting_issue</td>
         <td class="tg-0pky">Applicant performed the secondary document capture under poor lighting conditions</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -1912,7 +1913,7 @@ info:
         <td class="tg-0pky">secondary_document_front_not_captured</td>
         <td class="tg-0pky">Applicant has not captured the front of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -1921,7 +1922,7 @@ info:
         <td class="tg-0pky">secondary_document_back_not_captured</td>
         <td class="tg-0pky">Applicant has not captured the back of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -1930,7 +1931,7 @@ info:
         <td class="tg-0pky">secondary document_partially_hidden</td>
         <td class="tg-0pky">Applicant hides part of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -1939,7 +1940,7 @@ info:
         <td class="tg-0pky">secondary_document_not_tilted</td>
         <td class="tg-0pky">Applicant did not present a dynamic view of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -1952,7 +1953,7 @@ info:
         <td class="tg-0pky">Applicant's video of their face is too blurry <br>(mostly due to too much movement but if this error persists the camera quality might be at fault)</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
       <tr>
@@ -1961,7 +1962,7 @@ info:
         <td class="tg-0pky">Applicant performed their identity verification under poor lighting conditions</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
       <tr>
@@ -1995,7 +1996,7 @@ info:
         <td class="tg-0pky">61413</td>
         <td class="tg-0pky">face_challenge_timeout</td>
         <td class="tg-0pky">Applicant failed to meet the face challenge and the verification expired</td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
@@ -2112,7 +2113,7 @@ info:
         <td class="tg-0pky">secondary_document_expired</td>
         <td class="tg-0pky">Applicant presented an expired secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -2121,7 +2122,7 @@ info:
         <td class="tg-0pky">secondary_document_not_accepted</td>
         <td class="tg-0pky">Applicant presented an secondary document which is not accepted</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+         <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -2130,7 +2131,7 @@ info:
         <td class="tg-0pky">secondary_document_damaged</td>
         <td class="tg-0pky">Applicant has submitted a damaged secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -2139,7 +2140,7 @@ info:
         <td class="tg-0pky">secondary_document_unsupported_alphabet</td>
         <td class="tg-0pky">Applicant presented an secondary document containing an unsupported alphabet</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+         <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -2148,7 +2149,7 @@ info:
         <td class="tg-0pky">secondary_document_photocopy</td>
         <td class="tg-0pky">Applicant presented a photocopy of the secondary document</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -2157,7 +2158,7 @@ info:
         <td class="tg-0pky">secondary_document_screenshot</td>
         <td class="tg-0pky">Applicant presented the secondary document on a screen</td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
         <td class="center-icon"></td>
         <td class="center-icon"></td>
       </tr>
@@ -2450,7 +2451,7 @@ info:
     # API Standard
 
     ## Signature
-
+    
     ### What is signed ?
     **Webhook notifications** are signed by default.
 
@@ -2514,7 +2515,7 @@ info:
     For HTTP error codes 400 and 422 the response body will contain:
     - `error_type`: a short description code
     - `error_codes`: a list of more detailed codes
-
+    
     Error codes and error types can be formatted as follows:
     - `{error}`
     - `{target/attribute}__{error}`
@@ -2777,6 +2778,7 @@ paths:
         This endpoint allows you to retrieve a PDF report containing all the information of the identity verification.
 
         Please note that this report is only available for verifications in statuses `declined` and `approved` once you receive the `identity_verification_report_created` event.
+
 
       operationId: pdf_identity_verification
       parameters:
@@ -3169,7 +3171,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/AMLVerificationOutputGet"
 
-  # Face Authentications
+# Face Authentications
   /v2/face-authentications:
     post:
       tags:
@@ -3323,8 +3325,7 @@ paths:
       tags:
         - Face authentications
       summary: Create an attempt
-      description:
-        This endpoint allows you to create a new Attempt. It is possible when the face-authentication is in one of
+      description: This endpoint allows you to create a new Attempt. It is possible when the face-authentication is in one of
         the following statuses `created`, `pending`, `capture_in_progress`, `retry_required`
       operationId: create_attempt_face_authentication
       parameters:
@@ -3358,8 +3359,7 @@ paths:
         "404":
           description: The provided face authentication ID is not valid
         "409":
-          description:
-            The current face authentication status does not allow the creation of a new attempt.
+          description: The current face authentication status does not allow the creation of a new attempt.
             The face authentication status must be either `created`, `pending`, `capture_in_progress`, or `retry_required`
         "500":
           description: An error occurred while creating the attempt
@@ -3424,7 +3424,7 @@ paths:
             type: string
           description: The ID of the attempt
       responses:
-        "200":
+        '200':
           description: The assets were retrieved successfully
           content:
             application/json:
@@ -3433,6 +3433,7 @@ paths:
                   $ref: "#/components/examples/face_authentication_attempt_assets_response_body"
               schema:
                 $ref: "#/components/schemas/FaceAuthenticationAttemptAssetsOutput"
+
 
   /v2/id-document-verifications:
     post:
@@ -3532,7 +3533,7 @@ paths:
           description: ID document verification not found
         "500":
           description: Internal server error
-
+  
   /v2/id-document-verifications/{id_document_verification_id}/pdf-report:
     get:
       tags:
@@ -3547,7 +3548,7 @@ paths:
       parameters:
         - name: id_document_verification_id
           in: path
-          description: ID of the ID document verification
+          description: ID of the ID document verification 
           required: true
           schema:
             type: string
@@ -3590,7 +3591,7 @@ paths:
       responses:
         "204":
           description: Notification successfully requested
-
+    
   /v2/id-document-verifications/{id_document_verification_id}/attempts:
     get:
       tags:
@@ -3624,8 +3625,7 @@ paths:
       tags:
         - ID document verifications (Coming soon)
       summary: Create an ID document verification attempt
-      description:
-        "This endpoint allows you to create an ID document verification attempt. It is possible when the ID document verification
+      description: "This endpoint allows you to create an ID document verification attempt. It is possible when the ID document verification 
         is one of the following statuses: `created`, `retry_required`"
       operationId: create_id_document_verification_attempt
       parameters:
@@ -3659,12 +3659,11 @@ paths:
         "404":
           description: The provided ID document verification ID is not valid
         "409":
-          description:
-            The ID document verification is not in a valid state to create an attempt.
+          description: The ID document verification is not in a valid state to create an attempt.
             The ID document verification status must be `created` or `retry_required`
         "500":
           description: An error occurred while creating the attempt
-
+      
   /v2/id-document-verifications/{id_document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
@@ -3700,7 +3699,7 @@ paths:
           description: The provided document verification attempt ID is not valid
         "500":
           description: An error occurred while fetching the attempt
-
+  
   /v2/id-document-verifications/{id_document_verification_id}/attempts/{attempt_id}/assets:
     get:
       tags:
@@ -3785,10 +3784,10 @@ components:
         - summary
 
     RiskLabels:
-      type: array
-      items:
-        $ref: "#/components/schemas/RiskLabel"
-      description: Risk assessment labels
+          type: array
+          items:
+            $ref: "#/components/schemas/RiskLabel"
+          description: Risk assessment labels
 
     RiskLabel:
       type: string
@@ -4004,15 +4003,15 @@ components:
           $ref: "#/components/schemas/ListLinks"
 
     ListLinks:
-      type: object
-      required: [self]
-      properties:
-        self:
-          $ref: "#/components/schemas/HalLink"
-        previous:
-          $ref: "#/components/schemas/HalLink"
-        next:
-          $ref: "#/components/schemas/HalLink"
+        type: object
+        required: [self]
+        properties:
+          self:
+            $ref: "#/components/schemas/HalLink"
+          previous:
+            $ref: "#/components/schemas/HalLink"
+          next:
+            $ref: "#/components/schemas/HalLink"
 
     SelfLink:
       type: object
@@ -4065,9 +4064,9 @@ components:
           type: string
           nullable: true
           oneOf:
-            - $ref: "#/components/schemas/GenderA47Enum"
-            - $ref: "#/components/schemas/BlankEnum"
-            - $ref: "#/components/schemas/NullEnum"
+            - $ref: '#/components/schemas/GenderA47Enum'
+            - $ref: '#/components/schemas/BlankEnum'
+            - $ref: '#/components/schemas/NullEnum'
 
     GenderA47Enum:
       enum:
@@ -4082,7 +4081,7 @@ components:
 
     BlankEnum:
       enum:
-        - ""
+        - ''
 
     NullEnum:
       enum:
@@ -4096,6 +4095,9 @@ components:
         external_applicant_id:
           type: string
           example: "ext_osdfdfdb4hryu5cei5vwoabrk5k"
+        external_applicant_name:
+          type: string
+          example: "David Vincent"
         email:
           type: string
           format: email
@@ -4137,6 +4139,9 @@ components:
     ApplicantInputPatch:
       type: object
       properties:
+        external_applicant_name:
+          type: string
+          example: "David Vincent"
         email:
           type: string
           format: email
@@ -4202,7 +4207,7 @@ components:
     IdentityVerificationInputBase:
       type: object
       allOf:
-        - $ref: "#/components/schemas/IdentityVerificationBase"
+          - $ref: "#/components/schemas/IdentityVerificationBase"
 
     IdentityVerificationOutputBase:
       type: object
@@ -4212,15 +4217,15 @@ components:
         response_codes:
           type: array
           items:
-            $ref: "#/components/schemas/ResponseCodes"
+            $ref: '#/components/schemas/ResponseCodes'
         verified_identity:
-          $ref: "#/components/schemas/VerificationIdentity"
+          $ref: '#/components/schemas/VerificationIdentity'
         documents:
           type: array
           items:
             $ref: "#/components/schemas/Document"
         face:
-          $ref: "#/components/schemas/VerificationFace"
+          $ref: '#/components/schemas/VerificationFace'
         verification_policy_version:
           type: string
           description: returned ONLY for certified verifications
@@ -4237,18 +4242,7 @@ components:
 
     IdentityVerificationOutputPost:
       type: object
-      required:
-        [
-          id,
-          declared_data,
-          status,
-          webhook_url,
-          _links,
-          response_codes,
-          risk_labels,
-          applicant_id,
-          user_journey_id,
-        ]
+      required: [id, declared_data, status, webhook_url, _links, response_codes, risk_labels, applicant_id, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4272,19 +4266,7 @@ components:
 
     IdentityVerificationOutputHelper:
       type: object
-      required:
-        [
-          id,
-          declared_data,
-          status,
-          webhook_url,
-          _links,
-          response_codes,
-          risk_labels,
-          redirect_url,
-          applicant_id,
-          user_journey_id,
-        ]
+      required: [id, declared_data, status, webhook_url, _links, response_codes, risk_labels, redirect_url, applicant_id, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4301,19 +4283,7 @@ components:
 
     IdentityVerificationOutputGet:
       type: object
-      required:
-        [
-          id,
-          declared_data,
-          status,
-          webhook_url,
-          redirect_url,
-          _links,
-          applicant_id,
-          response_codes,
-          risk_labels,
-          user_journey_id,
-        ]
+      required: [id, declared_data, status, webhook_url, redirect_url, _links, applicant_id, response_codes, risk_labels, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4330,18 +4300,7 @@ components:
 
     IdentityVerificationOutputAnonymize:
       type: object
-      required:
-        [
-          id,
-          status,
-          webhook_url,
-          _links,
-          applicant_id,
-          redirect_url,
-          response_codes,
-          risk_labels,
-          user_journey_id,
-        ]
+      required: [id, status, webhook_url, _links, applicant_id, redirect_url, response_codes, risk_labels, user_journey_id]
       properties:
         id:
           $ref: "#/components/schemas/IdentityVerificationId"
@@ -4370,30 +4329,14 @@ components:
 
     IdentityVerificationAttemptAssetOutput:
       type: object
-      required: [type, _links]
+      required: [ type, _links ]
       properties:
         type:
           type: string
-          enum:
-            [
-              face_image,
-              face_video,
-              document_front_image,
-              document_back_image,
-              document_back_image,
-              document_front_video,
-              document_signature_image,
-              document_back_video,
-              secondary_document_front_video,
-              secondary_document_front_image,
-              secondary_document_back_image,
-              secondary_document_signature_image,
-              secondary_document_back_video,
-              secondary_document_front_video,
-            ]
+          enum: [face_image, face_video, document_front_image, document_back_image, document_back_image, document_front_video, document_signature_image, document_back_video, secondary_document_front_video, secondary_document_front_image, secondary_document_back_image, secondary_document_signature_image, secondary_document_back_video, secondary_document_front_video]
         _links:
           type: object
-          required: [asset_url]
+          required: [ asset_url ]
           properties:
             asset_url:
               $ref: "#/components/schemas/HalLink"
@@ -4412,13 +4355,13 @@ components:
 
     FaceAuthenticationAttemptAssetOutput:
       type: object
-      required: [type, _links]
+      required: [ type, _links ]
       properties:
         type:
           type: string
           enum: [face_image, face_video]
         _links:
-          required: [asset_url]
+          required: [ asset_url ]
           type: object
           properties:
             asset_url:
@@ -4462,8 +4405,7 @@ components:
       type: string
       description: Identity verification unique identifier.
       pattern: ^idv_\w+$
-      example:
-        idv_tkoi5db4hryu5cei5vwoabr7we
+      example: idv_tkoi5db4hryu5cei5vwoabr7we
         #######################################################################
     #######################################################################
 
@@ -4605,6 +4547,8 @@ components:
         initial_device:
           $ref: "#/components/schemas/InitialDevices"
 
+
+
     IdentityVerificationApplicantSessionInformation:
       type: object
       properties:
@@ -4618,7 +4562,7 @@ components:
         - $ref: "#/components/schemas/BaseApplicantSessionInformation"
         ############################################################################
     #######################################################################
-
+    
     ######################### Face Attempt schemas ########################
     FaceAttemptBase:
       type: object
@@ -4659,7 +4603,7 @@ components:
 
     FaceAuthenticationAttemptResponseList:
       type: object
-      required: [total_count, skip, limit, _links, data]
+      required: [ total_count, skip, limit, _links, data ]
       properties:
         data:
           type: array
@@ -4686,7 +4630,7 @@ components:
       required: [id, status, redirect_url, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationAttemptOutputBase"
-
+          
     ###################### Face Attempt Utils schemas ####################
     FaceAuthenticationApplicantSessionInformation:
       type: object
@@ -4719,7 +4663,7 @@ components:
       type: object
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationBase"
-
+          
     FaceAuthenticationOutputBase:
       type: object
       properties:
@@ -4730,17 +4674,17 @@ components:
         response_codes:
           type: array
           items:
-            $ref: "#/components/schemas/ResponseCodes"
+            $ref: '#/components/schemas/ResponseCodes'
         risk_labels:
-          $ref: "#/components/schemas/RiskLabels"
+          $ref: '#/components/schemas/RiskLabels'
         face:
-          $ref: "#/components/schemas/VerificationFace"
+          $ref: '#/components/schemas/VerificationFace'
         _links:
           $ref: "#/components/schemas/FaceAuthenticationLinks"
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationBase"
         - $ref: "#/components/schemas/DatedObject"
-
+    
     FaceAuthenticationInputPost:
       type: object
       required: [webhook_url, applicant_id, user_journey_id]
@@ -4749,55 +4693,25 @@ components:
 
     FaceAuthenticationOutputPost:
       type: object
-      required:
-        [
-          id,
-          status,
-          webhook_url,
-          applicant_id,
-          response_codes,
-          risk_labels,
-          user_journey_id,
-          _links,
-        ]
+      required: [id, status, webhook_url, applicant_id, response_codes, risk_labels, user_journey_id, _links]
       properties:
         face:
-          $ref: "#/components/schemas/VerificationFace"
+          $ref: '#/components/schemas/VerificationFace'
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationOutputBase"
-
+    
     FaceAuthenticationOutputGet:
       type: object
-      required:
-        [
-          id,
-          status,
-          webhook_url,
-          applicant_id,
-          response_codes,
-          risk_labels,
-          user_journey_id,
-          _links,
-        ]
+      required: [id, status, webhook_url, applicant_id, response_codes, risk_labels, user_journey_id, _links]
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationOutputBase"
 
     FaceAuthenticationOutputAnonymize:
       type: object
-      required:
-        [
-          id,
-          status,
-          webhook_url,
-          applicant_id,
-          user_journey_id,
-          response_codes,
-          risk_labels,
-          _links,
-        ]
+      required: [id, status, webhook_url, applicant_id, user_journey_id, response_codes, risk_labels, _links]
       properties:
         face:
-          $ref: "#/components/schemas/VerificationFace"
+          $ref: '#/components/schemas/VerificationFace'
       allOf:
         - $ref: "#/components/schemas/FaceAuthenticationOutputBase"
 
@@ -4832,11 +4746,12 @@ components:
           type: string
           format: uri
 
+
     IdDocumentVerificationInputBase:
       type: object
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationBase"
-
+    
     IdDocumentVerificationOutputBase:
       type: object
       properties:
@@ -4855,35 +4770,32 @@ components:
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationBase"
         - $ref: "#/components/schemas/DatedObject"
-
+      
     IdDocumentVerificationInputPost:
       type: object
       required: [applicant_id, user_journey_id]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationInputBase"
-
+    
     IdDocumentVerificationOutputPost:
       type: object
-      required:
-        [id, status, applicant_id, response_codes, user_journey_id, _links]
+      required: [id, status, applicant_id, response_codes, user_journey_id, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
-
+    
     IdDocumentVerificationOutputGet:
       type: object
-      required:
-        [id, status, _links, applicant_id, response_codes, user_journey_id]
+      required: [id, status, _links, applicant_id, response_codes, user_journey_id]
       allOf:
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
 
     IdDocumentVerificationOutputAnonymize:
       type: object
-      required:
-        [id, status, applicant_id, user_journey_id, response_codes, _links]
+      required: [id, status, applicant_id, user_journey_id, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationOutputBase"
-
+    
     IdDocumentVerificationOutputPdfReport:
       type: object
       required: [pdf_report]
@@ -4902,7 +4814,7 @@ components:
         document_back:
           type: string
           format: binary
-
+    
     IdDocumentVerificationAttemptOutputBase:
       type: object
       properties:
@@ -4937,19 +4849,19 @@ components:
       required: [document_front]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationAttemptInputBase"
-
+    
     IdDocumentVerificationAttemptOutputPost:
       type: object
       required: [id, status, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputBase"
-
+    
     IdDocumentVerificationAttemptOutputGet:
       type: object
       required: [id, status, response_codes, _links]
       allOf:
         - $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputBase"
-
+    
     IdDocumentVerificationAttemptAssetsOutput:
       type: object
       required: [total_count, skip, limit, _links, data]
@@ -4987,7 +4899,7 @@ components:
       description: ID ocument verification unique identifier.
       pattern: ^iddv_\w+$
       example: iddv_tkoi5db4hryu5cei5vwoabr7we
-
+    
     IdDocumentVerificationStatus:
       type: string
       description: ID document verification status.
@@ -4999,7 +4911,7 @@ components:
         - declined
         - retry_required
         - inconclusive
-
+    
     IdDocumentVerificationLinks:
       type: object
       allOf:
@@ -5059,8 +4971,7 @@ components:
 
     AMLVerificationOutputPost:
       type: object
-      required:
-        [id, status, webhook_url, _links, applicant_id, search_parameters]
+      required: [id, status, webhook_url, _links, applicant_id, search_parameters]
       properties:
         id:
           $ref: "#/components/schemas/AMLVerificationId"
@@ -5070,8 +4981,7 @@ components:
 
     AMLVerificationOutputGet:
       type: object
-      required:
-        [id, status, webhook_url, _links, applicant_id, search_parameters]
+      required: [id, status, webhook_url, _links, applicant_id, search_parameters]
       properties:
         id:
           $ref: "#/components/schemas/AMLVerificationId"
@@ -5129,8 +5039,8 @@ components:
         declared_data:
           name: John Smith
         phone_number:
-          country_code: "+1"
-          number: "5555550102"
+          country_code: '+1'
+          number: '5555550102'
         redirect_url: https://example.com?query-param=hello
         webhook_url: https://my.api/events/
 
@@ -5222,10 +5132,11 @@ components:
         _links:
           self:
             href: "https://api.ubble.ai/api/v2/face-authentications/fau_116kcr6z00h62kzvf4hw2twb3b/attempts/fatp_116kcr6z00h62kzvf4hw2twb3d/assets"
-
+      
         limit: 10
         skip: 0
         total_count: 4
+
 
     identity_verification_response_body:
       value:
@@ -5278,8 +5189,8 @@ components:
         risk_labels:
           - multiple_faces_detected
         phone_number:
-          country_code: "+1"
-          number: "5555550102"
+          country_code: '+1'
+          number: '5555550102'
         documents: []
         webhook_url: https://my.api/events/
         redirect_url: https://myweb.site?query-param=hello
@@ -5394,6 +5305,7 @@ components:
     applicant_creation_request_body:
       value:
         external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
+        external_applicant_name: David Vincent
         email: david.vincent@courriel.ml
 
     applicant_response_body:
@@ -5402,6 +5314,7 @@ components:
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
+        external_applicant_name: David Vincent
         email: david.vincent@courriel.ml
         _links:
           self:
@@ -5409,6 +5322,7 @@ components:
 
     applicant_patch_request_body:
       value:
+        external_applicant_name: David Vincent
         email: david.vincent@courriel.ml
 
     applicant_response_body_anonymized:
@@ -5417,6 +5331,7 @@ components:
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         external_applicant_id: ext_osdfdfdb4hryu5cei5vwoabrk5k
+        external_applicant_name: David Vincent
         _links:
           self:
             href: https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
@@ -5545,7 +5460,7 @@ components:
         _links:
           self:
             href: "https://api.ubble.ai/api/v2/face-authentications/fau_116kcr6z00h62kzvf4hw2twb3b/attempts/fatp_116kcr6z00h62kzvf4hw2twb3d/assets"
-
+      
         limit: 10
         skip: 0
         total_count: 2
@@ -5647,7 +5562,7 @@ components:
         declared_data:
           name: David Vincent
         webhook_url: https://my.api/events/
-
+    
     id_document_verification_creation_response_body:
       value:
         id: iddv_tkoi5db4hryu5cei5vwoabr7we
@@ -5671,7 +5586,7 @@ components:
             href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we"
           applicant:
             href: "https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we"
-
+    
     id_document_verification_anonymization_response_body:
       value:
         id: iddv_tkoi5db4hryu5cei5vwoabr7we
@@ -5697,6 +5612,7 @@ components:
         document_front: |
           data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…
 
+    
     id_document_verification_attempt_creation_request_body_max:
       value:
         document_front: |
@@ -5704,6 +5620,7 @@ components:
         document_back: |
           data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
 
+    
     id_document_verification_attempt_creation_response_body:
       value:
         id: iddv_tkoi5db4hryu5cei5vwoabr7we
@@ -5714,7 +5631,7 @@ components:
         _links:
           self:
             href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we"
-
+    
     id_document_verification_attempt_get_response_body:
       value:
         id: iddv_tkoi5db4hryu5cei5vwoabr7we
@@ -5747,7 +5664,7 @@ components:
             href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we/attempts/..."
           previous:
             href: "https://api.ubble.ai/v2/id-document-verifications/iddv_tkoi5db4hryu5cei5vwoabr7we/attempts/..."
-
+    
     id_document_verification_attempt_output_assets_response_body:
       value:
         total_count: 2
