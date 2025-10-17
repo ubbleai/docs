@@ -2038,13 +2038,13 @@ info:
       </colgroup>
       <thead>
         <tr>
-          <th class="tg-fymr"><nobr><code>code</code></nobr></th>
-          <th class="tg-fymr"><code>summary</code></th>
+          <th class="tg-fymr"><nobr>code</nobr></th>
+          <th class="tg-fymr">summary</th>
           <th class="tg-fymr">Description</th>
-          <th class="tg-fymr">idv</th>
-          <th class="tg-fymr">certified idv</th>
-          <th class="tg-fymr">fav</th>
-          <th class="tg-fymr">iddv</th>
+          <th class="tg-fymr" style="text-align: center">idv</th>
+          <th class="tg-fymr" style="text-align: center">certified idv</th>
+          <th class="tg-fymr" style="text-align: center">fav</th>
+          <th class="tg-fymr" style="text-align: center">iddv</th>
         </tr>
       </thead>
       <tbody>
