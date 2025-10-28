@@ -1192,7 +1192,6 @@ info:
       |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
       | `id_document_verification_created`                           | You created a document verification                                                                                               |
       | `id_document_verification_quality_checks_in_progress`        | You created a first attempt and we assess the quality of the images                                                               |
-      | `id_document_verification_reset`                             | You created a new attempt while the status was checks in progress or quality_ checks_in_progres                                   |
       | `id_document_verification_checks_in_progress`                | We completed the quality assessment and perform the safety checks                                                                 |
       | `id_document_verification_checks_completed`                  | We completed the safety checks                                                                                                    |
       | `id_document_verification_quality_checks_aborted`            | The applicant did not provide assets of good enough quality to perform the verification                                           |
@@ -2190,7 +2189,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
           <td class="center-icon"></td>
-          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td class="center-icon"></td>
         </tr>
        <tr>
         <td class="tg-0pky">62331</td>
