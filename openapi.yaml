@@ -13,6 +13,7 @@ info:
     The Identities solutions enable you to verify identities, perform anti-money laundering (AML) screenings, and authenticate with biometrics. This helps meet compliance requirements and reduce the risk of fraud.
 
     - [Applicants](#section/Applicant-Profiles) – Create a profile for each physical person applying to use your services, where you can manage their identity.
+    - [Business Applicants](#section/Business-Applicant-Profiles) – Create a profile for each business entity applying to use your services.
     - [Identity Verification](#section/Identity-Verification) – Verify an applicant's identity using their identity document and face.
     - [ID Document Verification](#section/ID-Document-Verification) - Alternatively verify applicant's identity using document images. 
     - [AML Screening](#section/AML-Screening) – Check if an applicant appears in politically exposed persons, sanctions, or adverse media databases.
@@ -64,7 +65,7 @@ info:
     Make a note of the business applicant `id` value in the response. You'll need it to create verifications later.
 
     Once you have created a Business Applicant, you can start creating verifications as described in the sections below.
-    You can then [retrieve](#tag/Business-applicants/operation/retrieve_business_applicant) or [update](#tag/Business-applicants/operation/update_business_applicant) the profile.
+    You can then [retrieve](#tag/Business-applicants/operation/retrieve_business_applicant) the profile.
 
     # Identity Verification
 
@@ -1209,7 +1210,6 @@ info:
       |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
       | `id_document_verification_created`                           | You created a document verification                                                                                               |
       | `id_document_verification_quality_checks_in_progress`        | You created a first attempt and we assess the quality of the images                                                               |
-      | `id_document_verification_reset`                             | You created a new attempt while the status was checks in progress or quality_ checks_in_progres                                   |
       | `id_document_verification_checks_in_progress`                | We completed the quality assessment and perform the safety checks                                                                 |
       | `id_document_verification_checks_completed`                  | We completed the safety checks                                                                                                    |
       | `id_document_verification_quality_checks_aborted`            | The applicant did not provide assets of good enough quality to perform the verification                                           |
@@ -2207,7 +2207,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
           <td class="center-icon"></td>
-          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td class="center-icon"></td>
         </tr>
        <tr>
         <td class="tg-0pky">62331</td>
@@ -2578,6 +2578,7 @@ x-tagGroups:
   - name: Endpoints documentation
     tags:
       - Applicants
+      - Business applicants
       - Identity verifications
       - ID document verifications (Coming soon)
       - Face authentications
@@ -3170,7 +3171,7 @@ paths:
                   value:
                     {
                       "error_type": "request_invalid",
-                      "error_codes": ["external_applicant_id__required"],
+                      "error_codes": ["external_applicant_id__invalid"],
                     }
 
   /v2/business-applicants/{business_applicant_id}:
@@ -3199,75 +3200,6 @@ paths:
                   $ref: "#/components/examples/business_applicant_response_body"
         "404":
           description: "Business applicant not found"
-
-    patch:
-      tags:
-        - Business applicants
-      summary: Update a Business Applicant
-      description: Update a Business Applicant
-      operationId: update_business_applicant
-      parameters:
-        - name: business_applicant_id
-          required: true
-          in: path
-          description: ID of Business Applicant to return
-          schema:
-            $ref: "#/components/schemas/BusinessApplicantId"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BusinessApplicantInputPatch"
-            examples:
-              All possible data:
-                $ref: "#/components/examples/business_applicant_patch_request_body"
-      responses:
-        "200":
-          description: business applicant updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BusinessApplicantOutputPatch"
-              examples:
-                Always replies:
-                  $ref: "#/components/examples/business_applicant_response_body"
-        "404":
-          description: Business applicant not found
-        "400":
-          description: Bad request. One or more input parameters are invalid
-        "500":
-          description: Internal server error
-
-  /v2/business-applicants/{business_applicant_id}/anonymize:
-    post:
-      tags:
-        - Business applicants
-      summary: Anonymize a Business Applicant
-      description: Anonymize the personal data of a business applicant with the specified ID.
-      operationId: anonymize_business_applicant
-      parameters:
-        - name: business_applicant_id
-          in: path
-          description: ID of the business applicant to anonymize
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: business applicant anonymized successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BusinessApplicantOutputAnonymize"
-              examples:
-                Always replies:
-                  $ref: "#/components/examples/business_applicant_response_body_anonymized"
-        "404":
-          description: Business applicant not found
-        "400":
-          description: Bad request. The business applicant cannot be anonymized.
-        "500":
-          description: Internal server error
 
 # AML Verifications
   /v2/aml-verifications:
@@ -4363,30 +4295,6 @@ components:
       allOf:
         - $ref: "#/components/schemas/BusinessApplicantOutputBase"
 
-    BusinessApplicantInputPatch:
-      type: object
-      properties:
-        external_applicant_id:
-          type: string
-          example: "ext_business_osdfdfdb4hryu5cei5vwoabrk5k"
-
-    BusinessApplicantOutputPatch:
-      type: object
-      required: [id]
-      allOf:
-        - $ref: "#/components/schemas/BusinessApplicantOutputBase"
-
-    BusinessApplicantOutputAnonymize:
-      type: object
-      required: [id]
-      properties:
-        id:
-          allOf:
-            - $ref: "#/components/schemas/BusinessApplicantId"
-      allOf:
-        - $ref: "#/components/schemas/BusinessApplicantsLinks"
-        - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/BusinessApplicantOutputBase"
         ######################### Applicant Utils schemas #####################
     ApplicantId:
       type: string
@@ -4405,8 +4313,8 @@ components:
     BusinessApplicantId:
       type: string
       description: Business Applicant unique identifier.
-      pattern: ^aplt_\w+$
-      example: aplt_tkoi5db4hryu5cei5vwoabr7we
+      pattern: ^bplt_\w+$
+      example: bplt_tkoi5db4hryu5cei5vwoabr7we
 
     BusinessApplicantsLinks:
       type: object
@@ -5579,27 +5487,13 @@ components:
 
     business_applicant_response_body:
       value:
-        id: aplt_tkoi5db4hryu5cei5vwoabr7we
+        id: bplt_tkoi5db4hryu5cei5vwoabr7we
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         external_applicant_id: ext_business_osdfdfdb4hryu5cei5vwoabrk5k
         _links:
           self:
-            href: https://api.ubble.ai/v2/business-applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
-
-    business_applicant_patch_request_body:
-      value:
-        external_applicant_id: ext_business_osdfdfdb4hryu5cei5vwoabrk5k
-
-    business_applicant_response_body_anonymized:
-      value:
-        id: aplt_tkoi5db4hryu5cei5vwoabr7we
-        created_on: 2017-07-21T17:32:28Z
-        modified_on: 2017-07-21T17:40:32Z
-        external_applicant_id: ext_business_osdfdfdb4hryu5cei5vwoabrk5k
-        _links:
-          self:
-            href: https://api.ubble.ai/v2/business-applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
+            href: https://api.ubble.ai/v2/business-applicants/bplt_tkoi5db4hryu5cei5vwoabr7we
 
     aml_verification_creation_request_body_min:
       value:
