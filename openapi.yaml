@@ -13,7 +13,6 @@ info:
     The Identities solutions enable you to verify identities, perform anti-money laundering (AML) screenings, and authenticate with biometrics. This helps meet compliance requirements and reduce the risk of fraud.
 
     - [Applicants](#section/Applicant-Profiles) – Create a profile for each physical person applying to use your services, where you can manage their identity.
-    - [Business Applicants](#section/Business-Applicant-Profiles) – Create a profile for each business entity applying to use your services.
     - [Identity Verification](#section/Identity-Verification) – Verify an applicant's identity using their identity document and face.
     - [ID Document Verification](#section/ID-Document-Verification) - Alternatively verify applicant's identity using document images. 
     - [AML Screening](#section/AML-Screening) – Check if an applicant appears in politically exposed persons, sanctions, or adverse media databases.
@@ -49,24 +48,7 @@ info:
     Once you have created an applicant, you can start creating verifications as described in the sections below. 
     You can then [retrieve](#tag/Applicants/operation/retrieve_applicant) or [update](#tag/Applicants/operation/update_applicant) the profile.
     If requested under the GDPR, you can [remove the applicant's personal data](#tag/Applicants/operation/anonymize_applicant) from the profile.
-
-    # Business Applicant Profiles
-
-    The Business Verifications (e.g Website Screening) require a profile for each business entity applying to use our services.
-
-    ## Create a business applicant
-
-    To create a business applicant, call the [Create a business applicant](#tag/Business-applicants/operation/create_business_applicant) endpoint.
-
-    Optionally, provide the following fields:
-
-    - `external_applicant_id` – Your identifier for this applicant
-
-    Make a note of the business applicant `id` value in the response. You'll need it to create verifications later.
-
-    Once you have created a Business Applicant, you can start creating verifications as described in the sections below.
-    You can then [retrieve](#tag/Business-applicants/operation/retrieve_business_applicant) the profile.
-
+    
     # Identity Verification
 
     The Identity Verification solution enables you to verify the identity of a physical person applying to use your services. This helps you meet compliance requirements and reduce the risk of fraud.
@@ -2549,6 +2531,58 @@ info:
     }
     ````
 
+    ## Pagination
+
+    List endpoints that return multiple items support pagination.
+
+    ### Request parameters
+    You can control pagination using the following optional query parameters:
+    - `skip` (optional): Number of items to skip (offset). Default: 0
+    - `limit` (optional): Maximum number of items to return per page. Default: 10
+
+    ### Navigation methods
+    You can navigate through pages using either:
+    1. **Navigation links**: Use the URLs provided in the `_links` object (recommended)
+    2. **Manual parameters**: Construct your own URLs using `skip` and `limit` query parameters
+
+    ### Response structure
+    Paginated responses include the following fields:
+    - `total_count`: Total number of items available
+    - `skip`: Number of items skipped (offset)
+    - `limit`: Maximum number of items returned per page
+    - `data`: Array of items for the current page
+    - `_links`: Navigation links object containing:
+      - `self`: Link to the current page
+      - `next`: Link to the next page (if available)
+      - `previous`: Link to the previous page (if available)
+
+    ```json
+    {
+      "total_count": 42,
+      "skip": 10,
+      "limit": 10,
+      "data": [
+        {
+          "id": "iatp_tkoi5db4hryu5cei5vwoabr7we",
+          "status": "checks_in_progress",
+          "created_on": "2017-07-21T17:32:28Z"
+          ...
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_xxx/attempts"
+        },
+        "next": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_xxx/attempts?skip=20&limit=10"
+        },
+        "previous": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_xxx/attempts?skip=0&limit=10"
+        }
+      }
+    }
+    ```
+
     ## Common Objects/Properties
 
     | name         | format                                                                                                                                              | example                                                                     |
@@ -2578,7 +2612,6 @@ x-tagGroups:
   - name: Endpoints documentation
     tags:
       - Applicants
-      - Business applicants
       - Identity verifications
       - ID document verifications (Coming soon)
       - Face authentications
@@ -2853,7 +2886,13 @@ paths:
       tags:
         - Identity verifications
       summary: List attempts
-      description: This endpoint allows you to list all attempts of a verification
+      description: |
+        This endpoint allows you to list all attempts of a verification.
+        
+        Attempts are returned ordered by creation date, newest first.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       operationId: list_attempts
       parameters:
         - name: identity_verification_id
@@ -2862,6 +2901,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
           description: List attempt
@@ -2964,6 +3005,9 @@ paths:
         Retrieves the assets associated with an identity verification attempt.
         This includes face images, videos, and document images captured during the verification process.
         Please note that videos are not exposed by default, contact your account manager to enable this feature.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       operationId: retrieve_identity_verification_attempt_assets
       parameters:
         - name: identity_verification_id
@@ -2978,6 +3022,8 @@ paths:
           schema:
             type: string
           description: The ID of the attempt
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         '200':
           description: The assets were retrieved successfully
@@ -3129,77 +3175,6 @@ paths:
           description: Bad request. The applicant cannot be anonymized.
         "500":
           description: Internal server error
-
-# Business Applicants
-  /v2/business-applicants:
-    post:
-      tags:
-        - Business applicants
-      summary: Create a Business Applicant
-      description: This section describes all endpoints related to business applicants. It will enable you to create and manage business applicant objects.
-      operationId: create_business_applicant
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BusinessApplicantInputPost"
-            examples:
-              All possible data:
-                $ref: "#/components/examples/business_applicant_creation_request_body"
-
-      responses:
-        "201":
-          description: Business applicant successfully created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BusinessApplicantOutputPost"
-              examples:
-                Always replies:
-                  $ref: "#/components/examples/business_applicant_response_body"
-          links:
-            RetrieveBusinessApplicantById:
-              operationId: retrieve_business_applicant
-              parameters:
-                business_applicant_id: "$response.body#/id"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              examples:
-                Invalid request:
-                  value:
-                    {
-                      "error_type": "request_invalid",
-                      "error_codes": ["external_applicant_id__invalid"],
-                    }
-
-  /v2/business-applicants/{business_applicant_id}:
-    get:
-      tags:
-        - Business applicants
-      summary: Retrieve a Business Applicant
-      description: Retrieve a Business Applicant
-      operationId: retrieve_business_applicant
-      parameters:
-        - name: business_applicant_id
-          required: true
-          in: path
-          description: ID of Business Applicant to return
-          schema:
-            $ref: "#/components/schemas/BusinessApplicantId"
-      responses:
-        "200":
-          description: business applicant retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BusinessApplicantOutputGet"
-              examples:
-                Always replies:
-                  $ref: "#/components/examples/business_applicant_response_body"
-        "404":
-          description: "Business applicant not found"
 
 # AML Verifications
   /v2/aml-verifications:
@@ -3386,7 +3361,13 @@ paths:
       tags:
         - Face authentications
       summary: List attempts
-      description: This endpoint allows you to list all attempts of a face authentication
+      description: |
+        This endpoint allows you to list all attempts of a face authentication.
+        
+        Attempts are returned ordered by creation date, newest first.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       operationId: list_attempts_face_authentication
       parameters:
         - name: face_authentication_id
@@ -3395,6 +3376,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
           description: List attempts
@@ -3498,6 +3481,9 @@ paths:
         Retrieves the assets associated with a face authentication attempt.
         This includes face images and videos captured during the verification process.
         Please note that videos are not exposed by default, contact your account manager to enable this feature.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       operationId: retrieve_face_authentication_attempt_assets
       parameters:
         - name: face_authentication_id
@@ -3512,6 +3498,8 @@ paths:
           schema:
             type: string
           description: The ID of the attempt
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         '200':
           description: The assets were retrieved successfully
@@ -3687,7 +3675,13 @@ paths:
         - ID document verifications (Coming soon)
       summary: List ID document verification attempts
       operationId: list_attempts_id_document_verification
-      description: This endpoint allows you to list all attempts of an ID document verification
+      description: |
+        This endpoint allows you to list all attempts of an ID document verification.
+        
+        Attempts are returned ordered by creation date, newest first.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       parameters:
         - name: id_document_verification_id
           in: path
@@ -3695,6 +3689,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
           description: ID document verification attempts retrieved successfully
@@ -3798,6 +3794,9 @@ paths:
       description: |
         This endpoint allows you to retrieve the assets associated with an ID document verification.
         This includes the document front image and the document back image.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       parameters:
         - name: id_document_verification_id
           in: path
@@ -3811,6 +3810,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
           description: ID document verification attempt asset retrieved successfully
@@ -4084,10 +4085,13 @@ components:
       properties:
         total_count:
           type: integer
+          description: Total number of items available across all pages
         skip:
           type: integer
+          description: Number of items skipped (offset from the start)
         limit:
           type: integer
+          description: Maximum number of items returned in this page
         _links:
           $ref: "#/components/schemas/ListLinks"
 
@@ -4096,10 +4100,13 @@ components:
         required: [self]
         properties:
           self:
+            description: Link to the current page
             $ref: "#/components/schemas/HalLink"
           previous:
+            description: Link to the previous page (null if on the first page)
             $ref: "#/components/schemas/HalLink"
           next:
+            description: Link to the next page (null if on the last page)
             $ref: "#/components/schemas/HalLink"
 
     SelfLink:
@@ -4253,48 +4260,6 @@ components:
         - $ref: "#/components/schemas/ApplicantsLinks"
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/ApplicantOutputBase"
-
-    ########################### Business Applicant schemas #########################
-    BaseBusinessApplicant:
-      type: object
-      properties:
-        external_applicant_id:
-          type: string
-          example: "ext_business_osdfdfdb4hryu5cei5vwoabrk5k"
-
-    BusinessApplicantInputBase:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/BaseBusinessApplicant"
-
-    BusinessApplicantOutputBase:
-      type: object
-      properties:
-        id:
-          allOf:
-            - $ref: "#/components/schemas/BusinessApplicantId"
-      allOf:
-        - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/BaseBusinessApplicant"
-        - $ref: "#/components/schemas/BusinessApplicantsLinks"
-
-    BusinessApplicantInputPost:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/BusinessApplicantInputBase"
-
-    BusinessApplicantOutputPost:
-      type: object
-      required: [id]
-      allOf:
-        - $ref: "#/components/schemas/BusinessApplicantOutputBase"
-
-    BusinessApplicantOutputGet:
-      type: object
-      required: [id]
-      allOf:
-        - $ref: "#/components/schemas/BusinessApplicantOutputBase"
-
         ######################### Applicant Utils schemas #####################
     ApplicantId:
       type: string
@@ -4303,20 +4268,6 @@ components:
       example: aplt_tkoi5db4hryu5cei5vwoabr7we
 
     ApplicantsLinks:
-      type: object
-      required: [_links]
-      properties:
-        _links:
-          allOf:
-            - $ref: "#/components/schemas/SelfLink"
-
-    BusinessApplicantId:
-      type: string
-      description: Business Applicant unique identifier.
-      pattern: ^bplt_\w+$
-      example: bplt_tkoi5db4hryu5cei5vwoabr7we
-
-    BusinessApplicantsLinks:
       type: object
       required: [_links]
       properties:
@@ -4466,6 +4417,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of identity verification attempt assets for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/IdentityVerificationAttemptAssetOutput"
@@ -4492,6 +4444,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of face authentication attempt assets for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/FaceAuthenticationAttemptAssetOutput"
@@ -4598,6 +4551,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of identity verification attempts for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/IdentityVerificationAttemptOutputGet"
@@ -4752,6 +4706,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of face authentication attempts for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/FaceAuthenticationAttemptOutputGet"
@@ -4983,6 +4938,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of ID document verification attempts for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputGet"
@@ -5013,6 +4969,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of ID document verification attempt assets for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputAssetOutput"
@@ -5168,6 +5125,27 @@ components:
         - $ref: "#/components/schemas/ApplicantLink"
         #######################################################################
     #######################################################################
+
+  parameters:
+    skipParam:
+      name: skip
+      in: query
+      description: Number of items to skip (offset)
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return per page
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
 
   examples:
     identity_verification_creation_request_body_helper_min:
@@ -5347,7 +5325,7 @@ components:
 
     identity_verification_pdf_response_body:
       value:
-        pdf_report: www.pdf.com
+        pdf_report: https://www.example.com/reports/idv_123.pdf
 
     identity_verification_attempt_list_response_body:
       value:
@@ -5377,11 +5355,11 @@ components:
                 href: "https://id.ubble.ai/4hryu5cei5/"
         _links:
           self:
-            href: "https://api.ubble.ai/v2/identity-verifications/{verification_id}/attempts"
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=10&limit=10"
           next:
-            href: "https://api.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=20&limit=10"
           previous:
-            href: "https://api.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=0&limit=10"
 
     attempt_creation_request_body_min:
       value:
@@ -5480,20 +5458,6 @@ components:
         _links:
           self:
             href: https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
-
-    business_applicant_creation_request_body:
-      value:
-        external_applicant_id: ext_business_osdfdfdb4hryu5cei5vwoabrk5k
-
-    business_applicant_response_body:
-      value:
-        id: bplt_tkoi5db4hryu5cei5vwoabr7we
-        created_on: 2017-07-21T17:32:28Z
-        modified_on: 2017-07-21T17:40:32Z
-        external_applicant_id: ext_business_osdfdfdb4hryu5cei5vwoabrk5k
-        _links:
-          self:
-            href: https://api.ubble.ai/v2/business-applicants/bplt_tkoi5db4hryu5cei5vwoabr7we
 
     aml_verification_creation_request_body_min:
       value:
@@ -5601,7 +5565,7 @@ components:
           ip_address: "123.123.123.01"
         _links:
           self:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}"
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts/fatp_tkoi5db4hryu5cei5vwoabr7we"
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
@@ -5639,7 +5603,7 @@ components:
         redirect_url: https://myweb.site?query-param=hello
         _links:
           self:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}"
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts/fatp_tkoi5db4hryu5cei5vwoabr7we"
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
@@ -5696,16 +5660,16 @@ components:
               ip_address: "123.123.123.01"
             _links:
               self:
-                href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}"
+                href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts/fatp_tkoi5db4hryu5cei5vwoabr7we"
               verification_url:
                 href: "https://id.ubble.ai/4hryu5clik/"
         _links:
           self:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts"
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=10&limit=10"
           next:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=20&limit=10"
           previous:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=0&limit=10"
 
     id_document_verification_creation_request_body_min:
       value:
@@ -5764,7 +5728,7 @@ components:
 
     id_document_verification_pdf_report_response_body:
       value:
-        pdf_report: www.pdf.com
+        pdf_report: https://www.example.com/reports/iddv_123.pdf
 
     id_document_verification_attempt_creation_request_body_min:
       value:
