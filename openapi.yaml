@@ -13,6 +13,7 @@ info:
     The Identities solutions enable you to verify identities, perform anti-money laundering (AML) screenings, and authenticate with biometrics. This helps meet compliance requirements and reduce the risk of fraud.
 
     - [Applicants](#section/Applicant-Profiles) – Create a profile for each physical person applying to use your services, where you can manage their identity.
+    - [Business Applicants](#section/Business-Applicant-Profiles) – Create a profile for each business entity applying to use your services.
     - [Identity Verification](#section/Identity-Verification) – Verify an applicant's identity using their identity document and face.
     - [ID Document Verification](#section/ID-Document-Verification) - Alternatively verify applicant's identity using document images. 
     - [AML Screening](#section/AML-Screening) – Check if an applicant appears in politically exposed persons, sanctions, or adverse media databases.
@@ -48,7 +49,24 @@ info:
     Once you have created an applicant, you can start creating verifications as described in the sections below. 
     You can then [retrieve](#tag/Applicants/operation/retrieve_applicant) or [update](#tag/Applicants/operation/update_applicant) the profile.
     If requested under the GDPR, you can [remove the applicant's personal data](#tag/Applicants/operation/anonymize_applicant) from the profile.
-    
+
+    # Business Applicant Profiles
+
+    The Business Verifications (e.g Website Screening) require a profile for each business entity applying to use our services.
+
+    ## Create a business applicant
+
+    To create a business applicant, call the [Create a business applicant](#tag/Business-applicants/operation/create_business_applicant) endpoint.
+
+    Optionally, provide the following fields:
+
+    - `external_applicant_id` – Your identifier for this applicant
+
+    Make a note of the business applicant `id` value in the response. You'll need it to create verifications later.
+
+    Once you have created a Business Applicant, you can start creating verifications as described in the sections below.
+    You can then [retrieve](#tag/Business-applicants/operation/retrieve_business_applicant) the profile.
+
     # Identity Verification
 
     The Identity Verification solution enables you to verify the identity of a physical person applying to use your services. This helps you meet compliance requirements and reduce the risk of fraud.
@@ -2612,6 +2630,7 @@ x-tagGroups:
   - name: Endpoints documentation
     tags:
       - Applicants
+      - Business applicants
       - Identity verifications
       - ID document verifications (Coming soon)
       - Face authentications
@@ -3175,6 +3194,77 @@ paths:
           description: Bad request. The applicant cannot be anonymized.
         "500":
           description: Internal server error
+
+# Business Applicants
+  /v2/business-applicants:
+    post:
+      tags:
+        - Business applicants
+      summary: Create a Business Applicant
+      description: This section describes all endpoints related to business applicants. It will enable you to create and manage business applicant objects.
+      operationId: create_business_applicant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BusinessApplicantInputPost"
+            examples:
+              All possible data:
+                $ref: "#/components/examples/business_applicant_creation_request_body"
+
+      responses:
+        "201":
+          description: Business applicant successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessApplicantOutputPost"
+              examples:
+                Always replies:
+                  $ref: "#/components/examples/business_applicant_response_body"
+          links:
+            RetrieveBusinessApplicantById:
+              operationId: retrieve_business_applicant
+              parameters:
+                business_applicant_id: "$response.body#/id"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                Invalid request:
+                  value:
+                    {
+                      "error_type": "request_invalid",
+                      "error_codes": ["external_applicant_id__invalid"],
+                    }
+
+  /v2/business-applicants/{business_applicant_id}:
+    get:
+      tags:
+        - Business applicants
+      summary: Retrieve a Business Applicant
+      description: Retrieve a Business Applicant
+      operationId: retrieve_business_applicant
+      parameters:
+        - name: business_applicant_id
+          required: true
+          in: path
+          description: ID of Business Applicant to return
+          schema:
+            $ref: "#/components/schemas/BusinessApplicantId"
+      responses:
+        "200":
+          description: business applicant retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessApplicantOutputGet"
+              examples:
+                Always replies:
+                  $ref: "#/components/examples/business_applicant_response_body"
+        "404":
+          description: "Business applicant not found"
 
 # AML Verifications
   /v2/aml-verifications:
@@ -4260,6 +4350,48 @@ components:
         - $ref: "#/components/schemas/ApplicantsLinks"
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/ApplicantOutputBase"
+
+    ########################### Business Applicant schemas #########################
+    BaseBusinessApplicant:
+      type: object
+      properties:
+        external_applicant_id:
+          type: string
+          example: "ext_business_osdfdfdb4hryu5cei5vwoabrk5k"
+
+    BusinessApplicantInputBase:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessApplicant"
+
+    BusinessApplicantOutputBase:
+      type: object
+      properties:
+        id:
+          allOf:
+            - $ref: "#/components/schemas/BusinessApplicantId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/BaseBusinessApplicant"
+        - $ref: "#/components/schemas/BusinessApplicantsLinks"
+
+    BusinessApplicantInputPost:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BusinessApplicantInputBase"
+
+    BusinessApplicantOutputPost:
+      type: object
+      required: [id]
+      allOf:
+        - $ref: "#/components/schemas/BusinessApplicantOutputBase"
+
+    BusinessApplicantOutputGet:
+      type: object
+      required: [id]
+      allOf:
+        - $ref: "#/components/schemas/BusinessApplicantOutputBase"
+
         ######################### Applicant Utils schemas #####################
     ApplicantId:
       type: string
@@ -4268,6 +4400,20 @@ components:
       example: aplt_tkoi5db4hryu5cei5vwoabr7we
 
     ApplicantsLinks:
+      type: object
+      required: [_links]
+      properties:
+        _links:
+          allOf:
+            - $ref: "#/components/schemas/SelfLink"
+
+    BusinessApplicantId:
+      type: string
+      description: Business Applicant unique identifier.
+      pattern: ^bplt_\w+$
+      example: bplt_tkoi5db4hryu5cei5vwoabr7we
+
+    BusinessApplicantsLinks:
       type: object
       required: [_links]
       properties:
@@ -5458,6 +5604,20 @@ components:
         _links:
           self:
             href: https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
+
+    business_applicant_creation_request_body:
+      value:
+        external_applicant_id: ext_business_osdfdfdb4hryu5cei5vwoabrk5k
+
+    business_applicant_response_body:
+      value:
+        id: bplt_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        external_applicant_id: ext_business_osdfdfdb4hryu5cei5vwoabrk5k
+        _links:
+          self:
+            href: https://api.ubble.ai/v2/business-applicants/bplt_tkoi5db4hryu5cei5vwoabr7we
 
     aml_verification_creation_request_body_min:
       value:
