@@ -1386,7 +1386,7 @@ info:
 
     # Reference info
 
-    `idv` refers to Identity verification, `iddv` to ID Document Verification, `amlv` to AML screening, `fav` to Face authentication.  
+    `idv` refers to Identity verification, `iddv` to ID Document Verification, `amlv` to AML screening, `fav` to Face authentication and `certified idv` to an Identity Verification compliant with the french PVID certification.  
 
     ## Check statuses
 
@@ -2276,7 +2276,7 @@ info:
           <td class="tg-0pky">62399</td>
           <td class="tg-0pky">generic_fraud</td>
           <td class="tg-0pky">Replace all other Identity Fraud codes for certified identity verification</td>
-          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td class="center-icon"></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
           <td class="center-icon"></td>
