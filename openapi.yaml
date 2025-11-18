@@ -71,7 +71,7 @@ info:
 
     The Identity Verification solution enables you to verify the identity of a physical person applying to use your services. This helps you meet compliance requirements and reduce the risk of fraud.
 
-    The solution works as follow:
+    The solution works as follows:
     - Create a verification linked to the applicant's profile.
     - Create an attempt and redirect the applicant.
     - The applicant captures video of their identity document and face.
@@ -111,7 +111,7 @@ info:
     - `applicant_id` – The applicant id from the Create an applicant response
     - `declared_data.name` – The applicant's name to be compared with the extracted name
     - `webhook_url` - The URL you want to be notified on
-    - `user_journey_id` – You configuration ID
+    - `user_journey_id` – Your configuration ID
 
     Make a note of the identity verification `id` value in the response. You'll need it to create an attempt and retrieve the detailed results.
 
@@ -147,7 +147,7 @@ info:
         <tr>
           <td class="tg-0pky"><code>identity_verification_capture_completed</code></td>
           <td class="tg-0pky"><code>checks_in_progress</code></td>
-          <td class="tg-0pky">Applicants completed the capture, Checkout.com processes the verification</td>
+          <td class="tg-0pky">The applicant completed the capture, Checkout.com processes the verification</td>
         </tr>
         <tr>
           <td class="tg-0pky"><code>identity_verification_checks_completed</code></td>
@@ -243,8 +243,8 @@ info:
 
     The ID Document Verification solution allows you to confirm that the image of an ID is a direct photo/scan of a legit & genuine document which matches the identity declared by the user.
 
-    The solution works as follow:
-    - Create a ID Document Verification linked to the applicant's profile.
+    The solution works as follows:
+    - Create an ID Document Verification linked to the applicant's profile.
     - Create an attempt and include the document images. 
     - Checkout.com checks if the document image is legit. 
     - Verify webhook notifications and retrieve the verification to see the result.
@@ -258,7 +258,7 @@ info:
 
     #### Configuration
     
-    When you request an account, your account manager provides you a configuration ID, prefixed usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
+    When you request an account, your account manager provides you with a configuration ID, prefixed with usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
 
     - The service level agreement for receiving the result from Checkout.com
     - Identity documents: 
@@ -399,13 +399,13 @@ info:
     
     In partnership with ComplyAdvantage, we propose an Identity verification and AML screening bundle. After having verified the applicant's identity you will be able to:  
     
-    Search them in the Politically Exposed Person (PEP) lists, Sanction lists and Adverse media database,
+    - Search them in the Politically Exposed Person (PEP) lists, Sanction lists and Adverse media database,
     
-    Get a risk score based on a customized model,
+    - Get a risk score based on a customized model,
     
-    Manually investigate cases,
+    - Manually investigate cases,
     
-    Monitor an applicant and get notified if an alert is raised.
+    - Monitor an applicant and get notified if an alert is raised.
     
     Please note that this offer is only available if you subscribed to both services, reach out your account manager if you have any questions.
     
@@ -584,7 +584,7 @@ info:
     The Face Authentication solution enables you to confirm a user is the same person whose identity you've successfully verified using the Identity Verification solution. 
     This helps you decide whether to allow them to access your services.
 
-    The solution works as follow:
+    The solution works as follows:
     - Create a verification linked to the applicant's profile.
     - Create an attempt and redirect the applicant.
     - The applicant captures video of their face.
@@ -599,7 +599,7 @@ info:
 
     #### Configuration
     
-    When you request an account, your account manager provides you a configuration ID, prefixed usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
+    When you request an account, your account manager provides you with a configuration ID, prefixed with usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
 
     - The service level agreement for receiving the result from Checkout.com
     - Processing type:
@@ -648,7 +648,7 @@ info:
         <tr>
           <td class="tg-0pky"><code>face_authentication_capture_completed</code></td>
           <td class="tg-0pky"><code>checks_in_progress</code></td>
-          <td class="tg-0pky">Applicants completed the capture, Checkout.com processes the verification</td>
+          <td class="tg-0pky">The applicant completed the capture, Checkout.com processes the verification</td>
         </tr>
         <tr>
           <td class="tg-0pky"><code>face_authentication_checks_completed</code></td>
@@ -2494,7 +2494,7 @@ info:
     We use **ECDSA** with **SHA-512** to create signatures.
 
     ### Verifying the Signature
-    1. **Download the Public Key**: Separate keys for test and live environments are available in the dashboard.
+    1. **Download the Public Key**: Separate keys for test and live environments are available in the [dashboard security section](https://dashboard.ubble.ai/security). 
     2. **Recreate the Signed Data**: Combine the request body and the `Cko-Signature` timestamp.
     3. **Verify the Signature**: Use ECDSA with the downloaded public key to verify the signature.
 
@@ -2635,6 +2635,7 @@ x-tagGroups:
       - ID document verifications (Coming soon)
       - Face authentications
       - AML verifications
+      - Website verifications (Coming soon)
       - Service status
 paths:
   /health:
@@ -3913,6 +3914,91 @@ paths:
               schema:
                 $ref: "#/components/schemas/IdDocumentVerificationAttemptAssetsOutput"
 
+  /v2/website-verifications:
+    post:
+      tags:
+        - Website verifications (Coming soon)
+      summary: Create a website verification
+      operationId: create_website_verification
+      description: Creates a website verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebsiteVerificationInputPost"
+      responses:
+        "201":
+          description: Website verification created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/WebsiteVerificationOutputPost"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "422":
+          description: Unprocessable entity
+        "500":
+          description: Internal server error
+        "503":
+          description: Service unavailable
+
+  /v2/website-verifications/{website_verification_id}:
+    get:
+      tags:
+        - Website verifications (Coming soon)
+      summary: Retrieve a website verification
+      description: This endpoint allows you to get the detailed results of a website verification
+      operationId: retrieve_website_verification
+      parameters:
+        - name: website_verification_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/WebsiteVerificationId"
+      responses:
+        "200":
+          description: Website verification retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/WebsiteVerificationOutputGet"
+        "404":
+          description: Website verification not found
+        "500":
+          description: Internal server error
+
+  /v2/website-verifications/{website_verification_id}/notify:
+    post:
+      tags:
+        - Website verifications (Coming soon)
+      summary: Request webhook notification
+      operationId: notify_website_verification
+      description: This endpoint can be used to initiate a webhook call containing the latest event of a website verification
+      parameters:
+        - name: website_verification_id
+          in: path
+          description: ID of the website verification to notify
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhook_url:
+                  type: string
+                  format: uri
+      responses:
+        "204":
+          description: Notification successfully requested
+
 components:
   schemas:
     ########################### Utils schemas #############################
@@ -5176,6 +5262,136 @@ components:
         - quality_checks_aborted
         - checks_inconclusive
         - terminated
+    #######################################################################
+
+    ###################### Website Verification schemas ####################
+    WebsiteVerificationBase:
+      type: object
+      properties:
+        user_journey_id:
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          allOf:
+            - $ref: "#/components/schemas/BusinessApplicantId"
+        webhook_url:
+          type: string
+          format: uri
+        website_url:
+          type: string
+          format: uri
+          maxLength: 1024
+
+    WebsiteVerificationInputBase:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/WebsiteVerificationBase"
+
+    WebsiteVerificationOutputBase:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/WebsiteVerificationId"
+        status:
+          $ref: "#/components/schemas/WebsiteVerificationStatus"
+        response_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        risk_labels:
+          $ref: "#/components/schemas/RiskLabels"
+        website_data:
+          $ref: "#/components/schemas/WebsiteVerificationResult"
+        _links:
+          $ref: "#/components/schemas/WebsiteVerificationLinks"
+      allOf:
+        - $ref: "#/components/schemas/WebsiteVerificationBase"
+        - $ref: "#/components/schemas/DatedObject"
+
+    WebsiteVerificationInputPost:
+      type: object
+      required: [applicant_id, user_journey_id, webhook_url, website_url]
+      allOf:
+        - $ref: "#/components/schemas/WebsiteVerificationInputBase"
+
+    WebsiteVerificationOutputPost:
+      type: object
+      required: [id, status, applicant_id, response_codes, risk_labels, user_journey_id, website_url, _links]
+      allOf:
+        - $ref: "#/components/schemas/WebsiteVerificationOutputBase"
+
+    WebsiteVerificationOutputGet:
+      type: object
+      required: [id, status, applicant_id, response_codes, risk_labels, user_journey_id, website_url, _links]
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/WebsiteVerificationOutputBase"
+
+    WebsiteVerificationResult:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        country_of_incorporation:
+          $ref: "#/components/schemas/CountryCodeIso2"
+        mccs:
+          type: array
+          items:
+            type: string
+        alternative_mccs:
+          type: array
+          items:
+            type: string
+        risky_activities:
+          type: array
+          items:
+            type: string
+        legal_address:
+          $ref: "#/components/schemas/Address"
+
+    Address:
+      type: object
+      properties:
+        address_line1:
+          type: string
+          maxLength: 250
+        address_line2:
+          type: string
+          maxLength: 250
+        city:
+          type: string
+          maxLength: 50
+        state:
+          type: string
+          maxLength: 50
+        zip:
+          type: string
+          maxLength: 50
+        country:
+          $ref: "#/components/schemas/CountryCodeIso2"
+
+    WebsiteVerificationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+        - $ref: "#/components/schemas/ApplicantLink"
+
+    WebsiteVerificationId:
+      type: string
+      description: Website verification unique identifier.
+      pattern: ^wbv_\w+$
+      example: wbv_tkoi5db4hryu5cei5vwoabr7we
+
+    WebsiteVerificationStatus:
+      type: string
+      description: Status of the website verification.
+      enum:
+        - initial_status
+        - created
+        - checks_in_progress
+        - approved
+        - declined
+        - inconclusive
     #######################################################################
 
     ################## AML Verifications schemas ##########################
