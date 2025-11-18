@@ -5281,6 +5281,7 @@ components:
           type: string
           format: uri
           maxLength: 1024
+          description: URL of the website to be verified
 
     WebsiteVerificationInputBase:
       type: object
