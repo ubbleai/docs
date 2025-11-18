@@ -5310,7 +5310,7 @@ components:
 
     WebsiteVerificationInputPost:
       type: object
-      required: [applicant_id, user_journey_id, webhook_url, website_url]
+      required: [applicant_id, user_journey_id, website_url]
       allOf:
         - $ref: "#/components/schemas/WebsiteVerificationInputBase"
 
