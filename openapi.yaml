@@ -18,6 +18,7 @@ info:
     - [ID Document Verification](#section/ID-Document-Verification) - Alternatively verify applicant's identity using document images. 
     - [AML Screening](#section/AML-Screening) – Check if an applicant appears in politically exposed persons, sanctions, or adverse media databases.
     - [Face Authentication](#section/Face-Authentication) – Confirm an applicant is who they say using facial biometrics.
+    - [Website Verification](#section/Website-Verification) (Coming soon) – Verify a business' website compliance and extract relevant information from the website.
 
     The dedicated IDV Dashboard enables you to view and manage your identities activity, data, and metrics.
 
@@ -738,6 +739,70 @@ info:
 
     If authentication status changes to `declined`, you will have to create a new face authentication if you want to allow the applicant to retry. 
 
+    # Website Verification (Coming soon)
+
+    The Website Verification solution enables you to verify the compliance of a business' website and extract relevant information from this website. This helps meet compliance requirements and reduce the risk of fraud.
+
+    The solution works as follows:
+    - Create a verification linked to the Business Applicant's profile.
+    - We check whether the website is compliant with your policy and extract the relevant data.
+    - Verify webhook notifications and retrieve the verification to see the result.
+
+    ## Before you begin
+    
+    - Set up your webhook receiver and prepare to [handle webhooks](#section/Webhooks).
+    - Contact your account manager to obtain a configuration ID.
+    - [Create a profile](#section/Business-Applicant-Profiles) for the Business Applicant whose website you want to verify.
+
+    #### Configuration
+    
+    When you request an account, your account manager provides you a configuration ID, prefixed usj_. Provide this ID every time you create a verification. It configures:
+
+    - The checks you want to include within the Website Verification
+    - The data you want to extract from the websites
+
+    ## Create a Website Verification
+
+    To create a Website Verification, call the [Create a website verification](#tag/Website-verifications-(Coming-soon)/operation/create_website_verification) endpoint, and provide the following fields:
+
+    - `applicant_id` – The Business Applicant ID from the Create a Business Applicant response
+    - `website_url` - The URL of the Business Applicant website
+    - `user_journey_id` – Your configuration ID
+    - `webhook_url` - The URL you want to be notified on
+
+    Make a note of the Website Verification `id` value in the response. You'll need it to retrieve the detailed results.
+
+    ## Verify webhook notifications
+
+    You'll be notified of events that occur during the Website verification process via webhooks. Among other information, they will contain:
+
+    - the event `type` - for example, `website_verification_created`,
+    - the Website Verification `status` - for example, `created` or `approved`.
+
+    You can rely on this information to decide on follow-up actions.
+
+    | **Status** | **Description** | **Recommended action** |
+    | --- | --- | --- |
+    | `created` | The Website Verification has been created. | Wait for a change in `status`. |
+    | `checks_in_progress` | The Website Verification is in progress. | Wait for a change in `status`. |
+    | `approved` | The website is compliant. | Accept the Business Applicant's request. |
+    | `declined` | The website is not compliant. | Refuse the Business Applicant's request. |
+
+    You can also get this status by calling the following endpoint with the unique `id` returned in the create a Website Verification response:
+
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/website-verifications/{website_verification_id}</span>
+    </div>
+
+    You can also use the `response_codes` to implement your own business rules. For more details and to decide on follow-up actions, see the [Reference info](#section/Reference-info) section.
+
+    ## Retrieve detailed results
+
+    To retrieve the detailed verification results, call the [Retrieve a website verification](#tag/Website-verifications-(Coming-soon)/operation/retrieve_website_verification) endpoint with the Website Verification `id` value returned in the Create a Website Verification response.
+
+    If the status of the verification is `approved` or `declined`, you will find all the information extracted from the website in the `website_data` object.
+
     # Web integration
    
     When you request an [identity verification](#section/Get-Started), you’ll receive a `verification_url` in the response. Redirect your user to this URL so they can perform the verification.
@@ -1220,6 +1285,56 @@ info:
       | `id_document_verification_audit_completed`                   | 	The verification has been audited and the status may have been updated                                                          |
       | `id_document_verification_report_created`                    | The pdf report is available                                                                                                       |
     
+    ## Website Verification
+
+    #### Body
+    
+      The webhook body contains the following information: 
+
+      | Attribute                   | Description                                                                             |
+      |-----------------------------|-----------------------------------------------------------------------------------------|
+      | applicant_id                | ID of the Business Applicant, useful to recognize them                                  |
+      | external_applicant_id       | Your Business Applicant ID, only if you updated it in the Business Applicant object   |
+      | user_journey_id             | ID of the user journey                                                                  |
+      | website_verification_id     | ID of the website verification                                                          |
+      | status                      | Status of the website verification                                                     |
+      | response_codes              | List of response codes                                                                  |
+
+
+      **Example**
+      
+      ```json
+        {
+            "specversion": "2.0",
+            "type": "website_verification_completed",
+            "subject": "wbv_5hxpdwegjcbujpth3wdo55d3vm",
+            "id": "evnt_5hxpdwegjcbujpth3wdo55d3vm",
+            "time": "2023-03-22T17:31:00Z",
+            "datacontenttype": "application/json",
+            "data": {
+                "external_applicant_id": "9fj3lz918bujpth3wdolmc74s",
+                "applicant_id": "bplt_5hxpdwegjcbujpth3wdo55d3vm",
+                "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
+                "website_verification_id": "wbv_5hxpdwegjcbujpth3wdo55d3vm",
+                "status": "approved",
+                "response_codes": [
+                    {"code": 10000, "summary": "approved"}
+                ]
+            }
+        }
+      ```
+  
+    #### Events
+
+      | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
+      |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+      | `website_verification_created`                           | You created a website verification                                                                                                |
+      | `website_verification_checks_in_progress`                | Checkout.com is analyzing the website and processing the verification                                                             |
+      | `website_verification_completed`                        | We completed the website verification checks                                                                                      |
+      | `website_verification_inconclusive`                     | The website verification result is inconclusive                                                                                   |
+      | `website_verification_closed`                           | The verification has been forcibly closed                                                                                        |
+      | `website_verification_anonymized`                        | The website verification has been anonymized                                                                                      |
+    
     ## AML verification
 
      #### Body
@@ -1404,7 +1519,7 @@ info:
 
     # Reference info
 
-    `idv` refers to Identity verification, `iddv` to ID Document Verification, `amlv` to AML screening, `fav` to Face authentication and `certified idv` to an Identity Verification compliant with the french PVID certification.  
+    `idv` refers to Identity verification, `iddv` to ID Document Verification, `amlv` to AML screening, `fav` to Face authentication, `certified idv` to an Identity Verification compliant with the french PVID certification and `wbv` to Website Verification.
 
     ## Check statuses
 
@@ -1412,6 +1527,7 @@ info:
       <colgroup>
         <col style="width: 30%">
         <col style="width: 60%">
+        <col style="width: 5%; text-align: center">
         <col style="width: 5%; text-align: center">
         <col style="width: 5%; text-align: center">
         <col style="width: 5%; text-align: center">
@@ -1425,12 +1541,14 @@ info:
           <th style="text-align: center">fav</th>
           <th style="text-align: center">iddv</th>
           <th style="text-align: center">amlv</th>
+          <th style="text-align: center">wbv</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><code>created</code></td>
           <td>The verification has been created</td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -1443,12 +1561,14 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>capture_in_progress</code></td>
           <td>The applicant is performing the capture</td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td></td>
           <td></td>
           <td></td>
         </tr>
@@ -1459,6 +1579,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>quality_checks_in_progress</code></td>
@@ -1467,10 +1588,12 @@ info:
           <td></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>checks_in_progress</code></td>
           <td>Checkout.com performs the security checks for the applicant's verification</td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -1483,10 +1606,12 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         </tr>
         <tr>
           <td><code>declined</code></td>
           <td>The applicant's verification had an irregularity</td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -1499,6 +1624,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>review_required</code></td>
@@ -1507,10 +1633,12 @@ info:
           <td></td>
           <td></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>inconclusive</code></td>
           <td>The verification checks were not completed and a retry is no longer available</td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -1676,6 +1804,7 @@ info:
       <col style="width: 5%; text-align: center">
       <col style="width: 5%; text-align: center">
       <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
     </colgroup>
     <thead>
       <tr>
@@ -1686,6 +1815,7 @@ info:
         <th class="tg-fymr" style="text-align: center">certified idv</th>
         <th class="tg-fymr" style="text-align: center">fav</th>
         <th class="tg-fymr" style="text-align: center">iddv</th>
+        <th class="tg-fymr" style="text-align: center">wbv</th>
       </tr>
     </thead>
     <tbody>
@@ -1693,6 +1823,7 @@ info:
         <td class="tg-0pky">10000</td>
         <td class="tg-0pky">approved</td>
         <td class="tg-0pky">The verification has been approved</td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -2052,6 +2183,7 @@ info:
         <col class="five" />
         <col class="six" />
         <col class="seven" />
+        <col style="width: 5%; text-align: center" />
       </colgroup>
       <thead>
         <tr>
@@ -2062,11 +2194,12 @@ info:
           <th class="tg-fymr" style="text-align: center">certified idv</th>
           <th class="tg-fymr" style="text-align: center">fav</th>
           <th class="tg-fymr" style="text-align: center">iddv</th>
+          <th class="tg-fymr" style="text-align: center">wbv</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="tg-dvid" colspan="7">Document non compliant</td>
+          <td class="tg-dvid" colspan="8">Document non compliant</td>
         </tr>
         <tr>
           <td class="tg-0pky">62101</td>
@@ -2076,6 +2209,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td class="center-icon"></td>
         </tr>
         <tr>
           <td class="tg-0pky">62102</td>
@@ -2123,7 +2257,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         </tr>
         <tr>
-          <td class="tg-dvid" colspan="7">Secondary document non compliant</td>
+          <td class="tg-dvid" colspan="8">Secondary document non compliant</td>
         </tr>
         <tr>
         <td class="tg-0pky">62121</td>
@@ -2180,7 +2314,7 @@ info:
         <td class="center-icon"></td>
       </tr>
         <tr>
-          <td class="tg-dvid" colspan="7">Identity fraud</td>
+          <td class="tg-dvid" colspan="8">Identity fraud</td>
         </tr>
         <tr>
           <td class="tg-0pky">62301</td>
@@ -2300,7 +2434,7 @@ info:
           <td class="center-icon"></td>
         </tr>
         <tr>
-          <td class="tg-dvid" colspan="7">Prohibited behavior</td>
+          <td class="tg-dvid" colspan="8">Prohibited behavior</td>
         </tr>
         <tr>
           <td class="tg-0pky">62401</td>
@@ -2346,8 +2480,149 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
+          <td class="center-icon"></td>
+        </tr>
+        <tr>
+          <td class="tg-dvid" colspan="8">Website compliance issues</td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72381</td>
+          <td class="tg-0pky">missing_terms_and_conditions</td>
+          <td class="tg-0pky">T&Cs are missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72382</td>
+          <td class="tg-0pky">missing_privacy_policy</td>
+          <td class="tg-0pky">Privacy Policy is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72383</td>
+          <td class="tg-0pky">missing_refund_policy</td>
+          <td class="tg-0pky">Refund Policy is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72384</td>
+          <td class="tg-0pky">missing_customer_service_contact</td>
+          <td class="tg-0pky">Customer Service contact is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72385</td>
+          <td class="tg-0pky">missing_legal_entity_name</td>
+          <td class="tg-0pky">Legal entity name is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72386</td>
+          <td class="tg-0pky">missing_legal_entity_address</td>
+          <td class="tg-0pky">Legal entity address is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72387</td>
+          <td class="tg-0pky">missing_country_of_incorporation</td>
+          <td class="tg-0pky">Country of Incorporation is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         </tr>
       </tbody>
+    </table>
+
+    ### Check status: `inconclusive`
+
+    Meaning the verification checks could not be completed
+
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+      <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr>Code</nobr></th>
+        <th class="tg-fymr">Summary</th>
+        <th class="tg-fymr">Description</th>
+        <th class="tg-fymr" style="text-align: center">idv</th>
+        <th class="tg-fymr" style="text-align: center">certified idv</th>
+        <th class="tg-fymr" style="text-align: center">fav</th>
+        <th class="tg-fymr" style="text-align: center">iddv</th>
+        <th class="tg-fymr" style="text-align: center">wbv</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-dvid" colspan="8">Medium issue</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">71181</td>
+        <td class="tg-0pky">url_does_not_exist</td>
+        <td class="tg-0pky">URL does not exist</td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">71182</td>
+        <td class="tg-0pky">website_not_available</td>
+        <td class="tg-0pky">Website could not be reached</td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+      </tr>
+      <tr>
+        <td class="tg-dvid" colspan="8">Other issues</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">71901</td>
+        <td class="tg-0pky">internal_error</td>
+        <td class="tg-0pky">An internal error prevents us from completing the verification, we do our best to reduce the occurrence of this case</td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+      </tr>
+    </tbody>
     </table>
 
     ### Verification status: `refused`
@@ -2450,6 +2725,7 @@ info:
         <th class="tg-fymr" style="text-align: center">certified idv</th>
         <th class="tg-fymr" style="text-align: center">fav</th>
         <th class="tg-fymr" style="text-align: center">iddv</th>
+        <th class="tg-fymr" style="text-align: center">wbv</th>
       </tr>
     </thead>
     <tbody>
@@ -2459,6 +2735,7 @@ info:
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></svg></td>
         <td class="center-icon"></svg></td>
       </tr>
     </tbody>
