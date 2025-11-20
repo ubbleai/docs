@@ -5610,20 +5610,28 @@ components:
       properties:
         legal_name:
           type: string
+          description: Legal name of the company
         country_of_incorporation:
           $ref: "#/components/schemas/CountryCodeIso2"
+          description: Country of incorporation of the company
         mccs:
           type: array
           items:
             type: string
+          description: MCCs of the company
         alternative_mccs:
           type: array
           items:
             type: string
+          description: Alternative MCCs of the company
+        mcc_rationale:
+          type: string
+          description: Rationale for the MCCs
         risky_activities:
           type: array
           items:
             type: string
+          description: Risky activities of the company
         legal_address:
           $ref: "#/components/schemas/Address"
 
