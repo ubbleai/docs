@@ -781,12 +781,37 @@ info:
 
     You can rely on this information to decide on follow-up actions.
 
-    | **Status** | **Description** | **Recommended action** |
-    | --- | --- | --- |
-    | `created` | The Website Verification has been created. | Wait for a change in `status`. |
-    | `checks_in_progress` | The Website Verification is in progress. | Wait for a change in `status`. |
-    | `approved` | The website is compliant. | Accept the Business Applicant's request. |
-    | `declined` | The website is not compliant. | Refuse the Business Applicant's request. |
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-fymr">Event type</th>
+          <th class="tg-fymr">Status</th>
+          <th class="tg-fymr">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-0pky"><code>website_verification_created</code></td>
+          <td class="tg-0pky"><code>created</code></td>
+          <td class="tg-0pky">The Website Verification has been created.</td>
+        </tr>
+        <tr>
+          <td class="tg-0pky"><code>website_verification_checks_in_progress</code></td>
+          <td class="tg-0pky"><code>checks_in_progress</code></td>
+          <td class="tg-0pky">The Website Verification is in progress.</td>
+        </tr>
+        <tr>
+          <td class="tg-0pky"><code>website_verification_completed</code></td>
+          <td class="tg-0pky"><code>approved</code></td>
+          <td class="tg-0pky">The website is compliant.</td>
+        </tr>
+        <tr>
+          <td class="tg-0pky"><code>website_verification_completed</code></td>
+          <td class="tg-0pky"><code>declined</code></td>
+          <td class="tg-0pky">The website is not compliant.</td>
+        </tr>
+      </tbody>
+    </table>
 
     You can also get this status by calling the following endpoint with the unique `id` returned in the create a Website Verification response:
 
