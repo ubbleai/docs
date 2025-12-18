@@ -2641,10 +2641,10 @@ info:
         <td class="tg-0pky">71901</td>
         <td class="tg-0pky">internal_error</td>
         <td class="tg-0pky">An internal error prevents us from completing the verification, we do our best to reduce the occurrence of this case</td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
-        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
     </tbody>
@@ -4301,6 +4301,34 @@ paths:
         "204":
           description: Notification successfully requested
 
+  /v2/website-verifications/{website_verification_id}/anonymize:
+    post:
+      tags:
+        - Website verifications (Coming soon)
+      summary: Anonymize a website verification
+      operationId: anonymize_website_verification
+      description: Anonymize the personal data of a website verification with the specified ID.
+      parameters:
+        - name: website_verification_id
+          in: path
+          description: ID of the website verification to anonymize
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Website verification anonymized
+          content:
+            application/json:
+              schema:
+                required: [applicant_id, user_journey_id, website_url]
+                allOf:
+                  - $ref: "#/components/schemas/WebsiteVerificationOutputAnonymize"
+        "404":
+          description: Website verification not found
+        "500":
+          description: Internal server error
+
 components:
   schemas:
     ########################### Utils schemas #############################
@@ -5624,6 +5652,13 @@ components:
         - $ref: "#/components/schemas/WebsiteVerificationOutputBase"
 
     WebsiteVerificationOutputGet:
+      type: object
+      required: [id, status, applicant_id, response_codes, risk_labels, user_journey_id, website_url, _links]
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/WebsiteVerificationOutputBase"
+
+    WebsiteVerificationOutputAnonymize:
       type: object
       required: [id, status, applicant_id, response_codes, risk_labels, user_journey_id, website_url, _links]
       allOf:
