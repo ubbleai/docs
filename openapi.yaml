@@ -240,7 +240,7 @@ info:
 
     If the verification status changes to `declined`, you will need to create a new identity verification if you want to allow the applicant to retry. 
 
-    # ID Document Verification (Coming soon)
+    # ID Document Verification
 
     The ID Document Verification solution allows you to confirm that the image of an ID is a direct photo/scan of a legit & genuine document which matches the identity declared by the user.
 
@@ -2919,7 +2919,7 @@ servers:
 tags:
   - name: identity verifications
     description: Identity verification endpoints documentation.
-  - name: ID document verifications (Coming soon)
+  - name: ID document verifications
     description: API for ID document verification
   - name: AML verifications
     description: AML verification endpoints documentation.
@@ -2934,7 +2934,7 @@ x-tagGroups:
       - Applicants
       - Business applicants
       - Identity verifications
-      - ID document verifications (Coming soon)
+      - ID document verifications
       - Face authentications
       - AML verifications
       - Website verifications (Coming soon)
@@ -3908,7 +3908,7 @@ paths:
   /v2/id-document-verifications:
     post:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Create an ID document verification
       operationId: create_id_document_verification
       description: Creates an ID document verification
@@ -3948,7 +3948,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Retrieve an ID document verification
       description: This endpoint allows you to get the detailed results of an ID document verification
       operationId: retrieve_id_document_verification
@@ -3976,7 +3976,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/anonymize:
     post:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Anonymize an ID document verification
       operationId: anonymize_id_document_verification
       description: Anonymize the personal data of an ID document verification with the specified ID.
@@ -4007,7 +4007,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/pdf-report:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Retrieve PDF report of an ID document verification
       operationId: pdf_id_document_verification
       description: |
@@ -4038,7 +4038,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/notify:
     post:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Request webhook notification
       operationId: notify_id_document_verification
       description: This endpoint can be used to initiate a webhook call containing the latest event of an ID document verification
@@ -4065,7 +4065,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/attempts:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: List ID document verification attempts
       operationId: list_attempts_id_document_verification
       description: |
@@ -4101,7 +4101,7 @@ paths:
           description: An error occurred while fetching the attempts
     post:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Create an ID document verification attempt
       description: "This endpoint allows you to create an ID document verification attempt. It is possible when the ID document verification 
         is one of the following statuses: `created`, `retry_required`"
@@ -4145,7 +4145,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Retrieve an ID document verification attempt
       description: This endpoint allows you to retrieve the details for a given ID document verification attempt
       operationId: fetch_attempts_id_document_verification
@@ -4181,7 +4181,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/attempts/{attempt_id}/assets:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Retrieve an ID document verification attempt asset
       operationId: fetch_asset_id_document_verification_attempt
       description: |
