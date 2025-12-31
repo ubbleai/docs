@@ -5694,6 +5694,29 @@ components:
           description: Risky activities of the company
         legal_address:
           $ref: "#/components/schemas/Address"
+        disclosure_urls:
+          $ref: "#/components/schemas/DisclosureURLs"
+
+    DisclosureURLs:
+      type: object
+      description: URLs to disclosure pages found on the website
+      properties:
+        privacy_policy_url:
+          type: string
+          nullable: true
+          description: URL to the privacy policy page
+        terms_and_conditions_url:
+          type: string
+          nullable: true
+          description: URL to the terms and conditions page
+        refund_policy_url:
+          type: string
+          nullable: true
+          description: URL to the refund policy page
+        contact_us_url:
+          type: string
+          nullable: true
+          description: URL to the contact us page
 
     Address:
       type: object
