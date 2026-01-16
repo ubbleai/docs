@@ -13,10 +13,12 @@ info:
     The Identities solutions enable you to verify identities, perform anti-money laundering (AML) screenings, and authenticate with biometrics. This helps meet compliance requirements and reduce the risk of fraud.
 
     - [Applicants](#section/Applicant-Profiles) – Create a profile for each physical person applying to use your services, where you can manage their identity.
+    - [Business Applicants](#section/Business-Applicant-Profiles) – Create a profile for each business entity applying to use your services.
     - [Identity Verification](#section/Identity-Verification) – Verify an applicant's identity using their identity document and face.
     - [ID Document Verification](#section/ID-Document-Verification) - Alternatively verify applicant's identity using document images. 
     - [AML Screening](#section/AML-Screening) – Check if an applicant appears in politically exposed persons, sanctions, or adverse media databases.
     - [Face Authentication](#section/Face-Authentication) – Confirm an applicant is who they say using facial biometrics.
+    - [Website Verification](#section/Website-Verification) (Coming soon) – Verify a business' website compliance and extract relevant information from the website.
 
     The dedicated IDV Dashboard enables you to view and manage your identities activity, data, and metrics.
 
@@ -48,12 +50,29 @@ info:
     Once you have created an applicant, you can start creating verifications as described in the sections below. 
     You can then [retrieve](#tag/Applicants/operation/retrieve_applicant) or [update](#tag/Applicants/operation/update_applicant) the profile.
     If requested under the GDPR, you can [remove the applicant's personal data](#tag/Applicants/operation/anonymize_applicant) from the profile.
-    
+
+    # Business Applicant Profiles
+
+    The Business Verifications (e.g Website Screening) require a profile for each business entity applying to use our services.
+
+    ## Create a business applicant
+
+    To create a business applicant, call the [Create a business applicant](#tag/Business-applicants/operation/create_business_applicant) endpoint.
+
+    Optionally, provide the following fields:
+
+    - `external_applicant_id` – Your identifier for this applicant
+
+    Make a note of the business applicant `id` value in the response. You'll need it to create verifications later.
+
+    Once you have created a Business Applicant, you can start creating verifications as described in the sections below.
+    You can then [retrieve](#tag/Business-applicants/operation/retrieve_business_applicant) the profile.
+
     # Identity Verification
 
     The Identity Verification solution enables you to verify the identity of a physical person applying to use your services. This helps you meet compliance requirements and reduce the risk of fraud.
 
-    The solution works as follow:
+    The solution works as follows:
     - Create a verification linked to the applicant's profile.
     - Create an attempt and redirect the applicant.
     - The applicant captures video of their identity document and face.
@@ -93,7 +112,7 @@ info:
     - `applicant_id` – The applicant id from the Create an applicant response
     - `declared_data.name` – The applicant's name to be compared with the extracted name
     - `webhook_url` - The URL you want to be notified on
-    - `user_journey_id` – You configuration ID
+    - `user_journey_id` – Your configuration ID
 
     Make a note of the identity verification `id` value in the response. You'll need it to create an attempt and retrieve the detailed results.
 
@@ -129,7 +148,7 @@ info:
         <tr>
           <td class="tg-0pky"><code>identity_verification_capture_completed</code></td>
           <td class="tg-0pky"><code>checks_in_progress</code></td>
-          <td class="tg-0pky">Applicants completed the capture, Checkout.com processes the verification</td>
+          <td class="tg-0pky">The applicant completed the capture, Checkout.com processes the verification</td>
         </tr>
         <tr>
           <td class="tg-0pky"><code>identity_verification_checks_completed</code></td>
@@ -221,12 +240,12 @@ info:
 
     If the verification status changes to `declined`, you will need to create a new identity verification if you want to allow the applicant to retry. 
 
-    # ID Document Verification (Coming soon)
+    # ID Document Verification
 
     The ID Document Verification solution allows you to confirm that the image of an ID is a direct photo/scan of a legit & genuine document which matches the identity declared by the user.
 
-    The solution works as follow:
-    - Create a ID Document Verification linked to the applicant's profile.
+    The solution works as follows:
+    - Create an ID Document Verification linked to the applicant's profile.
     - Create an attempt and include the document images. 
     - Checkout.com checks if the document image is legit. 
     - Verify webhook notifications and retrieve the verification to see the result.
@@ -240,7 +259,7 @@ info:
 
     #### Configuration
     
-    When you request an account, your account manager provides you a configuration ID, prefixed usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
+    When you request an account, your account manager provides you with a configuration ID, prefixed with usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
 
     - The service level agreement for receiving the result from Checkout.com
     - Identity documents: 
@@ -251,8 +270,8 @@ info:
 
     To create an ID Document verification, call the Create an ID Document Verification endpoint, and provide the following fields:
     - `applicant_id` – The applicant id from the Create an applicant response
-    - `declared_data.name` – The applicant's name to be compared with the extracted name
-    - `webhook_url` - The URL you want to be notified on
+    - `declared_data.name` (optional) – The applicant's name to be compared with the extracted name
+    - `webhook_url` (optional) - The URL you want to be notified on
     - `user_journey_id` – Your specific configuration ID
 
     Make a note of the ID Document Verification `id` value in the response. You'll need it to create an attempt and retrieve the detailed results.
@@ -381,13 +400,13 @@ info:
     
     In partnership with ComplyAdvantage, we propose an Identity verification and AML screening bundle. After having verified the applicant's identity you will be able to:  
     
-    Search them in the Politically Exposed Person (PEP) lists, Sanction lists and Adverse media database,
+    - Search them in the Politically Exposed Person (PEP) lists, Sanction lists and Adverse media database,
     
-    Get a risk score based on a customized model,
+    - Get a risk score based on a customized model,
     
-    Manually investigate cases,
+    - Manually investigate cases,
     
-    Monitor an applicant and get notified if an alert is raised.
+    - Monitor an applicant and get notified if an alert is raised.
     
     Please note that this offer is only available if you subscribed to both services, reach out your account manager if you have any questions.
     
@@ -566,7 +585,7 @@ info:
     The Face Authentication solution enables you to confirm a user is the same person whose identity you've successfully verified using the Identity Verification solution. 
     This helps you decide whether to allow them to access your services.
 
-    The solution works as follow:
+    The solution works as follows:
     - Create a verification linked to the applicant's profile.
     - Create an attempt and redirect the applicant.
     - The applicant captures video of their face.
@@ -581,7 +600,7 @@ info:
 
     #### Configuration
     
-    When you request an account, your account manager provides you a configuration ID, prefixed usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
+    When you request an account, your account manager provides you with a configuration ID, prefixed with usj_. Provide this ID every time you create a verification. It configures the following elements of the solution:
 
     - The service level agreement for receiving the result from Checkout.com
     - Processing type:
@@ -630,7 +649,7 @@ info:
         <tr>
           <td class="tg-0pky"><code>face_authentication_capture_completed</code></td>
           <td class="tg-0pky"><code>checks_in_progress</code></td>
-          <td class="tg-0pky">Applicants completed the capture, Checkout.com processes the verification</td>
+          <td class="tg-0pky">The applicant completed the capture, Checkout.com processes the verification</td>
         </tr>
         <tr>
           <td class="tg-0pky"><code>face_authentication_checks_completed</code></td>
@@ -719,6 +738,95 @@ info:
     For example, if the user's data connection is poor, let them know so they can try to improve it.
 
     If authentication status changes to `declined`, you will have to create a new face authentication if you want to allow the applicant to retry. 
+
+    # Website Verification (Coming soon)
+
+    The Website Verification solution enables you to verify the compliance of a business' website and extract relevant information from this website. This helps meet compliance requirements and reduce the risk of fraud.
+
+    The solution works as follows:
+    - Create a verification linked to the Business Applicant's profile.
+    - We check whether the website is compliant with your policy and extract the relevant data.
+    - Verify webhook notifications and retrieve the verification to see the result.
+
+    ## Before you begin
+    
+    - Set up your webhook receiver and prepare to [handle webhooks](#section/Webhooks).
+    - Contact your account manager to obtain a configuration ID.
+    - [Create a profile](#section/Business-Applicant-Profiles) for the Business Applicant whose website you want to verify.
+
+    #### Configuration
+    
+    When you request an account, your account manager provides you a configuration ID, prefixed usj_. Provide this ID every time you create a verification. It configures:
+
+    - The checks you want to include within the Website Verification
+    - The data you want to extract from the websites
+
+    ## Create a Website Verification
+
+    To create a Website Verification, call the [Create a website verification](#tag/Website-verifications-(Coming-soon)/operation/create_website_verification) endpoint, and provide the following fields:
+
+    - `applicant_id` – The Business Applicant ID from the Create a Business Applicant response
+    - `website_url` - The URL of the Business Applicant website
+    - `user_journey_id` – Your configuration ID
+    - `webhook_url` - The URL you want to be notified on
+
+    Make a note of the Website Verification `id` value in the response. You'll need it to retrieve the detailed results.
+
+    ## Verify webhook notifications
+
+    You'll be notified of events that occur during the Website verification process via webhooks. Among other information, they will contain:
+
+    - the event `type` - for example, `website_verification_created`,
+    - the Website Verification `status` - for example, `created` or `approved`.
+
+    You can rely on this information to decide on follow-up actions.
+
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-fymr">Event type</th>
+          <th class="tg-fymr">Status</th>
+          <th class="tg-fymr">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-0pky"><code>website_verification_created</code></td>
+          <td class="tg-0pky"><code>created</code></td>
+          <td class="tg-0pky">The Website Verification has been created.</td>
+        </tr>
+        <tr>
+          <td class="tg-0pky"><code>website_verification_checks_in_progress</code></td>
+          <td class="tg-0pky"><code>checks_in_progress</code></td>
+          <td class="tg-0pky">The Website Verification is in progress.</td>
+        </tr>
+        <tr>
+          <td class="tg-0pky"><code>website_verification_completed</code></td>
+          <td class="tg-0pky"><code>approved</code></td>
+          <td class="tg-0pky">The website is compliant.</td>
+        </tr>
+        <tr>
+          <td class="tg-0pky"><code>website_verification_completed</code></td>
+          <td class="tg-0pky"><code>declined</code></td>
+          <td class="tg-0pky">The website is not compliant.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    You can also get this status by calling the following endpoint with the unique `id` returned in the create a Website Verification response:
+
+    <div style="padding: 1em; background-color: #fafafa; display: flex; align-items: center; border-radius: 0.5rem;">
+      <span type="get" class="sc-EgOXT dzbTKB http-verb get">get</span>
+      <span class="sc-ejfMa-d jgeKJH">/v2/website-verifications/{website_verification_id}</span>
+    </div>
+
+    You can also use the `response_codes` to implement your own business rules. For more details and to decide on follow-up actions, see the [Reference info](#section/Reference-info) section.
+
+    ## Retrieve detailed results
+
+    To retrieve the detailed verification results, call the [Retrieve a website verification](#tag/Website-verifications-(Coming-soon)/operation/retrieve_website_verification) endpoint with the Website Verification `id` value returned in the Create a Website Verification response.
+
+    If the status of the verification is `approved` or `declined`, you will find all the information extracted from the website in the `website_data` object.
 
     # Web integration
    
@@ -1202,6 +1310,56 @@ info:
       | `id_document_verification_audit_completed`                   | 	The verification has been audited and the status may have been updated                                                          |
       | `id_document_verification_report_created`                    | The pdf report is available                                                                                                       |
     
+    ## Website Verification
+
+    #### Body
+    
+      The webhook body contains the following information: 
+
+      | Attribute                   | Description                                                                             |
+      |-----------------------------|-----------------------------------------------------------------------------------------|
+      | applicant_id                | ID of the Business Applicant, useful to recognize them                                  |
+      | external_applicant_id       | Your Business Applicant ID, only if you updated it in the Business Applicant object   |
+      | user_journey_id             | ID of the user journey                                                                  |
+      | website_verification_id     | ID of the website verification                                                          |
+      | status                      | Status of the website verification                                                     |
+      | response_codes              | List of response codes                                                                  |
+
+
+      **Example**
+      
+      ```json
+        {
+            "specversion": "2.0",
+            "type": "website_verification_completed",
+            "subject": "wbv_5hxpdwegjcbujpth3wdo55d3vm",
+            "id": "evnt_5hxpdwegjcbujpth3wdo55d3vm",
+            "time": "2023-03-22T17:31:00Z",
+            "datacontenttype": "application/json",
+            "data": {
+                "external_applicant_id": "9fj3lz918bujpth3wdolmc74s",
+                "applicant_id": "bplt_5hxpdwegjcbujpth3wdo55d3vm",
+                "user_journey_id": "usj_5hxpdwegjcbujpth3wdo55d3vm",
+                "website_verification_id": "wbv_5hxpdwegjcbujpth3wdo55d3vm",
+                "status": "approved",
+                "response_codes": [
+                    {"code": 10000, "summary": "approved"}
+                ]
+            }
+        }
+      ```
+  
+    #### Events
+
+      | <div style="width:12em">Events</div>                      | Description                                                                                                                       |
+      |-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+      | `website_verification_created`                           | You created a website verification                                                                                                |
+      | `website_verification_checks_in_progress`                | Checkout.com is analyzing the website and processing the verification                                                             |
+      | `website_verification_completed`                        | We completed the website verification checks                                                                                      |
+      | `website_verification_inconclusive`                     | The website verification result is inconclusive                                                                                   |
+      | `website_verification_closed`                           | The verification has been forcibly closed                                                                                        |
+      | `website_verification_anonymized`                        | The website verification has been anonymized                                                                                      |
+    
     ## AML verification
 
      #### Body
@@ -1386,7 +1544,7 @@ info:
 
     # Reference info
 
-    `idv` refers to Identity verification, `iddv` to ID Document Verification, `amlv` to AML screening, `fav` to Face authentication.  
+    `idv` refers to Identity verification, `iddv` to ID Document Verification, `amlv` to AML screening, `fav` to Face authentication, `certified idv` to an Identity Verification compliant with the french PVID certification and `wbv` to Website Verification.
 
     ## Check statuses
 
@@ -1394,6 +1552,7 @@ info:
       <colgroup>
         <col style="width: 30%">
         <col style="width: 60%">
+        <col style="width: 5%; text-align: center">
         <col style="width: 5%; text-align: center">
         <col style="width: 5%; text-align: center">
         <col style="width: 5%; text-align: center">
@@ -1407,12 +1566,14 @@ info:
           <th style="text-align: center">fav</th>
           <th style="text-align: center">iddv</th>
           <th style="text-align: center">amlv</th>
+          <th style="text-align: center">wbv</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><code>created</code></td>
           <td>The verification has been created</td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -1425,12 +1586,14 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>capture_in_progress</code></td>
           <td>The applicant is performing the capture</td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td></td>
           <td></td>
           <td></td>
         </tr>
@@ -1441,6 +1604,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>quality_checks_in_progress</code></td>
@@ -1449,10 +1613,12 @@ info:
           <td></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>checks_in_progress</code></td>
           <td>Checkout.com performs the security checks for the applicant's verification</td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -1465,10 +1631,12 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         </tr>
         <tr>
           <td><code>declined</code></td>
           <td>The applicant's verification had an irregularity</td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -1481,6 +1649,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>review_required</code></td>
@@ -1489,10 +1658,12 @@ info:
           <td></td>
           <td></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td></td>
         </tr>
         <tr>
           <td><code>inconclusive</code></td>
           <td>The verification checks were not completed and a retry is no longer available</td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -1658,6 +1829,7 @@ info:
       <col style="width: 5%; text-align: center">
       <col style="width: 5%; text-align: center">
       <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
     </colgroup>
     <thead>
       <tr>
@@ -1668,6 +1840,7 @@ info:
         <th class="tg-fymr" style="text-align: center">certified idv</th>
         <th class="tg-fymr" style="text-align: center">fav</th>
         <th class="tg-fymr" style="text-align: center">iddv</th>
+        <th class="tg-fymr" style="text-align: center">wbv</th>
       </tr>
     </thead>
     <tbody>
@@ -1675,6 +1848,7 @@ info:
         <td class="tg-0pky">10000</td>
         <td class="tg-0pky">approved</td>
         <td class="tg-0pky">The verification has been approved</td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
@@ -2034,6 +2208,7 @@ info:
         <col class="five" />
         <col class="six" />
         <col class="seven" />
+        <col style="width: 5%; text-align: center" />
       </colgroup>
       <thead>
         <tr>
@@ -2044,11 +2219,12 @@ info:
           <th class="tg-fymr" style="text-align: center">certified idv</th>
           <th class="tg-fymr" style="text-align: center">fav</th>
           <th class="tg-fymr" style="text-align: center">iddv</th>
+          <th class="tg-fymr" style="text-align: center">wbv</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="tg-dvid" colspan="7">Document non compliant</td>
+          <td class="tg-dvid" colspan="8">Document non compliant</td>
         </tr>
         <tr>
           <td class="tg-0pky">62101</td>
@@ -2058,6 +2234,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td class="center-icon"></td>
         </tr>
         <tr>
           <td class="tg-0pky">62102</td>
@@ -2105,7 +2282,7 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         </tr>
         <tr>
-          <td class="tg-dvid" colspan="7">Secondary document non compliant</td>
+          <td class="tg-dvid" colspan="8">Secondary document non compliant</td>
         </tr>
         <tr>
         <td class="tg-0pky">62121</td>
@@ -2162,7 +2339,7 @@ info:
         <td class="center-icon"></td>
       </tr>
         <tr>
-          <td class="tg-dvid" colspan="7">Identity fraud</td>
+          <td class="tg-dvid" colspan="8">Identity fraud</td>
         </tr>
         <tr>
           <td class="tg-0pky">62301</td>
@@ -2276,13 +2453,13 @@ info:
           <td class="tg-0pky">62399</td>
           <td class="tg-0pky">generic_fraud</td>
           <td class="tg-0pky">Replace all other Identity Fraud codes for certified identity verification</td>
-          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+          <td class="center-icon"></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
           <td class="center-icon"></td>
         </tr>
         <tr>
-          <td class="tg-dvid" colspan="7">Prohibited behavior</td>
+          <td class="tg-dvid" colspan="8">Prohibited behavior</td>
         </tr>
         <tr>
           <td class="tg-0pky">62401</td>
@@ -2328,8 +2505,149 @@ info:
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
           <td class="center-icon"></td>
+          <td class="center-icon"></td>
+        </tr>
+        <tr>
+          <td class="tg-dvid" colspan="8">Website compliance issues</td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72381</td>
+          <td class="tg-0pky">missing_terms_and_conditions</td>
+          <td class="tg-0pky">T&Cs are missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72382</td>
+          <td class="tg-0pky">missing_privacy_policy</td>
+          <td class="tg-0pky">Privacy Policy is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72383</td>
+          <td class="tg-0pky">missing_refund_policy</td>
+          <td class="tg-0pky">Refund Policy is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72384</td>
+          <td class="tg-0pky">missing_customer_service_contact</td>
+          <td class="tg-0pky">Customer Service contact is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72385</td>
+          <td class="tg-0pky">missing_legal_entity_name</td>
+          <td class="tg-0pky">Legal entity name is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72386</td>
+          <td class="tg-0pky">missing_legal_entity_address</td>
+          <td class="tg-0pky">Legal entity address is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        </tr>
+        <tr>
+          <td class="tg-0pky">72387</td>
+          <td class="tg-0pky">missing_country_of_incorporation</td>
+          <td class="tg-0pky">Country of Incorporation is missing</td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"></td>
+          <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         </tr>
       </tbody>
+    </table>
+
+    ### Check status: `inconclusive`
+
+    Meaning the verification checks could not be completed
+
+    <table class="tg">
+    <colgroup>
+      <col class="one" />
+      <col class="two" />
+      <col class="three" />
+      <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
+      <col style="width: 5%; text-align: center">
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="tg-fymr"><nobr>Code</nobr></th>
+        <th class="tg-fymr">Summary</th>
+        <th class="tg-fymr">Description</th>
+        <th class="tg-fymr" style="text-align: center">idv</th>
+        <th class="tg-fymr" style="text-align: center">certified idv</th>
+        <th class="tg-fymr" style="text-align: center">fav</th>
+        <th class="tg-fymr" style="text-align: center">iddv</th>
+        <th class="tg-fymr" style="text-align: center">wbv</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-dvid" colspan="8">Medium issue</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">71181</td>
+        <td class="tg-0pky">url_does_not_exist</td>
+        <td class="tg-0pky">URL does not exist</td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">71182</td>
+        <td class="tg-0pky">website_not_available</td>
+        <td class="tg-0pky">Website could not be reached</td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+      </tr>
+      <tr>
+        <td class="tg-dvid" colspan="8">Other issues</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky">71901</td>
+        <td class="tg-0pky">internal_error</td>
+        <td class="tg-0pky">An internal error prevents us from completing the verification, we do our best to reduce the occurrence of this case</td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+      </tr>
+    </tbody>
     </table>
 
     ### Verification status: `refused`
@@ -2432,6 +2750,7 @@ info:
         <th class="tg-fymr" style="text-align: center">certified idv</th>
         <th class="tg-fymr" style="text-align: center">fav</th>
         <th class="tg-fymr" style="text-align: center">iddv</th>
+        <th class="tg-fymr" style="text-align: center">wbv</th>
       </tr>
     </thead>
     <tbody>
@@ -2441,6 +2760,7 @@ info:
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+        <td class="center-icon"></svg></td>
         <td class="center-icon"></svg></td>
       </tr>
     </tbody>
@@ -2476,7 +2796,7 @@ info:
     We use **ECDSA** with **SHA-512** to create signatures.
 
     ### Verifying the Signature
-    1. **Download the Public Key**: Separate keys for test and live environments are available in the dashboard.
+    1. **Download the Public Key**: Separate keys for test and live environments are available in the [dashboard security section](https://dashboard.ubble.ai/security). 
     2. **Recreate the Signed Data**: Combine the request body and the `Cko-Signature` timestamp.
     3. **Verify the Signature**: Use ECDSA with the downloaded public key to verify the signature.
 
@@ -2531,6 +2851,58 @@ info:
     }
     ````
 
+    ## Pagination
+
+    List endpoints that return multiple items support pagination.
+
+    ### Request parameters
+    You can control pagination using the following optional query parameters:
+    - `skip` (optional): Number of items to skip (offset). Default: 0
+    - `limit` (optional): Maximum number of items to return per page. Default: 10
+
+    ### Navigation methods
+    You can navigate through pages using either:
+    1. **Navigation links**: Use the URLs provided in the `_links` object (recommended)
+    2. **Manual parameters**: Construct your own URLs using `skip` and `limit` query parameters
+
+    ### Response structure
+    Paginated responses include the following fields:
+    - `total_count`: Total number of items available
+    - `skip`: Number of items skipped (offset)
+    - `limit`: Maximum number of items returned per page
+    - `data`: Array of items for the current page
+    - `_links`: Navigation links object containing:
+      - `self`: Link to the current page
+      - `next`: Link to the next page (if available)
+      - `previous`: Link to the previous page (if available)
+
+    ```json
+    {
+      "total_count": 42,
+      "skip": 10,
+      "limit": 10,
+      "data": [
+        {
+          "id": "iatp_tkoi5db4hryu5cei5vwoabr7we",
+          "status": "checks_in_progress",
+          "created_on": "2017-07-21T17:32:28Z"
+          ...
+        }
+      ],
+      "_links": {
+        "self": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_xxx/attempts"
+        },
+        "next": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_xxx/attempts?skip=20&limit=10"
+        },
+        "previous": {
+          "href": "https://api.ubble.ai/v2/identity-verifications/idv_xxx/attempts?skip=0&limit=10"
+        }
+      }
+    }
+    ```
+
     ## Common Objects/Properties
 
     | name         | format                                                                                                                                              | example                                                                     |
@@ -2547,7 +2919,7 @@ servers:
 tags:
   - name: identity verifications
     description: Identity verification endpoints documentation.
-  - name: ID document verifications (Coming soon)
+  - name: ID document verifications
     description: API for ID document verification
   - name: AML verifications
     description: AML verification endpoints documentation.
@@ -2560,10 +2932,15 @@ x-tagGroups:
   - name: Endpoints documentation
     tags:
       - Applicants
+      - Business applicants
       - Identity verifications
-      - ID document verifications (Coming soon)
+      - ID document verifications
       - Face authentications
       - AML verifications
+      - Website verifications (Coming soon)
+      - Bank document verifications (Coming soon)
+      - Company document verifications (Coming soon)
+      - Proof of address document verifications (Coming soon)
       - Service status
 paths:
   /health:
@@ -2834,7 +3211,13 @@ paths:
       tags:
         - Identity verifications
       summary: List attempts
-      description: This endpoint allows you to list all attempts of a verification
+      description: |
+        This endpoint allows you to list all attempts of a verification.
+        
+        Attempts are returned ordered by creation date, newest first.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       operationId: list_attempts
       parameters:
         - name: identity_verification_id
@@ -2843,6 +3226,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
           description: List attempt
@@ -2945,6 +3330,9 @@ paths:
         Retrieves the assets associated with an identity verification attempt.
         This includes face images, videos, and document images captured during the verification process.
         Please note that videos are not exposed by default, contact your account manager to enable this feature.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       operationId: retrieve_identity_verification_attempt_assets
       parameters:
         - name: identity_verification_id
@@ -2959,6 +3347,8 @@ paths:
           schema:
             type: string
           description: The ID of the attempt
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         '200':
           description: The assets were retrieved successfully
@@ -3110,6 +3500,77 @@ paths:
           description: Bad request. The applicant cannot be anonymized.
         "500":
           description: Internal server error
+
+# Business Applicants
+  /v2/business-applicants:
+    post:
+      tags:
+        - Business applicants
+      summary: Create a Business Applicant
+      description: This section describes all endpoints related to business applicants. It will enable you to create and manage business applicant objects.
+      operationId: create_business_applicant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BusinessApplicantInputPost"
+            examples:
+              All possible data:
+                $ref: "#/components/examples/business_applicant_creation_request_body"
+
+      responses:
+        "201":
+          description: Business applicant successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessApplicantOutputPost"
+              examples:
+                Always replies:
+                  $ref: "#/components/examples/business_applicant_response_body"
+          links:
+            RetrieveBusinessApplicantById:
+              operationId: retrieve_business_applicant
+              parameters:
+                business_applicant_id: "$response.body#/id"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                Invalid request:
+                  value:
+                    {
+                      "error_type": "request_invalid",
+                      "error_codes": ["external_applicant_id__invalid"],
+                    }
+
+  /v2/business-applicants/{business_applicant_id}:
+    get:
+      tags:
+        - Business applicants
+      summary: Retrieve a Business Applicant
+      description: Retrieve a Business Applicant
+      operationId: retrieve_business_applicant
+      parameters:
+        - name: business_applicant_id
+          required: true
+          in: path
+          description: ID of Business Applicant to return
+          schema:
+            $ref: "#/components/schemas/BusinessApplicantId"
+      responses:
+        "200":
+          description: business applicant retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessApplicantOutputGet"
+              examples:
+                Always replies:
+                  $ref: "#/components/examples/business_applicant_response_body"
+        "404":
+          description: "Business applicant not found"
 
 # AML Verifications
   /v2/aml-verifications:
@@ -3296,7 +3757,13 @@ paths:
       tags:
         - Face authentications
       summary: List attempts
-      description: This endpoint allows you to list all attempts of a face authentication
+      description: |
+        This endpoint allows you to list all attempts of a face authentication.
+        
+        Attempts are returned ordered by creation date, newest first.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       operationId: list_attempts_face_authentication
       parameters:
         - name: face_authentication_id
@@ -3305,6 +3772,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
           description: List attempts
@@ -3408,6 +3877,9 @@ paths:
         Retrieves the assets associated with a face authentication attempt.
         This includes face images and videos captured during the verification process.
         Please note that videos are not exposed by default, contact your account manager to enable this feature.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       operationId: retrieve_face_authentication_attempt_assets
       parameters:
         - name: face_authentication_id
@@ -3422,6 +3894,8 @@ paths:
           schema:
             type: string
           description: The ID of the attempt
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         '200':
           description: The assets were retrieved successfully
@@ -3437,7 +3911,7 @@ paths:
   /v2/id-document-verifications:
     post:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Create an ID document verification
       operationId: create_id_document_verification
       description: Creates an ID document verification
@@ -3477,7 +3951,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Retrieve an ID document verification
       description: This endpoint allows you to get the detailed results of an ID document verification
       operationId: retrieve_id_document_verification
@@ -3505,7 +3979,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/anonymize:
     post:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Anonymize an ID document verification
       operationId: anonymize_id_document_verification
       description: Anonymize the personal data of an ID document verification with the specified ID.
@@ -3536,7 +4010,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/pdf-report:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Retrieve PDF report of an ID document verification
       operationId: pdf_id_document_verification
       description: |
@@ -3567,7 +4041,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/notify:
     post:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Request webhook notification
       operationId: notify_id_document_verification
       description: This endpoint can be used to initiate a webhook call containing the latest event of an ID document verification
@@ -3594,10 +4068,16 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/attempts:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: List ID document verification attempts
       operationId: list_attempts_id_document_verification
-      description: This endpoint allows you to list all attempts of an ID document verification
+      description: |
+        This endpoint allows you to list all attempts of an ID document verification.
+        
+        Attempts are returned ordered by creation date, newest first.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       parameters:
         - name: id_document_verification_id
           in: path
@@ -3605,6 +4085,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
           description: ID document verification attempts retrieved successfully
@@ -3622,7 +4104,7 @@ paths:
           description: An error occurred while fetching the attempts
     post:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Create an ID document verification attempt
       description: "This endpoint allows you to create an ID document verification attempt. It is possible when the ID document verification 
         is one of the following statuses: `created`, `retry_required`"
@@ -3666,7 +4148,7 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Retrieve an ID document verification attempt
       description: This endpoint allows you to retrieve the details for a given ID document verification attempt
       operationId: fetch_attempts_id_document_verification
@@ -3702,12 +4184,15 @@ paths:
   /v2/id-document-verifications/{id_document_verification_id}/attempts/{attempt_id}/assets:
     get:
       tags:
-        - ID document verifications (Coming soon)
+        - ID document verifications
       summary: Retrieve an ID document verification attempt asset
       operationId: fetch_asset_id_document_verification_attempt
       description: |
         This endpoint allows you to retrieve the assets associated with an ID document verification.
         This includes the document front image and the document back image.
+        
+        The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
+        You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       parameters:
         - name: id_document_verification_id
           in: path
@@ -3721,6 +4206,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/skipParam"
+        - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
           description: ID document verification attempt asset retrieved successfully
@@ -3731,6 +4218,200 @@ paths:
                   $ref: "#/components/examples/id_document_verification_attempt_output_assets_response_body"
               schema:
                 $ref: "#/components/schemas/IdDocumentVerificationAttemptAssetsOutput"
+
+  /v2/website-verifications:
+    post:
+      tags:
+        - Website verifications (Coming soon)
+      summary: Create a website verification
+      operationId: create_website_verification
+      description: Creates a website verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebsiteVerificationInputPost"
+      responses:
+        "201":
+          description: Website verification created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/WebsiteVerificationOutputPost"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "422":
+          description: Unprocessable entity
+        "500":
+          description: Internal server error
+        "503":
+          description: Service unavailable
+
+  /v2/website-verifications/{website_verification_id}:
+    get:
+      tags:
+        - Website verifications (Coming soon)
+      summary: Retrieve a website verification
+      description: This endpoint allows you to get the detailed results of a website verification
+      operationId: retrieve_website_verification
+      parameters:
+        - name: website_verification_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/WebsiteVerificationId"
+      responses:
+        "200":
+          description: Website verification retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/WebsiteVerificationOutputGet"
+        "404":
+          description: Website verification not found
+        "500":
+          description: Internal server error
+
+  /v2/website-verifications/{website_verification_id}/notify:
+    post:
+      tags:
+        - Website verifications (Coming soon)
+      summary: Request webhook notification
+      operationId: notify_website_verification
+      description: This endpoint can be used to initiate a webhook call containing the latest event of a website verification
+      parameters:
+        - name: website_verification_id
+          in: path
+          description: ID of the website verification to notify
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhook_url:
+                  type: string
+                  format: uri
+      responses:
+        "204":
+          description: Notification successfully requested
+
+  /v2/website-verifications/{website_verification_id}/anonymize:
+    post:
+      tags:
+        - Website verifications (Coming soon)
+      summary: Anonymize a website verification
+      operationId: anonymize_website_verification
+      description: Anonymize the personal data of a website verification with the specified ID.
+      parameters:
+        - name: website_verification_id
+          in: path
+          description: ID of the website verification to anonymize
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Website verification anonymized
+          content:
+            application/json:
+              schema:
+                required: [applicant_id, user_journey_id, website_url]
+                allOf:
+                  - $ref: "#/components/schemas/WebsiteVerificationOutputAnonymize"
+        "404":
+          description: Website verification not found
+        "500":
+          description: Internal server error
+
+# Bank Document Verifications
+  /v2/bank-document-verifications/{bank_document_verification_id}:
+    get:
+      tags:
+        - Bank document verifications (Coming soon)
+      summary: Retrieve a Bank Document Verification
+      description: This endpoint allows you to get the detailed results of a bank document verification
+      operationId: retrieve_bank_document_verification
+      parameters:
+        - name: bank_document_verification_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/BankDocumentVerificationId"
+      responses:
+        "200":
+          description: Bank Document Verification retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BankDocumentVerificationOutputGet"
+        "404":
+          description: Bank Document Verification not found
+        "500":
+          description: Internal server error
+
+# Company Document Verifications
+  /v2/company-document-verifications/{company_document_verification_id}:
+    get:
+      tags:
+        - Company document verifications (Coming soon)
+      summary: Retrieve a Company Document Verification
+      description: This endpoint allows you to get the detailed results of a company document verification
+      operationId: retrieve_company_document_verification
+      parameters:
+        - name: company_document_verification_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/CompanyDocumentVerificationId"
+      responses:
+        "200":
+          description: Company Document Verification retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/CompanyDocumentVerificationOutputGet"
+        "404":
+          description: Company Document Verification not found
+        "500":
+          description: Internal server error
+
+# Proof of Address Document Verifications
+  /v2/proof-of-address-document-verifications/{proof_of_address_document_verification_id}:
+    get:
+      tags:
+        - Proof of address document verifications (Coming soon)
+      summary: Retrieve a Proof of Address Verification
+      description: This endpoint allows you to get the detailed results of a proof of address verification
+      operationId: retrieve_proof_of_address_document_verification
+      parameters:
+        - name: proof_of_address_document_verification_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/ProofOfAddressDocumentVerificationId"
+      responses:
+        "200":
+          description: Proof of Address Verification retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ProofOfAddressDocumentVerificationOutputGet"
+        "404":
+          description: Proof of Address Verification not found
+        "500":
+          description: Internal server error
 
 components:
   schemas:
@@ -3942,6 +4623,7 @@ components:
         - Other
         - Passport
         - Residence Permit
+        - Travel Document
         - Visa
 
     Event:
@@ -3994,10 +4676,13 @@ components:
       properties:
         total_count:
           type: integer
+          description: Total number of items available across all pages
         skip:
           type: integer
+          description: Number of items skipped (offset from the start)
         limit:
           type: integer
+          description: Maximum number of items returned in this page
         _links:
           $ref: "#/components/schemas/ListLinks"
 
@@ -4006,10 +4691,13 @@ components:
         required: [self]
         properties:
           self:
+            description: Link to the current page
             $ref: "#/components/schemas/HalLink"
           previous:
+            description: Link to the previous page (null if on the first page)
             $ref: "#/components/schemas/HalLink"
           next:
+            description: Link to the next page (null if on the last page)
             $ref: "#/components/schemas/HalLink"
 
     SelfLink:
@@ -4163,6 +4851,48 @@ components:
         - $ref: "#/components/schemas/ApplicantsLinks"
         - $ref: "#/components/schemas/DatedObject"
         - $ref: "#/components/schemas/ApplicantOutputBase"
+
+    ########################### Business Applicant schemas #########################
+    BaseBusinessApplicant:
+      type: object
+      properties:
+        external_applicant_id:
+          type: string
+          example: "ext_business_osdfdfdb4hryu5cei5vwoabrk5k"
+
+    BusinessApplicantInputBase:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseBusinessApplicant"
+
+    BusinessApplicantOutputBase:
+      type: object
+      properties:
+        id:
+          allOf:
+            - $ref: "#/components/schemas/BusinessApplicantId"
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/BaseBusinessApplicant"
+        - $ref: "#/components/schemas/BusinessApplicantsLinks"
+
+    BusinessApplicantInputPost:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BusinessApplicantInputBase"
+
+    BusinessApplicantOutputPost:
+      type: object
+      required: [id]
+      allOf:
+        - $ref: "#/components/schemas/BusinessApplicantOutputBase"
+
+    BusinessApplicantOutputGet:
+      type: object
+      required: [id]
+      allOf:
+        - $ref: "#/components/schemas/BusinessApplicantOutputBase"
+
         ######################### Applicant Utils schemas #####################
     ApplicantId:
       type: string
@@ -4171,6 +4901,20 @@ components:
       example: aplt_tkoi5db4hryu5cei5vwoabr7we
 
     ApplicantsLinks:
+      type: object
+      required: [_links]
+      properties:
+        _links:
+          allOf:
+            - $ref: "#/components/schemas/SelfLink"
+
+    BusinessApplicantId:
+      type: string
+      description: Business Applicant unique identifier.
+      pattern: ^bplt_\w+$
+      example: bplt_tkoi5db4hryu5cei5vwoabr7we
+
+    BusinessApplicantsLinks:
       type: object
       required: [_links]
       properties:
@@ -4320,6 +5064,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of identity verification attempt assets for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/IdentityVerificationAttemptAssetOutput"
@@ -4346,6 +5091,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of face authentication attempt assets for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/FaceAuthenticationAttemptAssetOutput"
@@ -4452,6 +5198,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of identity verification attempts for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/IdentityVerificationAttemptOutputGet"
@@ -4606,6 +5353,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of face authentication attempts for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/FaceAuthenticationAttemptOutputGet"
@@ -4837,6 +5585,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of ID document verification attempts for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputGet"
@@ -4867,6 +5616,7 @@ components:
       properties:
         data:
           type: array
+          description: Array of ID document verification attempt assets for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/IdDocumentVerificationAttemptOutputAssetOutput"
@@ -4927,6 +5677,451 @@ components:
         - quality_checks_aborted
         - checks_inconclusive
         - terminated
+    #######################################################################
+
+    ###################### Website Verification schemas ####################
+    WebsiteVerificationBase:
+      type: object
+      properties:
+        user_journey_id:
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          allOf:
+            - $ref: "#/components/schemas/BusinessApplicantId"
+        webhook_url:
+          type: string
+          format: uri
+        website_url:
+          type: string
+          format: uri
+          maxLength: 1024
+          description: URL of the website to be verified
+
+    WebsiteVerificationInputBase:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/WebsiteVerificationBase"
+
+    WebsiteVerificationOutputBase:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/WebsiteVerificationId"
+        status:
+          $ref: "#/components/schemas/WebsiteVerificationStatus"
+        response_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        risk_labels:
+          $ref: "#/components/schemas/RiskLabels"
+        website_data:
+          $ref: "#/components/schemas/WebsiteVerificationResult"
+        _links:
+          $ref: "#/components/schemas/WebsiteVerificationLinks"
+      allOf:
+        - $ref: "#/components/schemas/WebsiteVerificationBase"
+        - $ref: "#/components/schemas/DatedObject"
+
+    WebsiteVerificationInputPost:
+      type: object
+      required: [applicant_id, user_journey_id, website_url]
+      allOf:
+        - $ref: "#/components/schemas/WebsiteVerificationInputBase"
+
+    WebsiteVerificationOutputPost:
+      type: object
+      required: [id, status, applicant_id, response_codes, risk_labels, user_journey_id, website_url, _links]
+      allOf:
+        - $ref: "#/components/schemas/WebsiteVerificationOutputBase"
+
+    WebsiteVerificationOutputGet:
+      type: object
+      required: [id, status, applicant_id, response_codes, risk_labels, user_journey_id, website_url, _links]
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/WebsiteVerificationOutputBase"
+
+    WebsiteVerificationOutputAnonymize:
+      type: object
+      required: [id, status, applicant_id, response_codes, risk_labels, user_journey_id, website_url, _links]
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/WebsiteVerificationOutputBase"
+
+    WebsiteVerificationResult:
+      type: object
+      properties:
+        legal_name:
+          type: string
+          description: Legal name of the company
+        country_of_incorporation:
+          $ref: "#/components/schemas/CountryCodeIso2"
+          description: Country of incorporation of the company
+        mccs:
+          type: array
+          items:
+            type: string
+          description: MCCs of the company
+        alternative_mccs:
+          type: array
+          items:
+            type: string
+          description: Alternative MCCs of the company
+        mcc_rationale:
+          type: string
+          description: Rationale for the MCCs
+        risky_activities:
+          type: array
+          items:
+            type: string
+          description: Risky activities of the company
+        legal_address:
+          $ref: "#/components/schemas/Address"
+        disclosure_urls:
+          $ref: "#/components/schemas/DisclosureURLs"
+        registration_date:
+          type: string
+          format: date
+          nullable: true
+          description: The registration date of the domain
+
+    DisclosureURLs:
+      type: object
+      description: URLs to disclosure pages found on the website
+      properties:
+        privacy_policy_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to the privacy policy page
+        terms_and_conditions_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to the terms and conditions page
+        refund_policy_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to the refund policy page
+        contact_us_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to the contact us page
+
+    Address:
+      type: object
+      properties:
+        address_line1:
+          type: string
+          maxLength: 250
+        address_line2:
+          type: string
+          maxLength: 250
+        city:
+          type: string
+          maxLength: 50
+        state:
+          type: string
+          maxLength: 50
+        zip:
+          type: string
+          maxLength: 50
+        country:
+          $ref: "#/components/schemas/CountryCodeIso2"
+
+    WebsiteVerificationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+        - $ref: "#/components/schemas/ApplicantLink"
+
+    WebsiteVerificationId:
+      type: string
+      description: Website verification unique identifier.
+      pattern: ^wbv_\w+$
+      example: wbv_tkoi5db4hryu5cei5vwoabr7we
+
+    WebsiteVerificationStatus:
+      type: string
+      description: Status of the website verification.
+      enum:
+        - initial_status
+        - created
+        - checks_in_progress
+        - approved
+        - declined
+        - inconclusive
+    #######################################################################
+
+    ###################### Bank Document Verification schemas ######################
+    BankDocumentVerificationBase:
+      type: object
+      properties:
+        user_journey_id:
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          allOf:
+            - $ref: "#/components/schemas/BusinessApplicantId"
+        webhook_url:
+          type: string
+          format: uri
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
+
+    BankDocumentVerificationOutputBase:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/BankDocumentVerificationId"
+        status:
+          $ref: "#/components/schemas/IdDocumentVerificationStatus"
+        response_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        bank_document:
+          $ref: "#/components/schemas/BankDocument"
+        _links:
+          $ref: "#/components/schemas/BankDocumentVerificationLinks"
+      allOf:
+        - $ref: "#/components/schemas/BankDocumentVerificationBase"
+        - $ref: "#/components/schemas/DatedObject"
+
+    BankDocumentVerificationOutputGet:
+      type: object
+      required: [id, status, applicant_id, response_codes, user_journey_id, _links]
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/BankDocumentVerificationOutputBase"
+
+    BankDocument:
+      type: object
+      required: [bank_account_number, bank_routing_number, account_type, legal_name, bank_name, issue_date, document_type]
+      properties:
+        bank_account_number:
+          type: string
+          maxLength: 255
+        bank_routing_number:
+          type: string
+          maxLength: 255
+        account_type:
+          $ref: "#/components/schemas/AccountTypes"
+        legal_name:
+          type: string
+          minLength: 2
+          maxLength: 510
+        bank_name:
+          type: string
+          minLength: 2
+          maxLength: 510
+        issue_date:
+          type: string
+          format: date
+        document_type:
+          $ref: "#/components/schemas/BankDocumentType"
+
+    BankDocumentVerificationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+
+    BankDocumentVerificationId:
+      type: string
+      description: Bank Document verification unique identifier.
+      pattern: ^bdv_\w+$
+      example: bdv_tkoi5db4hryu5cei5vwoabr7we
+
+    AccountTypes:
+      type: string
+      description: Type of account.
+      enum:
+        - Checking
+        - Savings
+
+    BankDocumentType:
+      type: string
+      description: Type of document.
+      enum:
+        - Bank Statement
+        - Bank Letter
+    #######################################################################
+
+    ###################### Company Document Verification schemas ######################
+    CompanyDocumentVerificationBase:
+      type: object
+      properties:
+        user_journey_id:
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          allOf:
+            - $ref: "#/components/schemas/BusinessApplicantId"
+        webhook_url:
+          type: string
+          format: uri
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
+
+    CompanyDocumentVerificationOutputBase:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/CompanyDocumentVerificationId"
+        status:
+          $ref: "#/components/schemas/IdDocumentVerificationStatus"
+        response_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        company_document:
+          $ref: "#/components/schemas/CompanyDocument"
+        _links:
+          $ref: "#/components/schemas/CompanyDocumentVerificationLinks"
+      allOf:
+        - $ref: "#/components/schemas/CompanyDocumentVerificationBase"
+        - $ref: "#/components/schemas/DatedObject"
+
+    CompanyDocumentVerificationOutputGet:
+      type: object
+      required: [id, status, applicant_id, response_codes, user_journey_id, _links]
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/CompanyDocumentVerificationOutputBase"
+
+    CompanyDocument:
+      type: object
+      required: [company_number, legal_name, legal_address, issue_date, registration_date, document_type]
+      properties:
+        company_number:
+          type: string
+          maxLength: 255
+        legal_name:
+          type: string
+          minLength: 2
+          maxLength: 510
+        legal_address:
+          $ref: "#/components/schemas/Address"
+        issue_date:
+          type: string
+          format: date
+        registration_date:
+          type: string
+          format: date
+        document_type:
+          $ref: "#/components/schemas/CompanyDocumentType"
+
+    CompanyDocumentVerificationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+
+    CompanyDocumentVerificationId:
+      type: string
+      description: Company Document verification unique identifier.
+      pattern: ^cdv_\w+$
+      example: cdv_tkoi5db4hryu5cei5vwoabr7we
+
+    CompanyDocumentType:
+      type: string
+      description: Type of document.
+      enum:
+        - EIN Letter
+    #######################################################################
+
+    ###################### Proof of Address Document Verification schemas ######################
+    ProofOfAddressDocumentVerificationBase:
+      type: object
+      properties:
+        user_journey_id:
+          allOf:
+            - $ref: "#/components/schemas/UserJourneyId"
+        applicant_id:
+          allOf:
+            - $ref: "#/components/schemas/ApplicantId"
+        webhook_url:
+          type: string
+          format: uri
+
+    ProofOfAddressDocumentVerificationOutputBase:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/ProofOfAddressDocumentVerificationId"
+        status:
+          $ref: "#/components/schemas/IdDocumentVerificationStatus"
+        response_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResponseCodes"
+        proof_of_address_document:
+          $ref: "#/components/schemas/ProofOfAddressDocument"
+        links:
+          $ref: "#/components/schemas/ProofOfAddressDocumentVerificationLinks"
+      allOf:
+        - $ref: "#/components/schemas/ProofOfAddressDocumentVerificationBase"
+        - $ref: "#/components/schemas/DatedObject"
+
+    ProofOfAddressDocumentVerificationOutputGet:
+      type: object
+      required: [id, status, applicant_id, response_codes, user_journey_id, links, proof_of_address_document, created_on, modified_on]
+      allOf:
+        - $ref: "#/components/schemas/DatedObject"
+        - $ref: "#/components/schemas/ProofOfAddressDocumentVerificationOutputBase"
+
+    ProofOfAddressDocument:
+      type: object
+      required: [type, issuing_company, full_name, last_name, first_name, address, issue_date]
+      properties:
+        type:
+          $ref: "#/components/schemas/ProofOfAddressDocumentType"
+        issuing_company:
+          type: string
+          minLength: 2
+          maxLength: 510
+        full_name:
+          type: string
+          minLength: 2
+          maxLength: 510
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        address:
+          $ref: "#/components/schemas/Address"
+        issue_date:
+          type: string
+          format: date
+
+    ProofOfAddressDocumentType:
+      type: string
+      description: Type of document.
+      enum:
+        - Utility Bill
+        - Bank Statement
+        - Government Letter
+        - Tax Document
+        - Lease Agreement
+        - Other
+
+    ProofOfAddressDocumentVerificationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+
+    ProofOfAddressDocumentVerificationId:
+      type: string
+      description: Proof of Address verification unique identifier.
+      pattern: ^bdv_\w+$
+      example: bdv_tkoi5db4hryu5cei5vwoabr7we
     #######################################################################
 
     ################## AML Verifications schemas ##########################
@@ -5022,6 +6217,27 @@ components:
         - $ref: "#/components/schemas/ApplicantLink"
         #######################################################################
     #######################################################################
+
+  parameters:
+    skipParam:
+      name: skip
+      in: query
+      description: Number of items to skip (offset)
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return per page
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
 
   examples:
     identity_verification_creation_request_body_helper_min:
@@ -5201,7 +6417,7 @@ components:
 
     identity_verification_pdf_response_body:
       value:
-        pdf_report: www.pdf.com
+        pdf_report: https://www.example.com/reports/idv_123.pdf
 
     identity_verification_attempt_list_response_body:
       value:
@@ -5231,11 +6447,11 @@ components:
                 href: "https://id.ubble.ai/4hryu5cei5/"
         _links:
           self:
-            href: "https://api.ubble.ai/v2/identity-verifications/{verification_id}/attempts"
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=10&limit=10"
           next:
-            href: "https://api.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=20&limit=10"
           previous:
-            href: "https://api.ubble.ai/v2/identity-verifications/{verification_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/identity-verifications/idv_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=0&limit=10"
 
     attempt_creation_request_body_min:
       value:
@@ -5334,6 +6550,20 @@ components:
         _links:
           self:
             href: https://api.ubble.ai/v2/applicants/aplt_tkoi5db4hryu5cei5vwoabr7we
+
+    business_applicant_creation_request_body:
+      value:
+        external_applicant_id: ext_business_osdfdfdb4hryu5cei5vwoabrk5k
+
+    business_applicant_response_body:
+      value:
+        id: bplt_tkoi5db4hryu5cei5vwoabr7we
+        created_on: 2017-07-21T17:32:28Z
+        modified_on: 2017-07-21T17:40:32Z
+        external_applicant_id: ext_business_osdfdfdb4hryu5cei5vwoabrk5k
+        _links:
+          self:
+            href: https://api.ubble.ai/v2/business-applicants/bplt_tkoi5db4hryu5cei5vwoabr7we
 
     aml_verification_creation_request_body_min:
       value:
@@ -5441,7 +6671,7 @@ components:
           ip_address: "123.123.123.01"
         _links:
           self:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}"
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts/fatp_tkoi5db4hryu5cei5vwoabr7we"
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
@@ -5479,7 +6709,7 @@ components:
         redirect_url: https://myweb.site?query-param=hello
         _links:
           self:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}"
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts/fatp_tkoi5db4hryu5cei5vwoabr7we"
           verification_url:
             href: "https://id.ubble.ai/4hryu5cei5/"
 
@@ -5536,16 +6766,16 @@ components:
               ip_address: "123.123.123.01"
             _links:
               self:
-                href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts/{attempt_id}"
+                href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts/fatp_tkoi5db4hryu5cei5vwoabr7we"
               verification_url:
                 href: "https://id.ubble.ai/4hryu5clik/"
         _links:
           self:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts"
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=10&limit=10"
           next:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=20&limit=10"
           previous:
-            href: "https://api.ubble.ai/v2/face-authentications/{face_authentication_id}/attempts?..."
+            href: "https://api.ubble.ai/v2/face-authentications/fav_tkoi5db4hryu5cei5vwoabr7we/attempts?skip=0&limit=10"
 
     id_document_verification_creation_request_body_min:
       value:
@@ -5604,7 +6834,7 @@ components:
 
     id_document_verification_pdf_report_response_body:
       value:
-        pdf_report: www.pdf.com
+        pdf_report: https://www.example.com/reports/iddv_123.pdf
 
     id_document_verification_attempt_creation_request_body_min:
       value:
