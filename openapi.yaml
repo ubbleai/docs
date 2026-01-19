@@ -2940,7 +2940,7 @@ x-tagGroups:
       - Website verifications (Coming soon)
       - Bank document verifications (Coming soon)
       - Company document verifications (Coming soon)
-      - Proof of address document verifications (Coming soon)
+      - Address document verifications (Coming soon)
       - Service status
 paths:
   /health:
@@ -4386,30 +4386,30 @@ paths:
         "500":
           description: Internal server error
 
-# Proof of Address Document Verifications
-  /v2/proof-of-address-document-verifications/{proof_of_address_document_verification_id}:
+# Address Document Verifications
+  /v2/address-document-verifications/{address_document_verification_id}:
     get:
       tags:
-        - Proof of address document verifications (Coming soon)
-      summary: Retrieve a Proof of Address Verification
-      description: This endpoint allows you to get the detailed results of a proof of address verification
-      operationId: retrieve_proof_of_address_document_verification
+        - Address document verifications (Coming soon)
+      summary: Retrieve an Address Document Verification
+      description: This endpoint allows you to get the detailed results of an address document verification
+      operationId: retrieve_address_document_verification
       parameters:
-        - name: proof_of_address_document_verification_id
+        - name: address_document_verification_id
           in: path
           required: true
           schema:
-            $ref: "#/components/schemas/ProofOfAddressDocumentVerificationId"
+            $ref: "#/components/schemas/AddressDocumentVerificationId"
       responses:
         "200":
-          description: Proof of Address Verification retrieved successfully
+          description: Address Document Verification retrieved successfully
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/ProofOfAddressDocumentVerificationOutputGet"
+                  - $ref: "#/components/schemas/AddressDocumentVerificationOutputGet"
         "404":
-          description: Proof of Address Verification not found
+          description: Address Document Verification not found
         "500":
           description: Internal server error
 
@@ -5940,15 +5940,15 @@ components:
       type: string
       description: Type of account.
       enum:
-        - Checking
-        - Savings
+        - checking
+        - savings
 
     BankDocumentType:
       type: string
       description: Type of document.
       enum:
-        - Bank Statement
-        - Bank Letter
+        - bank_statement
+        - bank_letter
     #######################################################################
 
     ###################### Company Document Verification schemas ######################
@@ -6033,8 +6033,8 @@ components:
         - EIN Letter
     #######################################################################
 
-    ###################### Proof of Address Document Verification schemas ######################
-    ProofOfAddressDocumentVerificationBase:
+    ###################### Address Document Verification schemas ######################
+    AddressDocumentVerificationBase:
       type: object
       properties:
         user_journey_id:
@@ -6042,86 +6042,93 @@ components:
             - $ref: "#/components/schemas/UserJourneyId"
         applicant_id:
           allOf:
-            - $ref: "#/components/schemas/ApplicantId"
+            - $ref: "#/components/schemas/BusinessApplicantId"
         webhook_url:
           type: string
           format: uri
+        declared_data:
+          $ref: "#/components/schemas/DeclaredData"
 
-    ProofOfAddressDocumentVerificationOutputBase:
+    AddressDocumentVerificationOutputBase:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/ProofOfAddressDocumentVerificationId"
+          $ref: "#/components/schemas/AddressDocumentVerificationId"
         status:
           $ref: "#/components/schemas/IdDocumentVerificationStatus"
         response_codes:
           type: array
           items:
             $ref: "#/components/schemas/ResponseCodes"
-        proof_of_address_document:
-          $ref: "#/components/schemas/ProofOfAddressDocument"
-        links:
-          $ref: "#/components/schemas/ProofOfAddressDocumentVerificationLinks"
+        address_document:
+          $ref: "#/components/schemas/AddressDocument"
+        _links:
+          $ref: "#/components/schemas/AddressDocumentVerificationLinks"
       allOf:
-        - $ref: "#/components/schemas/ProofOfAddressDocumentVerificationBase"
+        - $ref: "#/components/schemas/AddressDocumentVerificationBase"
         - $ref: "#/components/schemas/DatedObject"
 
-    ProofOfAddressDocumentVerificationOutputGet:
+    AddressDocumentVerificationOutputGet:
       type: object
-      required: [id, status, applicant_id, response_codes, user_journey_id, links, proof_of_address_document, created_on, modified_on]
+      required: [id, status, applicant_id, response_codes, user_journey_id, _links]
       allOf:
         - $ref: "#/components/schemas/DatedObject"
-        - $ref: "#/components/schemas/ProofOfAddressDocumentVerificationOutputBase"
+        - $ref: "#/components/schemas/AddressDocumentVerificationOutputBase"
 
-    ProofOfAddressDocument:
+    AddressDocument:
       type: object
-      required: [type, issuing_company, full_name, last_name, first_name, address, issue_date]
+      required: [address_line1, city, state, postal_code, country, legal_name, issue_date, document_type]
       properties:
-        type:
-          $ref: "#/components/schemas/ProofOfAddressDocumentType"
-        issuing_company:
+        address_line1:
+          type: string
+          maxLength: 255
+        address_line2:
+          type: string
+          maxLength: 255
+        city:
+          type: string
+          minLength: 2
+          maxLength: 255
+        state:
+          type: string
+          minLength: 2
+          maxLength: 255
+        postal_code:
+          type: string
+          maxLength: 50
+        country:
+          type: string
+          minLength: 2
+          maxLength: 255
+        legal_name:
           type: string
           minLength: 2
           maxLength: 510
-        full_name:
-          type: string
-          minLength: 2
-          maxLength: 510
-        last_name:
-          type: string
-          minLength: 1
-          maxLength: 255
-        first_name:
-          type: string
-          minLength: 1
-          maxLength: 255
-        address:
-          $ref: "#/components/schemas/Address"
         issue_date:
           type: string
           format: date
+        document_type:
+          $ref: "#/components/schemas/AddressDocumentType"
 
-    ProofOfAddressDocumentType:
+    AddressDocumentVerificationLinks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SelfLink"
+
+    AddressDocumentVerificationId:
+      type: string
+      description: Address Document verification unique identifier.
+      pattern: ^adv_\w+$
+      example: adv_tkoi5db4hryu5cei5vwoabr7we
+
+    AddressDocumentType:
       type: string
       description: Type of document.
       enum:
         - Utility Bill
         - Bank Statement
-        - Government Letter
-        - Tax Document
+        - Government Issued Document
         - Lease Agreement
-        - Other
-
-    ProofOfAddressDocumentVerificationLinks:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/SelfLink"
-
-    ProofOfAddressDocumentVerificationId:
-      type: string
-      description: Proof of Address verification unique identifier.
-      pattern: ^bdv_\w+$
-      example: bdv_tkoi5db4hryu5cei5vwoabr7we
     #######################################################################
 
     ################## AML Verifications schemas ##########################
