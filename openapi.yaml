@@ -4402,7 +4402,7 @@ paths:
   /v2/bank-document-verifications/{bank_document_verification_id}/anonymize:
     post:
       tags:
-        - Bank document verifications
+        - Bank document verifications (Coming soon)
       summary: Anonymize a bank document verification
       operationId: anonymize_bank_document_verification
       description: Anonymize the personal data of a bank document verification with the specified ID.
@@ -4433,7 +4433,7 @@ paths:
   /v2/bank-document-verifications/{bank_document_verification_id}/pdf-report:
     get:
       tags:
-        - Bank document verifications
+        - Bank document verifications (Coming soon)
       summary: Retrieve PDF report of a bank document verification
       operationId: pdf_bank_document_verification
       description: |
@@ -4464,7 +4464,7 @@ paths:
   /v2/bank-document-verifications/{bank_document_verification_id}/notify:
     post:
       tags:
-        - Bank document verifications
+        - Bank document verifications (Coming soon)
       summary: Request webhook notification
       operationId: notify_bank_document_verification
       description: This endpoint can be used to initiate a webhook call containing the latest event of a bank document verification
@@ -4491,7 +4491,7 @@ paths:
   /v2/bank-document-verifications/{bank_document_verification_id}/attempts:
     get:
       tags:
-        - Bank document verifications
+        - Bank document verifications (Coming soon)
       summary: List bank document verification attempts
       operationId: list_attempts_bank_document_verification
       description: |
@@ -4527,7 +4527,7 @@ paths:
           description: An error occurred while fetching the attempts
     post:
       tags:
-        - Bank document verifications
+        - Bank document verifications (Coming soon)
       summary: Create a bank document verification attempt
       description: "This endpoint allows you to create a bank document verification attempt. It is possible when the bank document verification 
         is one of the following statuses: `created`, `retry_required`"
@@ -4571,7 +4571,7 @@ paths:
   /v2/bank-document-verifications/{bank_document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
-        - Bank document verifications
+        - Bank document verifications (Coming soon)
       summary: Retrieve a bank document verification attempt
       description: This endpoint allows you to retrieve the details for a given bank document verification attempt
       operationId: fetch_attempts_bank_document_verification
@@ -4607,7 +4607,7 @@ paths:
   /v2/bank-document-verifications/{bank_document_verification_id}/attempts/{attempt_id}/assets:
     get:
       tags:
-        - Bank document verifications
+        - Bank document verifications (Coming soon)
       summary: Retrieve a bank document verification attempt asset
       operationId: fetch_asset_bank_document_verification_attempt
       description: |
@@ -4646,7 +4646,7 @@ paths:
   /v2/company-document-verifications:
     post:
       tags:
-        - Company document verifications
+        - Company document verifications (Coming soon)
       summary: Create a company document verification
       operationId: create_company_document_verification
       description: Creates a company document verification
@@ -4712,7 +4712,7 @@ paths:
   /v2/company-document-verifications/{company_document_verification_id}/anonymize:
     post:
       tags:
-        - Company document verifications
+        - Company document verifications (Coming soon)
       summary: Anonymize a company document verification
       operationId: anonymize_company_document_verification
       description: Anonymize the personal data of a company document verification with the specified ID.
@@ -4743,7 +4743,7 @@ paths:
   /v2/company-document-verifications/{company_document_verification_id}/pdf-report:
     get:
       tags:
-        - Company document verifications
+        - Company document verifications (Coming soon)
       summary: Retrieve PDF report of a company document verification
       operationId: pdf_company_document_verification
       description: |
@@ -4774,7 +4774,7 @@ paths:
   /v2/company-document-verifications/{company_document_verification_id}/notify:
     post:
       tags:
-        - Company document verifications
+        - Company document verifications (Coming soon)
       summary: Request webhook notification
       operationId: notify_company_document_verification
       description: This endpoint can be used to initiate a webhook call containing the latest event of a company document verification
@@ -4801,7 +4801,7 @@ paths:
   /v2/company-document-verifications/{company_document_verification_id}/attempts:
     get:
       tags:
-        - Company document verifications
+        - Company document verifications (Coming soon)
       summary: List company document verification attempts
       operationId: list_attempts_company_document_verification
       description: |
@@ -4837,7 +4837,7 @@ paths:
           description: An error occurred while fetching the attempts
     post:
       tags:
-        - Company document verifications
+        - Company document verifications (Coming soon)
       summary: Create a company document verification attempt
       description: "This endpoint allows you to create a company document verification attempt. It is possible when the company document verification 
         is one of the following statuses: `created`, `retry_required`"
@@ -4881,7 +4881,7 @@ paths:
   /v2/company-document-verifications/{company_document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
-        - Company document verifications
+        - Company document verifications (Coming soon)
       summary: Retrieve a company document verification attempt
       description: This endpoint allows you to retrieve the details for a given company document verification attempt
       operationId: fetch_attempts_company_document_verification
@@ -4917,7 +4917,7 @@ paths:
   /v2/company-document-verifications/{company_document_verification_id}/attempts/{attempt_id}/assets:
     get:
       tags:
-        - Company document verifications
+        - Company document verifications (Coming soon)
       summary: Retrieve a company document verification attempt asset
       operationId: fetch_asset_company_document_verification_attempt
       description: |
@@ -4956,7 +4956,7 @@ paths:
   /v2/address-document-verifications:
     post:
       tags:
-        - Address document verifications
+        - Address document verifications (Coming soon)
       summary: Create an address document verification
       operationId: create_address_document_verification
       description: Creates an address document verification
@@ -5022,7 +5022,7 @@ paths:
   /v2/address-document-verifications/{address_document_verification_id}/anonymize:
     post:
       tags:
-        - Address document verifications
+        - Address document verifications (Coming soon)
       summary: Anonymize an address document verification
       operationId: anonymize_address_document_verification
       description: Anonymize the personal data of an address document verification with the specified ID.
@@ -5053,7 +5053,7 @@ paths:
   /v2/address-document-verifications/{address_document_verification_id}/pdf-report:
     get:
       tags:
-        - Address document verifications
+        - Address document verifications (Coming soon)
       summary: Retrieve PDF report of an address document verification
       operationId: pdf_address_document_verification
       description: |
@@ -5084,7 +5084,7 @@ paths:
   /v2/address-document-verifications/{address_document_verification_id}/notify:
     post:
       tags:
-        - Address document verifications
+        - Address document verifications (Coming soon)
       summary: Request webhook notification
       operationId: notify_address_document_verification
       description: This endpoint can be used to initiate a webhook call containing the latest event of an address document verification
@@ -5111,7 +5111,7 @@ paths:
   /v2/address-document-verifications/{address_document_verification_id}/attempts:
     get:
       tags:
-        - Address document verifications
+        - Address document verifications (Coming soon)
       summary: List address document verification attempts
       operationId: list_attempts_address_document_verification
       description: |
@@ -5147,7 +5147,7 @@ paths:
           description: An error occurred while fetching the attempts
     post:
       tags:
-        - Address document verifications
+        - Address document verifications (Coming soon)
       summary: Create an address document verification attempt
       description: "This endpoint allows you to create an address document verification attempt. It is possible when the address document verification 
         is one of the following statuses: `created`, `retry_required`"
@@ -5191,7 +5191,7 @@ paths:
   /v2/address-document-verifications/{address_document_verification_id}/attempts/{attempt_id}:
     get:
       tags:
-        - Address document verifications
+        - Address document verifications (Coming soon)
       summary: Retrieve an address document verification attempt
       description: This endpoint allows you to retrieve the details for a given address document verification attempt
       operationId: fetch_attempts_address_document_verification
@@ -5227,7 +5227,7 @@ paths:
   /v2/address-document-verifications/{address_document_verification_id}/attempts/{attempt_id}/assets:
     get:
       tags:
-        - Address document verifications
+        - Address document verifications (Coming soon)
       summary: Retrieve an address document verification attempt asset
       operationId: fetch_asset_address_document_verification_attempt
       description: |
