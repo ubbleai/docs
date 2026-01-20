@@ -6709,9 +6709,9 @@ components:
     ###################### Bank Document Verification schemas ######################
     BankDocumentVerificationDeclaredData:
       type: object
-      required: [legal_name]
+      required: [company_name]
       properties:
-        legal_name:
+        company_name:
           type: string
           minLength: 2
           maxLength: 255
@@ -6954,9 +6954,9 @@ components:
     ###################### Company Document Verification schemas ######################
     CompanyDocumentVerificationDeclaredData:
       type: object
-      required: [legal_name]
+      required: [company_name]
       properties:
-        legal_name:
+        company_name:
           type: string
           minLength: 2
           maxLength: 255
@@ -8097,14 +8097,14 @@ components:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          legal_name: Acme Corporation
+          company_name: Acme Corporation
 
     bank_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          legal_name: Acme Corporation
+          company_name: Acme Corporation
         webhook_url: https://my.api/events/
     
     bank_document_verification_creation_response_body:
@@ -8117,7 +8117,7 @@ components:
         status: created
         response_codes: []
         declared_data:
-          legal_name: "Acme Corporation"
+          company_name: "Acme Corporation"
         bank_document:
           bank_account_number: "1234567890"
           bank_routing_number: "987654321"
@@ -8232,14 +8232,14 @@ components:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          legal_name: Acme Corporation
+          company_name: Acme Corporation
 
     company_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          legal_name: Acme Corporation
+          company_name: Acme Corporation
         webhook_url: https://my.api/events/
     
     company_document_verification_creation_response_body:
@@ -8252,8 +8252,7 @@ components:
         status: created
         response_codes: []
         declared_data:
-          name: "Acme Corporation"
-          legal_name: Acme Corporation
+          company_name: Acme Corporation
         company_document:
           company_number: "12-3456789"
           legal_name: Acme Corporation
