@@ -7212,7 +7212,7 @@ components:
           items:
             $ref: "#/components/schemas/ResponseCodes"
         address_document:
-          $ref: "#/components/schemas/AddressDocument"
+          $ref: "#/components/schemas/ProofOfAddressDocument"
         _links:
           $ref: "#/components/schemas/AddressDocumentVerificationLinks"
       allOf:
@@ -7357,39 +7357,24 @@ components:
       allOf:
         - $ref: "#/components/schemas/AddressDocumentVerificationBase"
 
-    AddressDocument:
+    ProofOfAddressDocument:
       type: object
       properties:
-        address_line1:
+        type:
           type: string
-          maxLength: 255
-        address_line2:
+        issuing_company:
           type: string
-          maxLength: 255
-        city:
+        full_name:
           type: string
-          minLength: 2
-          maxLength: 255
-        state:
+        last_name:
           type: string
-          minLength: 2
-          maxLength: 255
-        postal_code:
+        first_name:
           type: string
-          maxLength: 50
-        country:
-          type: string
-          minLength: 2
-          maxLength: 255
-        legal_name:
-          type: string
-          minLength: 2
-          maxLength: 510
+        address:
+          $ref: "#/components/schemas/Address"
         issue_date:
           type: string
           format: date
-        document_type:
-          $ref: "#/components/schemas/AddressDocumentType"
 
     AddressDocumentVerificationLinks:
       type: object
@@ -7413,15 +7398,6 @@ components:
         - declined
         - retry_required
         - inconclusive
-
-    AddressDocumentType:
-      type: string
-      description: Type of document.
-      enum:
-        - utility_bill
-        - bank_statement
-        - government_issued_document
-        - lease_agreement
     #######################################################################
 
     ################## AML Verifications schemas ##########################
@@ -8121,14 +8097,14 @@ components:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          name: Acme Corporation
+          legal_name: Acme Corporation
 
     bank_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          name: Acme Corporation
+          legal_name: Acme Corporation
         webhook_url: https://my.api/events/
     
     bank_document_verification_creation_response_body:
@@ -8141,7 +8117,7 @@ components:
         status: created
         response_codes: []
         declared_data:
-          name: "Acme Corporation"
+          legal_name: "Acme Corporation"
         bank_document:
           bank_account_number: "1234567890"
           bank_routing_number: "987654321"
@@ -8256,14 +8232,14 @@ components:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          name: Acme Corporation
+          legal_name: Acme Corporation
 
     company_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          name: Acme Corporation
+          legal_name: Acme Corporation
         webhook_url: https://my.api/events/
     
     company_document_verification_creation_response_body:
@@ -8277,6 +8253,7 @@ components:
         response_codes: []
         declared_data:
           name: "Acme Corporation"
+          legal_name: Acme Corporation
         company_document:
           company_number: "12-3456789"
           legal_name: Acme Corporation
@@ -8288,7 +8265,7 @@ components:
             country: "US"
           issue_date: 2023-01-15
           registration_date: 2020-05-10
-          document_type: EIN Letter
+          document_type: ein_letter
         webhook_url: "https://my.api/events/"
         _links:
           self:
@@ -8393,14 +8370,14 @@ components:
     address_document_verification_creation_request_body_min:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: Acme Corporation
 
     address_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: Acme Corporation
         webhook_url: https://my.api/events/
@@ -8411,7 +8388,7 @@ components:
         created_on: "2017-07-21T17:32:28Z"
         modified_on: "2017-07-21T17:40:32Z"
         user_journey_id: "usj_tkoi5db4hryu5cei5vwoabr7we"
-        applicant_id: "bplt_tkoi5db4hryu5cei5vwoabr7we"
+        applicant_id: "aplt_tkoi5db4hryu5cei5vwoabr7we"
         status: created
         response_codes: []
         declared_data:
@@ -8437,7 +8414,7 @@ components:
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: aplt_tkoi5db4hryu5cei5vwoabr7we
         status: created
         response_codes: []
         webhook_url: "https://my.api/events/"
