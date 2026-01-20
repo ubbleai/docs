@@ -6857,7 +6857,14 @@ components:
             - document_front_image
             - document_back_image
         _links:
-          $ref: "#/components/schemas/AssetLink"
+          type: object
+          properties:
+            asset_url:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
 
     BankDocumentVerificationAttemptStates:
       type: string
@@ -7078,7 +7085,14 @@ components:
             - document_front_image
             - document_back_image
         _links:
-          $ref: "#/components/schemas/AssetLink"
+          type: object
+          properties:
+            asset_url:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
 
     CompanyDocumentVerificationAttemptStates:
       type: string
@@ -7287,7 +7301,14 @@ components:
             - document_front_image
             - document_back_image
         _links:
-          $ref: "#/components/schemas/AssetLink"
+          type: object
+          properties:
+            asset_url:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
 
     AddressDocumentVerificationAttemptStates:
       type: string
@@ -8056,14 +8077,14 @@ components:
     bank_document_verification_creation_request_body_min:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: baplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: Acme Corporation
 
     bank_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: baplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: Acme Corporation
         webhook_url: https://my.api/events/
@@ -8074,7 +8095,7 @@ components:
         created_on: "2017-07-21T17:32:28Z"
         modified_on: "2017-07-21T17:40:32Z"
         user_journey_id: "usj_tkoi5db4hryu5cei5vwoabr7we"
-        applicant_id: "baplt_tkoi5db4hryu5cei5vwoabr7we"
+        applicant_id: "bplt_tkoi5db4hryu5cei5vwoabr7we"
         status: created
         response_codes: []
         declared_data:
@@ -8098,7 +8119,7 @@ components:
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: baplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         status: created
         response_codes: []
         webhook_url: "https://my.api/events/"
@@ -8193,14 +8214,14 @@ components:
     company_document_verification_creation_request_body_min:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: baplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: Acme Corporation
 
     company_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: baplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: Acme Corporation
         webhook_url: https://my.api/events/
@@ -8211,7 +8232,7 @@ components:
         created_on: "2017-07-21T17:32:28Z"
         modified_on: "2017-07-21T17:40:32Z"
         user_journey_id: "usj_tkoi5db4hryu5cei5vwoabr7we"
-        applicant_id: "baplt_tkoi5db4hryu5cei5vwoabr7we"
+        applicant_id: "bplt_tkoi5db4hryu5cei5vwoabr7we"
         status: created
         response_codes: []
         declared_data:
@@ -8239,7 +8260,7 @@ components:
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: baplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         status: created
         response_codes: []
         webhook_url: "https://my.api/events/"
@@ -8334,14 +8355,14 @@ components:
     address_document_verification_creation_request_body_min:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: baplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: Acme Corporation
 
     address_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: baplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
           name: Acme Corporation
         webhook_url: https://my.api/events/
@@ -8352,7 +8373,7 @@ components:
         created_on: "2017-07-21T17:32:28Z"
         modified_on: "2017-07-21T17:40:32Z"
         user_journey_id: "usj_tkoi5db4hryu5cei5vwoabr7we"
-        applicant_id: "baplt_tkoi5db4hryu5cei5vwoabr7we"
+        applicant_id: "bplt_tkoi5db4hryu5cei5vwoabr7we"
         status: created
         response_codes: []
         declared_data:
@@ -8378,7 +8399,7 @@ components:
         created_on: 2017-07-21T17:32:28Z
         modified_on: 2017-07-21T17:40:32Z
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
-        applicant_id: baplt_tkoi5db4hryu5cei5vwoabr7we
+        applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         status: created
         response_codes: []
         webhook_url: "https://my.api/events/"
