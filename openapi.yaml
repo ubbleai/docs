@@ -6707,6 +6707,15 @@ components:
     #######################################################################
 
     ###################### Bank Document Verification schemas ######################
+    BankDocumentVerificationDeclaredData:
+      type: object
+      required: [legal_name]
+      properties:
+        legal_name:
+          type: string
+          minLength: 2
+          maxLength: 255
+
     BankDocumentVerificationBase:
       type: object
       properties:
@@ -6720,7 +6729,7 @@ components:
           type: string
           format: uri
         declared_data:
-          $ref: "#/components/schemas/DeclaredData"
+          $ref: "#/components/schemas/BankDocumentVerificationDeclaredData"
 
     BankDocumentVerificationOutputBase:
       type: object
@@ -6728,7 +6737,7 @@ components:
         id:
           $ref: "#/components/schemas/BankDocumentVerificationId"
         status:
-          $ref: "#/components/schemas/IdDocumentVerificationStatus"
+          $ref: "#/components/schemas/BankDocumentVerificationStatus"
         response_codes:
           type: array
           items:
@@ -6881,7 +6890,6 @@ components:
 
     BankDocument:
       type: object
-      required: [bank_account_number, bank_routing_number, account_type, legal_name, bank_name, issue_date, document_type]
       properties:
         bank_account_number:
           type: string
@@ -6916,6 +6924,18 @@ components:
       pattern: ^bdv_\w+$
       example: bdv_tkoi5db4hryu5cei5vwoabr7we
 
+    BankDocumentVerificationStatus:
+      type: string
+      description: Bank document verification status.
+      enum:
+        - created
+        - quality_checks_in_progress
+        - checks_in_progress
+        - approved
+        - declined
+        - retry_required
+        - inconclusive
+
     AccountTypes:
       type: string
       description: Type of account.
@@ -6932,6 +6952,15 @@ components:
     #######################################################################
 
     ###################### Company Document Verification schemas ######################
+    CompanyDocumentVerificationDeclaredData:
+      type: object
+      required: [legal_name]
+      properties:
+        legal_name:
+          type: string
+          minLength: 2
+          maxLength: 255
+
     CompanyDocumentVerificationBase:
       type: object
       properties:
@@ -6945,7 +6974,7 @@ components:
           type: string
           format: uri
         declared_data:
-          $ref: "#/components/schemas/DeclaredData"
+          $ref: "#/components/schemas/CompanyDocumentVerificationDeclaredData"
 
     CompanyDocumentVerificationOutputBase:
       type: object
@@ -6953,7 +6982,7 @@ components:
         id:
           $ref: "#/components/schemas/CompanyDocumentVerificationId"
         status:
-          $ref: "#/components/schemas/IdDocumentVerificationStatus"
+          $ref: "#/components/schemas/CompanyDocumentVerificationStatus"
         response_codes:
           type: array
           items:
@@ -7106,7 +7135,6 @@ components:
 
     CompanyDocument:
       type: object
-      required: [company_number, legal_name, legal_address, issue_date, registration_date, document_type]
       properties:
         company_number:
           type: string
@@ -7137,11 +7165,23 @@ components:
       pattern: ^cdv_\w+$
       example: cdv_tkoi5db4hryu5cei5vwoabr7we
 
+    CompanyDocumentVerificationStatus:
+      type: string
+      description: Company document verification status.
+      enum:
+        - created
+        - quality_checks_in_progress
+        - checks_in_progress
+        - approved
+        - declined
+        - retry_required
+        - inconclusive
+
     CompanyDocumentType:
       type: string
       description: Type of document.
       enum:
-        - EIN Letter
+        - ein_letter
     #######################################################################
 
     ###################### Address Document Verification schemas ######################
@@ -7153,7 +7193,7 @@ components:
             - $ref: "#/components/schemas/UserJourneyId"
         applicant_id:
           allOf:
-            - $ref: "#/components/schemas/BusinessApplicantId"
+            - $ref: "#/components/schemas/ApplicantId"
         webhook_url:
           type: string
           format: uri
@@ -7166,7 +7206,7 @@ components:
         id:
           $ref: "#/components/schemas/AddressDocumentVerificationId"
         status:
-          $ref: "#/components/schemas/IdDocumentVerificationStatus"
+          $ref: "#/components/schemas/AddressDocumentVerificationStatus"
         response_codes:
           type: array
           items:
@@ -7319,7 +7359,6 @@ components:
 
     AddressDocument:
       type: object
-      required: [address_line1, city, state, postal_code, country, legal_name, issue_date, document_type]
       properties:
         address_line1:
           type: string
@@ -7363,14 +7402,26 @@ components:
       pattern: ^adv_\w+$
       example: adv_tkoi5db4hryu5cei5vwoabr7we
 
+    AddressDocumentVerificationStatus:
+      type: string
+      description: Address document verification status.
+      enum:
+        - created
+        - quality_checks_in_progress
+        - checks_in_progress
+        - approved
+        - declined
+        - retry_required
+        - inconclusive
+
     AddressDocumentType:
       type: string
       description: Type of document.
       enum:
-        - Utility Bill
-        - Bank Statement
-        - Government Issued Document
-        - Lease Agreement
+        - utility_bill
+        - bank_statement
+        - government_issued_document
+        - lease_agreement
     #######################################################################
 
     ################## AML Verifications schemas ##########################
