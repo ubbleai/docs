@@ -6954,9 +6954,9 @@ components:
     ###################### Company Document Verification schemas ######################
     CompanyDocumentVerificationDeclaredData:
       type: object
-      required: [company_name]
+      required: [legal_name]
       properties:
-        company_name:
+        legal_name:
           type: string
           minLength: 2
           maxLength: 255
@@ -8232,14 +8232,14 @@ components:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          company_name: Acme Corporation
+          legal_name: Acme Corporation
 
     company_document_verification_creation_request_body_max:
       value:
         user_journey_id: usj_tkoi5db4hryu5cei5vwoabr7we
         applicant_id: bplt_tkoi5db4hryu5cei5vwoabr7we
         declared_data:
-          company_name: Acme Corporation
+          legal_name: Acme Corporation
         webhook_url: https://my.api/events/
     
     company_document_verification_creation_response_body:
@@ -8252,7 +8252,7 @@ components:
         status: created
         response_codes: []
         declared_data:
-          company_name: Acme Corporation
+          legal_name: Acme Corporation
         company_document:
           company_number: "12-3456789"
           legal_name: Acme Corporation
