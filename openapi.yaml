@@ -4336,7 +4336,7 @@ paths:
   /v2/bank-document-verifications:
     post:
       tags:
-        - Bank document verifications
+        - Bank document verifications (Coming soon)
       summary: Create a bank document verification
       operationId: create_bank_document_verification
       description: Creates a bank document verification
