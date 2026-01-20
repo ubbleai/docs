@@ -7003,10 +7003,7 @@ components:
     CompanyDocumentVerificationAttemptInputBase:
       type: object
       properties:
-        document_front:
-          type: string
-          format: binary
-        document_back:
+        document:
           type: string
           format: binary
     
@@ -7042,7 +7039,7 @@ components:
 
     CompanyDocumentVerificationAttemptInputPost:
       type: object
-      required: [document_front]
+      required: [document]
       allOf:
         - $ref: "#/components/schemas/CompanyDocumentVerificationAttemptInputBase"
     
@@ -7219,10 +7216,7 @@ components:
     AddressDocumentVerificationAttemptInputBase:
       type: object
       properties:
-        document_front:
-          type: string
-          format: binary
-        document_back:
+        document:
           type: string
           format: binary
     
@@ -7258,7 +7252,7 @@ components:
 
     AddressDocumentVerificationAttemptInputPost:
       type: object
-      required: [document_front]
+      required: [document]
       allOf:
         - $ref: "#/components/schemas/AddressDocumentVerificationAttemptInputBase"
     
@@ -8269,15 +8263,13 @@ components:
 
     company_document_verification_attempt_creation_request_body_min:
       value:
-        document_front: |
+        document: |
           data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…
 
     
     company_document_verification_attempt_creation_request_body_max:
       value:
-        document_front: |
-          data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
-        document_back: |
+        document: |
           data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
 
     
@@ -8408,15 +8400,13 @@ components:
 
     address_document_verification_attempt_creation_request_body_min:
       value:
-        document_front: |
+        document: |
           data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…
 
     
     address_document_verification_attempt_creation_request_body_max:
       value:
-        document_front: |
-          data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
-        document_back: |
+        document: |
           data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
 
     
