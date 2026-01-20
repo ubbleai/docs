@@ -6778,10 +6778,7 @@ components:
     BankDocumentVerificationAttemptInputBase:
       type: object
       properties:
-        document_front:
-          type: string
-          format: binary
-        document_back:
+        document:
           type: string
           format: binary
     
@@ -6817,7 +6814,7 @@ components:
 
     BankDocumentVerificationAttemptInputPost:
       type: object
-      required: [document_front]
+      required: [document]
       allOf:
         - $ref: "#/components/schemas/BankDocumentVerificationAttemptInputBase"
     
@@ -8133,15 +8130,13 @@ components:
 
     bank_document_verification_attempt_creation_request_body_min:
       value:
-        document_front: |
+        document: |
           data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…
 
     
     bank_document_verification_attempt_creation_request_body_max:
       value:
-        document_front: |
-          data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
-        document_back: |
+        document: |
           data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA…
 
     
