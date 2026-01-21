@@ -4337,9 +4337,9 @@ paths:
     post:
       tags:
         - Bank document verifications (Coming soon)
-      summary: Create a bank document verification
+      summary: Create a Bank Document Verification
       operationId: create_bank_document_verification
-      description: Creates a bank document verification
+      description: Creates a Bank Document Verification
       requestBody:
         required: true
         content:
@@ -4353,7 +4353,7 @@ paths:
               $ref: "#/components/schemas/BankDocumentVerificationInputPost"
       responses:
         "201":
-          description: Bank document verification created successfully
+          description: Bank Document Verification created successfully
           content:
             application/json:
               examples:
@@ -4378,7 +4378,7 @@ paths:
       tags:
         - Bank document verifications (Coming soon)
       summary: Retrieve a Bank Document Verification
-      description: This endpoint allows you to get the detailed results of a bank document verification
+      description: This endpoint allows you to get the detailed results of a Bank Document Verification
       operationId: retrieve_bank_document_verification
       parameters:
         - name: bank_document_verification_id
@@ -4403,9 +4403,9 @@ paths:
     post:
       tags:
         - Bank document verifications (Coming soon)
-      summary: Anonymize a bank document verification
+      summary: Anonymize a Bank Document Verification
       operationId: anonymize_bank_document_verification
-      description: Anonymize the personal data of a bank document verification with the specified ID.
+      description: Anonymize the personal data of a Bank Document Verification with the specified ID.
       parameters:
         - name: bank_document_verification_id
           in: path
@@ -4415,7 +4415,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Bank document verification anonymized
+          description: Bank Document Verification anonymized
           content:
             application/json:
               examples:
@@ -4426,7 +4426,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/BankDocumentVerificationOutputAnonymize"
         "404":
-          description: Bank document verification not found
+          description: Bank Document Verification not found
         "500":
           description: Internal server error
   
@@ -4434,23 +4434,23 @@ paths:
     get:
       tags:
         - Bank document verifications (Coming soon)
-      summary: Retrieve PDF report of a bank document verification
+      summary: Retrieve PDF report of a Bank Document Verification
       operationId: pdf_bank_document_verification
       description: |
-        This endpoint allows you to retrieve a PDF report of a bank document verification.
+        This endpoint allows you to retrieve a PDF report of a Bank Document Verification.
 
         Please note that the PDF report is only available for bank document verifications that are
         in status `declined` and `approved` once you receive the `bank_document_verification_report_created` event.
       parameters:
         - name: bank_document_verification_id
           in: path
-          description: ID of the bank document verification 
+          description: ID of the Bank Document Verification 
           required: true
           schema:
             type: string
       responses:
         "200":
-          description: Bank document verification PDF report retrieved successfully
+          description: Bank Document Verification PDF report retrieved successfully
           content:
             application/json:
               examples:
@@ -4467,7 +4467,7 @@ paths:
         - Bank document verifications (Coming soon)
       summary: Request webhook notification
       operationId: notify_bank_document_verification
-      description: This endpoint can be used to initiate a webhook call containing the latest event of a bank document verification
+      description: This endpoint can be used to initiate a webhook call containing the latest event of a Bank Document Verification
       parameters:
         - name: bank_document_verification_id
           in: path
@@ -4492,10 +4492,10 @@ paths:
     get:
       tags:
         - Bank document verifications (Coming soon)
-      summary: List bank document verification attempts
+      summary: List Bank Document Verification attempts
       operationId: list_attempts_bank_document_verification
       description: |
-        This endpoint allows you to list all attempts of a bank document verification.
+        This endpoint allows you to list all attempts of a Bank Document Verification.
         
         Attempts are returned ordered by creation date, newest first.
         
@@ -4512,7 +4512,7 @@ paths:
         - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
-          description: Bank document verification attempts retrieved successfully
+          description: Bank Document Verification attempts retrieved successfully
           content:
             application/json:
               examples:
@@ -4528,8 +4528,8 @@ paths:
     post:
       tags:
         - Bank document verifications (Coming soon)
-      summary: Create a bank document verification attempt
-      description: "This endpoint allows you to create a bank document verification attempt. It is possible when the bank document verification 
+      summary: Create a Bank Document Verification attempt
+      description: "This endpoint allows you to create a Bank Document Verification attempt. It is possible when the Bank Document Verification 
         is one of the following statuses: `created`, `retry_required`"
       operationId: create_bank_document_verification_attempt
       parameters:
@@ -4552,7 +4552,7 @@ paths:
               $ref: "#/components/schemas/BankDocumentVerificationAttemptInputPost"
       responses:
         "201":
-          description: Bank document verification attempt created
+          description: Bank Document Verification attempt created
           content:
             application/json:
               examples:
@@ -4561,10 +4561,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/BankDocumentVerificationAttemptOutputPost"
         "404":
-          description: The provided bank document verification ID is not valid
+          description: The provided Bank Document Verification ID is not valid
         "409":
-          description: The bank document verification is not in a valid state to create an attempt.
-            The bank document verification status must be `created` or `retry_required`
+          description: The Bank Document Verification is not in a valid state to create an attempt.
+            The Bank Document Verification status must be `created` or `retry_required`
         "500":
           description: An error occurred while creating the attempt
       
@@ -4572,8 +4572,8 @@ paths:
     get:
       tags:
         - Bank document verifications (Coming soon)
-      summary: Retrieve a bank document verification attempt
-      description: This endpoint allows you to retrieve the details for a given bank document verification attempt
+      summary: Retrieve a Bank Document Verification attempt
+      description: This endpoint allows you to retrieve the details for a given Bank Document Verification attempt.
       operationId: fetch_attempts_bank_document_verification
       parameters:
         - name: bank_document_verification_id
@@ -4590,7 +4590,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Bank document verification attempt retrieved successfully
+          description: Bank Document Verification attempt retrieved successfully
           content:
             application/json:
               examples:
@@ -4608,24 +4608,24 @@ paths:
     get:
       tags:
         - Bank document verifications (Coming soon)
-      summary: Retrieve a bank document verification attempt asset
+      summary: Retrieve a Bank Document Verification attempt asset
       operationId: fetch_asset_bank_document_verification_attempt
       description: |
-        This endpoint allows you to retrieve the assets associated with a bank document verification.
-        This includes the document front image and the document back image.
+        This endpoint allows you to retrieve the assets associated with a Bank Document Verification.
+        This includes the document image.
         
         The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
         You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       parameters:
         - name: bank_document_verification_id
           in: path
-          description: ID of the bank document verification
+          description: ID of the Bank Document Verification
           required: true
           schema:
             type: string
         - name: attempt_id
           in: path
-          description: ID of the bank document verification attempt
+          description: ID of the Bank Document Verification attempt
           required: true
           schema:
             type: string
@@ -4633,7 +4633,7 @@ paths:
         - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
-          description: Bank document verification attempt asset retrieved successfully
+          description: Bank Document Verification attempt asset retrieved successfully
           content:
             application/json:
               examples:
@@ -4647,9 +4647,9 @@ paths:
     post:
       tags:
         - Company document verifications (Coming soon)
-      summary: Create a company document verification
+      summary: Create a Company Document Verification
       operationId: create_company_document_verification
-      description: Creates a company document verification
+      description: Creates a Company Document Verification
       requestBody:
         required: true
         content:
@@ -4663,7 +4663,7 @@ paths:
               $ref: "#/components/schemas/CompanyDocumentVerificationInputPost"
       responses:
         "201":
-          description: Company document verification created successfully
+          description: Company Document Verification created successfully
           content:
             application/json:
               examples:
@@ -4688,7 +4688,7 @@ paths:
       tags:
         - Company document verifications (Coming soon)
       summary: Retrieve a Company Document Verification
-      description: This endpoint allows you to get the detailed results of a company document verification
+      description: This endpoint allows you to get the detailed results of a Company Document Verification
       operationId: retrieve_company_document_verification
       parameters:
         - name: company_document_verification_id
@@ -4713,9 +4713,9 @@ paths:
     post:
       tags:
         - Company document verifications (Coming soon)
-      summary: Anonymize a company document verification
+      summary: Anonymize a Company Document Verification
       operationId: anonymize_company_document_verification
-      description: Anonymize the personal data of a company document verification with the specified ID.
+      description: Anonymize the personal data of a Company Document Verification with the specified ID.
       parameters:
         - name: company_document_verification_id
           in: path
@@ -4725,7 +4725,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Company document verification anonymized
+          description: Company Document Verification anonymized
           content:
             application/json:
               examples:
@@ -4736,7 +4736,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/CompanyDocumentVerificationOutputAnonymize"
         "404":
-          description: Company document verification not found
+          description: Company Document Verification not found
         "500":
           description: Internal server error
   
@@ -4744,23 +4744,23 @@ paths:
     get:
       tags:
         - Company document verifications (Coming soon)
-      summary: Retrieve PDF report of a company document verification
+      summary: Retrieve PDF report of a Company Document Verification
       operationId: pdf_company_document_verification
       description: |
-        This endpoint allows you to retrieve a PDF report of a company document verification.
+        This endpoint allows you to retrieve a PDF report of a Company Document Verification.
 
         Please note that the PDF report is only available for company document verifications that are
         in status `declined` and `approved` once you receive the `company_document_verification_report_created` event.
       parameters:
         - name: company_document_verification_id
           in: path
-          description: ID of the company document verification 
+          description: ID of the Company Document Verification 
           required: true
           schema:
             type: string
       responses:
         "200":
-          description: Company document verification PDF report retrieved successfully
+          description: Company Document Verification PDF report retrieved successfully
           content:
             application/json:
               examples:
@@ -4777,7 +4777,7 @@ paths:
         - Company document verifications (Coming soon)
       summary: Request webhook notification
       operationId: notify_company_document_verification
-      description: This endpoint can be used to initiate a webhook call containing the latest event of a company document verification
+      description: This endpoint can be used to initiate a webhook call containing the latest event of a Company Document Verification
       parameters:
         - name: company_document_verification_id
           in: path
@@ -4802,10 +4802,10 @@ paths:
     get:
       tags:
         - Company document verifications (Coming soon)
-      summary: List company document verification attempts
+      summary: List Company Document Verification attempts
       operationId: list_attempts_company_document_verification
       description: |
-        This endpoint allows you to list all attempts of a company document verification.
+        This endpoint allows you to list all attempts of a Company Document Verification.
         
         Attempts are returned ordered by creation date, newest first.
         
@@ -4822,7 +4822,7 @@ paths:
         - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
-          description: Company document verification attempts retrieved successfully
+          description: Company Document Verification attempts retrieved successfully
           content:
             application/json:
               examples:
@@ -4838,8 +4838,8 @@ paths:
     post:
       tags:
         - Company document verifications (Coming soon)
-      summary: Create a company document verification attempt
-      description: "This endpoint allows you to create a company document verification attempt. It is possible when the company document verification 
+      summary: Create a Company Document Verification attempt
+      description: "This endpoint allows you to create a Company Document Verification attempt. It is possible when the Company Document Verification 
         is one of the following statuses: `created`, `retry_required`"
       operationId: create_company_document_verification_attempt
       parameters:
@@ -4862,7 +4862,7 @@ paths:
               $ref: "#/components/schemas/CompanyDocumentVerificationAttemptInputPost"
       responses:
         "201":
-          description: Company document verification attempt created
+          description: Company Document Verification attempt created
           content:
             application/json:
               examples:
@@ -4871,10 +4871,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/CompanyDocumentVerificationAttemptOutputPost"
         "404":
-          description: The provided company document verification ID is not valid
+          description: The provided Company Document Verification ID is not valid
         "409":
-          description: The company document verification is not in a valid state to create an attempt.
-            The company document verification status must be `created` or `retry_required`
+          description: The Company Document Verification is not in a valid state to create an attempt.
+            The Company Document Verification status must be `created` or `retry_required`
         "500":
           description: An error occurred while creating the attempt
       
@@ -4882,8 +4882,8 @@ paths:
     get:
       tags:
         - Company document verifications (Coming soon)
-      summary: Retrieve a company document verification attempt
-      description: This endpoint allows you to retrieve the details for a given company document verification attempt
+      summary: Retrieve a Company Document Verification attempt
+      description: This endpoint allows you to retrieve the details for a given Company Document Verification attempt.
       operationId: fetch_attempts_company_document_verification
       parameters:
         - name: company_document_verification_id
@@ -4900,7 +4900,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Company document verification attempt retrieved successfully
+          description: Company Document Verification attempt retrieved successfully
           content:
             application/json:
               examples:
@@ -4918,24 +4918,24 @@ paths:
     get:
       tags:
         - Company document verifications (Coming soon)
-      summary: Retrieve a company document verification attempt asset
+      summary: Retrieve a Company Document Verification attempt asset
       operationId: fetch_asset_company_document_verification_attempt
       description: |
-        This endpoint allows you to retrieve the assets associated with a company document verification.
-        This includes the document front image and the document back image.
+        This endpoint allows you to retrieve the assets associated with a Company Document Verification.
+        This includes the document image.
         
         The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
         You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       parameters:
         - name: company_document_verification_id
           in: path
-          description: ID of the company document verification
+          description: ID of the Company Document Verification
           required: true
           schema:
             type: string
         - name: attempt_id
           in: path
-          description: ID of the company document verification attempt
+          description: ID of the Company Document Verification attempt
           required: true
           schema:
             type: string
@@ -4943,7 +4943,7 @@ paths:
         - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
-          description: Company document verification attempt asset retrieved successfully
+          description: Company Document Verification attempt asset retrieved successfully
           content:
             application/json:
               examples:
@@ -4957,9 +4957,9 @@ paths:
     post:
       tags:
         - Address document verifications (Coming soon)
-      summary: Create an address document verification
+      summary: Create an Address Document Verification
       operationId: create_address_document_verification
-      description: Creates an address document verification
+      description: Creates an Address Document Verification
       requestBody:
         required: true
         content:
@@ -4973,7 +4973,7 @@ paths:
               $ref: "#/components/schemas/AddressDocumentVerificationInputPost"
       responses:
         "201":
-          description: Address document verification created successfully
+          description: Address Document Verification created successfully
           content:
             application/json:
               examples:
@@ -4998,7 +4998,7 @@ paths:
       tags:
         - Address document verifications (Coming soon)
       summary: Retrieve an Address Document Verification
-      description: This endpoint allows you to get the detailed results of an address document verification
+      description: This endpoint allows you to get the detailed results of an Address Document Verification
       operationId: retrieve_address_document_verification
       parameters:
         - name: address_document_verification_id
@@ -5023,9 +5023,9 @@ paths:
     post:
       tags:
         - Address document verifications (Coming soon)
-      summary: Anonymize an address document verification
+      summary: Anonymize an Address Document Verification
       operationId: anonymize_address_document_verification
-      description: Anonymize the personal data of an address document verification with the specified ID.
+      description: Anonymize the personal data of an Address Document Verification with the specified ID.
       parameters:
         - name: address_document_verification_id
           in: path
@@ -5035,7 +5035,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Address document verification anonymized
+          description: Address Document Verification anonymized
           content:
             application/json:
               examples:
@@ -5046,7 +5046,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/AddressDocumentVerificationOutputAnonymize"
         "404":
-          description: Address document verification not found
+          description: Address Document Verification not found
         "500":
           description: Internal server error
   
@@ -5054,23 +5054,23 @@ paths:
     get:
       tags:
         - Address document verifications (Coming soon)
-      summary: Retrieve PDF report of an address document verification
+      summary: Retrieve PDF report of an Address Document Verification
       operationId: pdf_address_document_verification
       description: |
-        This endpoint allows you to retrieve a PDF report of an address document verification.
+        This endpoint allows you to retrieve a PDF report of an Address Document Verification.
 
         Please note that the PDF report is only available for address document verifications that are
         in status `declined` and `approved` once you receive the `address_document_verification_report_created` event.
       parameters:
         - name: address_document_verification_id
           in: path
-          description: ID of the address document verification 
+          description: ID of the Address Document Verification 
           required: true
           schema:
             type: string
       responses:
         "200":
-          description: Address document verification PDF report retrieved successfully
+          description: Address Document Verification PDF report retrieved successfully
           content:
             application/json:
               examples:
@@ -5087,7 +5087,7 @@ paths:
         - Address document verifications (Coming soon)
       summary: Request webhook notification
       operationId: notify_address_document_verification
-      description: This endpoint can be used to initiate a webhook call containing the latest event of an address document verification
+      description: This endpoint can be used to initiate a webhook call containing the latest event of an Address Document Verification
       parameters:
         - name: address_document_verification_id
           in: path
@@ -5112,10 +5112,10 @@ paths:
     get:
       tags:
         - Address document verifications (Coming soon)
-      summary: List address document verification attempts
+      summary: List Address Document Verification attempts
       operationId: list_attempts_address_document_verification
       description: |
-        This endpoint allows you to list all attempts of an address document verification.
+        This endpoint allows you to list all attempts of an Address Document Verification.
         
         Attempts are returned ordered by creation date, newest first.
         
@@ -5132,7 +5132,7 @@ paths:
         - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
-          description: Address document verification attempts retrieved successfully
+          description: Address Document Verification attempts retrieved successfully
           content:
             application/json:
               examples:
@@ -5148,8 +5148,8 @@ paths:
     post:
       tags:
         - Address document verifications (Coming soon)
-      summary: Create an address document verification attempt
-      description: "This endpoint allows you to create an address document verification attempt. It is possible when the address document verification 
+      summary: Create an Address Document Verification attempt
+      description: "This endpoint allows you to create an Address Document Verification attempt. It is possible when the Address Document Verification 
         is one of the following statuses: `created`, `retry_required`"
       operationId: create_address_document_verification_attempt
       parameters:
@@ -5172,7 +5172,7 @@ paths:
               $ref: "#/components/schemas/AddressDocumentVerificationAttemptInputPost"
       responses:
         "201":
-          description: Address document verification attempt created
+          description: Address Document Verification attempt created
           content:
             application/json:
               examples:
@@ -5181,10 +5181,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/AddressDocumentVerificationAttemptOutputPost"
         "404":
-          description: The provided address document verification ID is not valid
+          description: The provided Address Document Verification ID is not valid
         "409":
-          description: The address document verification is not in a valid state to create an attempt.
-            The address document verification status must be `created` or `retry_required`
+          description: The Address Document Verification is not in a valid state to create an attempt.
+            The Address Document Verification status must be `created` or `retry_required`
         "500":
           description: An error occurred while creating the attempt
       
@@ -5192,8 +5192,8 @@ paths:
     get:
       tags:
         - Address document verifications (Coming soon)
-      summary: Retrieve an address document verification attempt
-      description: This endpoint allows you to retrieve the details for a given address document verification attempt
+      summary: Retrieve an Address Document Verification attempt
+      description: This endpoint allows you to retrieve the details for a given Address Document Verification attempt.
       operationId: fetch_attempts_address_document_verification
       parameters:
         - name: address_document_verification_id
@@ -5210,7 +5210,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Address document verification attempt retrieved successfully
+          description: Address Document Verification attempt retrieved successfully
           content:
             application/json:
               examples:
@@ -5228,24 +5228,24 @@ paths:
     get:
       tags:
         - Address document verifications (Coming soon)
-      summary: Retrieve an address document verification attempt asset
+      summary: Retrieve an Address Document Verification attempt asset
       operationId: fetch_asset_address_document_verification_attempt
       description: |
-        This endpoint allows you to retrieve the assets associated with an address document verification.
-        This includes the document front image and the document back image.
+        This endpoint allows you to retrieve the assets associated with an Address Document Verification.
+        This includes the document image.
         
         The response is paginated (see [Pagination](#section/API-standards/Pagination) section).
         You can navigate through pages using the `skip` and `limit` query parameters or by following the URLs in the `_links` object.
       parameters:
         - name: address_document_verification_id
           in: path
-          description: ID of the address document verification
+          description: ID of the Address Document Verification
           required: true
           schema:
             type: string
         - name: attempt_id
           in: path
-          description: ID of the address document verification attempt
+          description: ID of the Address Document Verification attempt
           required: true
           schema:
             type: string
@@ -5253,7 +5253,7 @@ paths:
         - $ref: "#/components/parameters/limitParam"
       responses:
         "200":
-          description: Address document verification attempt asset retrieved successfully
+          description: Address Document Verification attempt asset retrieved successfully
           content:
             application/json:
               examples:
@@ -6814,7 +6814,7 @@ components:
       properties:
         data:
           type: array
-          description: Array of bank document verification attempts for the current page
+          description: Array of Bank Document Verification attempts for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/BankDocumentVerificationAttemptOutputGet"
@@ -6845,7 +6845,7 @@ components:
       properties:
         data:
           type: array
-          description: Array of bank document verification attempt assets for the current page
+          description: Array of Bank Document Verification attempt assets for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/BankDocumentVerificationAttemptAsset"
@@ -6860,8 +6860,7 @@ components:
           type: string
           description: Type of asset
           enum:
-            - document_front_image
-            - document_back_image
+            - document
         _links:
           type: object
           properties:
@@ -6874,7 +6873,7 @@ components:
 
     BankDocumentVerificationAttemptStates:
       type: string
-      description: Bank document verification attempt state.
+      description: Bank Document Verification attempt state.
       enum:
         - quality_checks_in_progress
         - checks_in_progress
@@ -6920,13 +6919,13 @@ components:
 
     BankDocumentVerificationId:
       type: string
-      description: Bank Document verification unique identifier.
+      description: Bank Document Verification unique identifier.
       pattern: ^bdv_\w+$
       example: bdv_tkoi5db4hryu5cei5vwoabr7we
 
     BankDocumentVerificationStatus:
       type: string
-      description: Bank document verification status.
+      description: Bank Document Verification status.
       enum:
         - created
         - quality_checks_in_progress
@@ -7059,7 +7058,7 @@ components:
       properties:
         data:
           type: array
-          description: Array of company document verification attempts for the current page
+          description: Array of Company Document Verification attempts for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/CompanyDocumentVerificationAttemptOutputGet"
@@ -7090,7 +7089,7 @@ components:
       properties:
         data:
           type: array
-          description: Array of company document verification attempt assets for the current page
+          description: Array of Company Document Verification attempt assets for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/CompanyDocumentVerificationAttemptAsset"
@@ -7105,8 +7104,7 @@ components:
           type: string
           description: Type of asset
           enum:
-            - document_front_image
-            - document_back_image
+            - document
         _links:
           type: object
           properties:
@@ -7119,7 +7117,7 @@ components:
 
     CompanyDocumentVerificationAttemptStates:
       type: string
-      description: Company document verification attempt state.
+      description: Company Document Verification attempt state.
       enum:
         - quality_checks_in_progress
         - checks_in_progress
@@ -7161,13 +7159,13 @@ components:
 
     CompanyDocumentVerificationId:
       type: string
-      description: Company Document verification unique identifier.
+      description: Company Document Verification unique identifier.
       pattern: ^cdv_\w+$
       example: cdv_tkoi5db4hryu5cei5vwoabr7we
 
     CompanyDocumentVerificationStatus:
       type: string
-      description: Company document verification status.
+      description: Company Document Verification status.
       enum:
         - created
         - quality_checks_in_progress
@@ -7283,7 +7281,7 @@ components:
       properties:
         data:
           type: array
-          description: Array of address document verification attempts for the current page
+          description: Array of Address Document Verification attempts for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/AddressDocumentVerificationAttemptOutputGet"
@@ -7314,7 +7312,7 @@ components:
       properties:
         data:
           type: array
-          description: Array of address document verification attempt assets for the current page
+          description: Array of Address Document Verification attempt assets for the current page
           minItems: 0
           items:
             $ref: "#/components/schemas/AddressDocumentVerificationAttemptAsset"
@@ -7329,8 +7327,7 @@ components:
           type: string
           description: Type of asset
           enum:
-            - document_front_image
-            - document_back_image
+            - document
         _links:
           type: object
           properties:
@@ -7343,7 +7340,7 @@ components:
 
     AddressDocumentVerificationAttemptStates:
       type: string
-      description: Address document verification attempt state.
+      description: Address Document Verification attempt state.
       enum:
         - quality_checks_in_progress
         - checks_in_progress
@@ -7383,13 +7380,13 @@ components:
 
     AddressDocumentVerificationId:
       type: string
-      description: Address Document verification unique identifier.
+      description: Address Document Verification unique identifier.
       pattern: ^adv_\w+$
       example: adv_tkoi5db4hryu5cei5vwoabr7we
 
     AddressDocumentVerificationStatus:
       type: string
-      description: Address document verification status.
+      description: Address Document Verification status.
       enum:
         - created
         - quality_checks_in_progress
@@ -8207,7 +8204,7 @@ components:
     
     bank_document_verification_attempt_output_assets_response_body:
       value:
-        total_count: 2
+        total_count: 1
         skip: 10
         limit: 10
         _links:
@@ -8218,14 +8215,10 @@ components:
           previous:
             href: "https://api.ubble.ai/v2/bank-document-verifications/bdv_tkoi5db4hryu5cei5vwoabr7we/attempts/bdv_attempt_123/assets/..."
         data:
-        - type: document_front_image
+        - type: document
           _links:
             asset_url:
-              href: "https://api.ubble.ai/v2/bank-document-verifications/bdv_tkoi5db4hryu5cei5vwoabr7we/attempts/bdv_attempt_123/assets/document_front_image"
-        - type: document_back_image
-          _links:
-            asset_url:
-              href: "https://api.ubble.ai/v2/bank-document-verifications/bdv_tkoi5db4hryu5cei5vwoabr7we/attempts/bdv_attempt_123/assets/document_back_image"
+              href: "https://api.ubble.ai/v2/bank-document-verifications/bdv_tkoi5db4hryu5cei5vwoabr7we/attempts/bdv_attempt_123/assets/document"
 
     company_document_verification_creation_request_body_min:
       value:
@@ -8346,7 +8339,7 @@ components:
     
     company_document_verification_attempt_output_assets_response_body:
       value:
-        total_count: 2
+        total_count: 1
         skip: 10
         limit: 10
         _links:
@@ -8357,14 +8350,10 @@ components:
           previous:
             href: "https://api.ubble.ai/v2/company-document-verifications/cdv_tkoi5db4hryu5cei5vwoabr7we/attempts/cdv_attempt_123/assets/..."
         data:
-        - type: document_front_image
+        - type: document
           _links:
             asset_url:
-              href: "https://api.ubble.ai/v2/company-document-verifications/cdv_tkoi5db4hryu5cei5vwoabr7we/attempts/cdv_attempt_123/assets/document_front_image"
-        - type: document_back_image
-          _links:
-            asset_url:
-              href: "https://api.ubble.ai/v2/company-document-verifications/cdv_tkoi5db4hryu5cei5vwoabr7we/attempts/cdv_attempt_123/assets/document_back_image"
+              href: "https://api.ubble.ai/v2/company-document-verifications/cdv_tkoi5db4hryu5cei5vwoabr7we/attempts/cdv_attempt_123/assets/document"
 
     address_document_verification_creation_request_body_min:
       value:
@@ -8483,7 +8472,7 @@ components:
     
     address_document_verification_attempt_output_assets_response_body:
       value:
-        total_count: 2
+        total_count: 1
         skip: 10
         limit: 10
         _links:
@@ -8494,14 +8483,10 @@ components:
           previous:
             href: "https://api.ubble.ai/v2/address-document-verifications/adv_tkoi5db4hryu5cei5vwoabr7we/attempts/adv_attempt_123/assets/..."
         data:
-        - type: document_front_image
+        - type: document
           _links:
             asset_url:
-              href: "https://api.ubble.ai/v2/address-document-verifications/adv_tkoi5db4hryu5cei5vwoabr7we/attempts/adv_attempt_123/assets/document_front_image"
-        - type: document_back_image
-          _links:
-            asset_url:
-              href: "https://api.ubble.ai/v2/address-document-verifications/adv_tkoi5db4hryu5cei5vwoabr7we/attempts/adv_attempt_123/assets/document_back_image"
+              href: "https://api.ubble.ai/v2/address-document-verifications/adv_tkoi5db4hryu5cei5vwoabr7we/attempts/adv_attempt_123/assets/document"
     
     id_document_verification_anonymization_response_body:
       value:
