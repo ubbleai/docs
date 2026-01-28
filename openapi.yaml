@@ -2635,6 +2635,16 @@ info:
         <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
       </tr>
       <tr>
+        <td class="tg-0pky">71183</td>
+        <td class="tg-0pky">website_protected</td>
+        <td class="tg-0pky">Website is protected and cannot be accessed</td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"></td>
+        <td class="center-icon"><svg><use href="#checkmark"/></svg></td>
+      </tr>
+      <tr>
         <td class="tg-dvid" colspan="8">Other issues</td>
       </tr>
       <tr>
