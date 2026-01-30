@@ -1,6 +1,0 @@
-- group: Applicant Profiles
-  page: index.md
-  expanded: false
-  items:
-  - page: create-an-applicant.md
-    label: Create an applicant
