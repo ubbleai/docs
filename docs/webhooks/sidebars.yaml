@@ -1,0 +1,20 @@
+- group: Webhooks
+  page: index.md
+  expanded: false
+  items:
+  - page: configuration.md
+    label: Configuration
+  - page: retry.md
+    label: Retry
+  - page: security.md
+    label: Security
+  - page: identity-verification.md
+    label: Identity Verification
+  - page: id-document-verification.md
+    label: ID Document Verification
+  - page: website-verification.md
+    label: Website Verification
+  - page: aml-verification.md
+    label: AML verification
+  - page: face-authentication.md
+    label: Face authentication

@@ -1,0 +1,20 @@
+- group: Identity Verification
+  page: index.md
+  expanded: false
+  items:
+  - page: before-you-begin.md
+    label: Before you begin
+  - page: create-an-identity-verification.md
+    label: Create an identity verification
+  - page: create-an-attempt.md
+    label: Create an attempt
+  - page: redirect-the-user.md
+    label: Redirect the user
+  - page: verify-webhook-notifications.md
+    label: Verify webhook notifications
+  - page: retrieve-detailed-results.md
+    label: Retrieve detailed results
+  - page: manage-retries.md
+    label: Manage retries
+  - $ref: ./test/sidebars.yaml
+    label: Test Subfolder

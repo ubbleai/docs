@@ -1,0 +1,12 @@
+- group: Website Verification (Coming soon)
+  page: index.md
+  expanded: false
+  items:
+  - page: before-you-begin.md
+    label: Before you begin
+  - page: create-a-website-verification.md
+    label: Create a Website Verification
+  - page: verify-webhook-notifications.md
+    label: Verify webhook notifications
+  - page: retrieve-detailed-results.md
+    label: Retrieve detailed results

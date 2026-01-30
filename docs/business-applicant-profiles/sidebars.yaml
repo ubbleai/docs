@@ -1,0 +1,6 @@
+- group: Business Applicant Profiles
+  page: index.md
+  expanded: false
+  items:
+  - page: create-a-business-applicant.md
+    label: Create a business applicant

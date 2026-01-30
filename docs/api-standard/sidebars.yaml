@@ -1,0 +1,18 @@
+- group: API Standard
+  page: index.md
+  expanded: false
+  items:
+  - page: signature.md
+    label: Signature
+  - page: required-tag.md
+    label: Required tag
+  - page: resources-identifiers.md
+    label: Resources identifiers
+  - page: content-type.md
+    label: Content type
+  - page: error-handling.md
+    label: Error handling
+  - page: pagination.md
+    label: Pagination
+  - page: common-objects-properties.md
+    label: Common Objects/Properties

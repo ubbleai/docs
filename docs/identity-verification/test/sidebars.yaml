@@ -1,0 +1,17 @@
+- group: Mock Section One
+  page: mock-page-one.md
+  expanded: false
+  items:
+  - page: mock-item-one.md
+    label: Mock Item One
+  - page: mock-item-two.md
+    label: Mock Item Two
+
+- group: Mock Section Two
+  page: mock-page-two.md
+  expanded: false
+  items:
+  - page: mock-item-three.md
+    label: Mock Item Three
+  - page: mock-item-four.md
+    label: Mock Item Four

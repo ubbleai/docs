@@ -1,0 +1,18 @@
+- group: Web integration
+  page: index.md
+  expanded: false
+  items:
+  - page: url-expiration-and-attempt-creation.md
+    label: URL expiration and attempt creation
+  - page: pre-select-customer-details.md
+    label: Pre-select customer details
+  - page: customize-the-verification-user-experience.md
+    label: Customize the verification user experience
+  - page: redirect-to-mobile-for-verification.md
+    label: Redirect to mobile for verification
+  - page: redirect-using-web-redirection.md
+    label: Redirect using web redirection (Optional)
+  - page: redirect-using-webview.md
+    label: Redirect using webview (Optional)
+  - page: redirect-using-an-iframe.md
+    label: Redirect using an iframe (Optional)

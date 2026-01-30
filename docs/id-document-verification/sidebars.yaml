@@ -1,0 +1,16 @@
+- group: ID Document Verification
+  page: index.md
+  expanded: false
+  items:
+  - page: before-you-begin.md
+    label: Before you begin
+  - page: create-an-id-document-verification.md
+    label: Create an ID Document Verification
+  - page: create-an-attempt.md
+    label: Create an attempt
+  - page: verify-webhook-notifications.md
+    label: Verify webhook notifications
+  - page: retrieve-detailed-results.md
+    label: Retrieve detailed results
+  - page: manage-retries.md
+    label: Manage retries

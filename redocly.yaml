@@ -1,0 +1,38 @@
+# apis:
+  # hermes@v1:
+  #   root: openapi.yaml
+    # Optional: customize linting rules
+    # rules:
+    #   operation-4xx-response: off
+    #   security-defined: off
+    #   info-license: off
+
+# Logo and branding configuration
+logo:
+  image: "https://raw.githubusercontent.com/ubbleai/docs/main/cko_doc_logo.png"
+  altText: Checkout.com - Identity Verification
+  link: "https://www.checkout.com/"
+
+# Code samples configuration
+# Note: Auto-generated code samples require Redocly Realm (not available in Community Edition)
+openapi:
+  codeSamples:
+    languages:
+      - lang: Payload
+      - lang: curl
+      - lang: Python
+      - lang: JavaScript
+
+# Disable the "Was this helpful?" feedback widget globally (for all pages including markdown)
+feedback:
+  hide: true
+
+# Disable page actions (copy dropdown menu with "Copy for LLM", "View as Markdown", "Open in ChatGPT", etc.)
+navigation:
+  actions:
+    hide: true
+
+# Disable the "Report a problem" option in code snippets
+codeSnippet:
+  report:
+    hide: true

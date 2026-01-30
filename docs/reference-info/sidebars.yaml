@@ -1,0 +1,12 @@
+- group: Reference info
+  page: index.md
+  expanded: false
+  items:
+  - page: check-statuses.md
+    label: Check statuses
+  - page: attempt-statuses.md
+    label: Attempt statuses
+  - page: response-codes.md
+    label: Response codes
+  - page: risk-labels.md
+    label: Risk labels
